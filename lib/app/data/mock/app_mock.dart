@@ -8,32 +8,7 @@ class AppMock {
             'https://vcdn-sohoa.vnecdn.net/2020/11/10/iPhone-3-2656-1605000003.jpg',
         price: 3000),
     ProductModel(
-        name: 'Iphone 12 Pro Max 256 GB',
-        imageUrl:
-            'https://vcdn-sohoa.vnecdn.net/2020/11/10/iPhone-3-2656-1605000003.jpg',
-        price: 3000),
-    ProductModel(
-        name: 'Iphone 12 Pro Max 256 GB',
-        imageUrl:
-            'https://vcdn-sohoa.vnecdn.net/2020/11/10/iPhone-3-2656-1605000003.jpg',
-        price: 3000),
-    ProductModel(
-        name: 'Iphone 12 Pro Max 256 GB',
-        imageUrl:
-            'https://vcdn-sohoa.vnecdn.net/2020/11/10/iPhone-3-2656-1605000003.jpg',
-        price: 3000),
-    ProductModel(
-        name: 'Iphone 12 Pro Max 256 GB',
-        imageUrl:
-            'https://vcdn-sohoa.vnecdn.net/2020/11/10/iPhone-3-2656-1605000003.jpg',
-        price: 3000),
-    ProductModel(
-        name: 'Iphone 12 Pro Max 256 GB',
-        imageUrl:
-            'https://vcdn-sohoa.vnecdn.net/2020/11/10/iPhone-3-2656-1605000003.jpg',
-        price: 3000),
-    ProductModel(
-        name: 'Iphone 12 Pro Max 256 GB',
+        name: 'Iphone 12 Pro Max 256 GB zxcxz zxc ',
         imageUrl:
             'https://vcdn-sohoa.vnecdn.net/2020/11/10/iPhone-3-2656-1605000003.jpg',
         price: 3000),

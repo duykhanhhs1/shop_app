@@ -1,5 +1,7 @@
 import 'package:get/get.dart';
 import 'package:flutter/material.dart';
+
+
 import 'package:scrum_app/app/modules/login/controllers/login_controller.dart';
 import 'package:scrum_app/app/routes/app_pages.dart';
 import 'package:scrum_app/app/widgets/rounded_button.widget.dart';
@@ -26,7 +28,7 @@ class LoginView extends GetView<LoginController> {
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: <Widget>[
                   Image.asset(
-                    'images/logo.png',
+                    'assets/images/logo.png',
                     fit: BoxFit.contain,
                     width: 200.0,
                   ),
@@ -81,20 +83,6 @@ class LoginView extends GetView<LoginController> {
                     ),
                   ),
                   SizedBox(height: 20),
-                  // FlatButton(
-                  //   minWidth: Get.width,
-                  //   shape: RoundedRectangleBorder(
-                  //     borderRadius: BorderRadius.circular(18.0),
-                  //   ),
-                  //   child: Text(
-                  //     'Forgot password?',
-                  //     style: TextStyle(
-                  //       fontWeight: FontWeight.w500,
-                  //       color: kPrimaryColor,
-                  //     ),
-                  //   ),
-                  //   onPressed: () => Get.toNamed(Routes.FORGOT_PASSWORD),
-                  // ),
                 ],
               ),
             ),

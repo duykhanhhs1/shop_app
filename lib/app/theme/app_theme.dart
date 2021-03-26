@@ -5,6 +5,7 @@ import 'color_theme.dart';
 
 
 final ThemeData appThemeData = ThemeData(
+  fontFamily: 'Muli',
   scaffoldBackgroundColor: Colors.white,
   primaryColor: kPrimaryColor,
   accentColor: kPrimaryColor,

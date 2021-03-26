@@ -19,7 +19,7 @@ class FormRoundedInputField extends StatelessWidget {
     this.fillColor,
     this.onSaved,
     this.onChanged,
-    this.keyboardType,
+    this.keyboardType = TextInputType.text,
     this.icon,
   });
 
@@ -55,22 +55,22 @@ class FormRoundedInputField extends StatelessWidget {
         border: OutlineInputBorder(
           borderRadius: borderRadius,
           borderSide: BorderSide(
-              color: kPrimaryColor, width: 1, style: BorderStyle.solid),
+              color: kPrimaryColor),
         ),
         focusedBorder: OutlineInputBorder(
           borderRadius: borderRadius,
           borderSide: BorderSide(
-              color: kPrimaryColor, width: 1, style: BorderStyle.solid),
+              color: kPrimaryColor),
         ),
         errorBorder: OutlineInputBorder(
           borderRadius: borderRadius,
           borderSide: BorderSide(
-              color: kErrorColor, width: 1, style: BorderStyle.solid),
+              color: kErrorColor),
         ),
         enabledBorder: OutlineInputBorder(
           borderRadius: borderRadius,
           borderSide: BorderSide(
-              color: kPrimaryColor, width: 1, style: BorderStyle.solid),
+              color: kPrimaryColor),
         ),
       ),
       onFieldSubmitted: onFieldSubmitted,

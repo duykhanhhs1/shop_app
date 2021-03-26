@@ -26,7 +26,7 @@ class RoundedButton extends StatelessWidget {
       height: 45,
       child: RaisedButton(
         onPressed: onPressed,
-        child: Text(textContent),
+        child: Text(textContent,style: TextStyle(fontWeight: FontWeight.bold),),
         color: color,
         textColor: textColor,
         shape: RoundedRectangleBorder(
