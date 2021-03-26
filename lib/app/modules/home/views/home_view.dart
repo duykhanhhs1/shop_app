@@ -92,21 +92,23 @@ class HomeView extends GetView<HomeController> {
     );
   }
 
-  SizedBox _buildCategoryGridView() {
+  Widget _buildCategoryGridView() {
     return SizedBox(
-                    height: Get.height*0.3,
-                    child: GridView.builder(
-                      itemCount: 10,
-                      shrinkWrap: true,
-                      scrollDirection: Axis.horizontal,
-                      gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                        crossAxisCount: 2,crossAxisSpacing: 5, mainAxisSpacing: 5,childAspectRatio: 1/1
-                      ),
-                      itemBuilder: (context, index) {
-                        return CategoryCard();
-                      },
-                    ),
-                  );
+      height: Get.height * 0.33,
+      child: GridView.builder(
+        itemCount: 10,
+        shrinkWrap: true,
+        scrollDirection: Axis.horizontal,
+        gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+            crossAxisCount: 2,
+            crossAxisSpacing: 5,
+            mainAxisSpacing: 5,
+            childAspectRatio: 1 / 1),
+        itemBuilder: (context, index) {
+          return CategoryCard();
+        },
+      ),
+    );
   }
 
   Widget _buildSpecialListView() {
@@ -152,4 +154,3 @@ class HomeView extends GetView<HomeController> {
         });
   }
 }
-

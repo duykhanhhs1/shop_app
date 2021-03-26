@@ -2,8 +2,6 @@ import 'package:flutter/material.dart';
 
 import 'color_theme.dart';
 
-
-
 final ThemeData appThemeData = ThemeData(
   fontFamily: 'Muli',
   scaffoldBackgroundColor: Colors.white,

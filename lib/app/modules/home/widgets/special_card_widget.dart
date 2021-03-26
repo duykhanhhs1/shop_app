@@ -11,14 +11,14 @@ class SpecialCard extends StatelessWidget {
     return Container(
         width: Get.width * 0.7,
         decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(25),
+            borderRadius: BorderRadius.circular(15),
             image: DecorationImage(
                 image: NetworkImage(
                     'https://vcdn-sohoa.vnecdn.net/2020/11/10/iPhone-3-2656-1605000003.jpg'),
                 fit: BoxFit.cover)),
         child: Container(
           decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(25),
+            borderRadius: BorderRadius.circular(15),
             color: Colors.black.withOpacity(0.3),
           ),
           child: Padding(

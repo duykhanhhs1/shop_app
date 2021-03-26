@@ -29,7 +29,7 @@ class CategoryCard extends StatelessWidget {
                   color: Colors.grey,
                   shape: BoxShape.circle),
             ),
-            SizedBox(height: Get.height*0.05, child: Text('Electronic home',textAlign: TextAlign.center,))
+            SizedBox(height: Get.height*0.06, child: Text('Electronic home',textAlign: TextAlign.center,))
           ],
         ),
       ),
