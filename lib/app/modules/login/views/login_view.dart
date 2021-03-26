@@ -72,6 +72,7 @@ class LoginView extends GetView<LoginController> {
                   SizedBox(height: 20),
                   Obx(
                         () => RoundedButton(
+                          width: Get.width,
                       textContent:
                       controller.isProcessing.value ? 'Login...' : 'Login',
                       onPressed: () async {

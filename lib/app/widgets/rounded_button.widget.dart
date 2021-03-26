@@ -1,16 +1,17 @@
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
+import 'package:scrum_app/app/theme/color_theme.dart';
 
 class RoundedButton extends StatelessWidget {
   const RoundedButton({
     Key key,
     this.width,
-    this.height,
-    this.color,
+    this.height = 45,
+    this.color = kPrimaryColor,
     this.textColor,
     this.textContent,
     this.onPressed,
-  }) : super(key: key);
+    this.radius = 50,
+  });
 
   final double width;
   final double height;
@@ -18,19 +19,23 @@ class RoundedButton extends StatelessWidget {
   final Color textColor;
   final String textContent;
   final Function onPressed;
+  final double radius;
 
   @override
   Widget build(BuildContext context) {
     return SizedBox(
-      width: Get.width,
-      height: 45,
+      width: width,
+      height: height,
       child: RaisedButton(
         onPressed: onPressed,
-        child: Text(textContent,style: TextStyle(fontWeight: FontWeight.bold),),
+        child: Text(
+          textContent,
+          style: TextStyle(fontWeight: FontWeight.bold),
+        ),
         color: color,
         textColor: textColor,
         shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(50),
+          borderRadius: BorderRadius.circular(radius),
         ),
       ),
     );
