@@ -5,11 +5,13 @@ import 'package:scrum_app/app/data/providers/product_provider.dart';
 class ProductRepository {
   final ProductProvider apiClient;
 
-  ProductRepository({@required this.apiClient})
-      : assert(apiClient != null);
+  ProductRepository({@required this.apiClient}) : assert(apiClient != null);
 
-  Future<List<ProductModel>> getProducts() {
+  Future<List<ProductOverViewModel>> getProducts() {
     return apiClient.getProducts();
   }
 
+  Future<ProductDetailModel> getProductDetail(productNo) {
+    return apiClient.getProductDetail(productNo);
+  }
 }

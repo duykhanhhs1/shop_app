@@ -12,7 +12,7 @@ class HomeController extends GetxController {
   final count = 0.obs;
 
   RxInt currentIndexBottomBar = RxInt(0);
-  RxList<ProductModel> products = RxList<ProductModel>();
+  RxList<ProductOverViewModel> products = RxList<ProductOverViewModel>();
 
   @override
   void onInit() {
@@ -21,7 +21,7 @@ class HomeController extends GetxController {
   }
 
   void getProducts() async {
-    final List<ProductModel> data = await repository.getProducts();
+    final List<ProductOverViewModel> data = await repository.getProducts();
     products = data.obs;
     update();
   }

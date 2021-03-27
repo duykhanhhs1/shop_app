@@ -3,14 +3,11 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 import 'package:scrum_app/app/modules/home/controllers/home_controller.dart';
-import 'package:scrum_app/app/modules/home/views/profile_view.dart';
-import 'package:scrum_app/app/modules/home/views/show_products_view.dart';
 import 'package:scrum_app/app/modules/home/widgets/cart_icon_widget.dart';
 import 'package:scrum_app/app/modules/home/widgets/category_card_widget.dart';
 import 'package:scrum_app/app/modules/home/widgets/product_card_widget.dart';
 import 'package:scrum_app/app/modules/home/widgets/special_card_widget.dart';
 import 'package:scrum_app/app/routes/app_pages.dart';
-import 'package:scrum_app/app/theme/color_theme.dart';
 import 'package:scrum_app/app/theme/text_theme.dart';
 import 'package:scrum_app/app/widgets/app_bottom_navigation_bar_widget.dart';
 import 'package:scrum_app/app/widgets/rounded_input_field.widget.dart';
@@ -34,7 +31,7 @@ class HomeView extends GetView<HomeController> {
                   keyboardType: TextInputType.text,
                   borderRadius: BorderRadius.circular(10),
                   prefixIcon: Icons.search_rounded,
-                  hintText: 'Search your item',
+                  hintText: 'Tìm kiếm sản phẩm',
                   maxLines: 1,
                 ),
               ),
@@ -69,15 +66,15 @@ class HomeView extends GetView<HomeController> {
                   children: <Widget>[
                     Padding(
                         padding: const EdgeInsets.symmetric(vertical: 10),
-                        child: Text('Category', style: textTitle)),
+                        child: Text('Danh mục', style: textTitle)),
                     _buildCategoryGridView(),
                     Padding(
                         padding: const EdgeInsets.symmetric(vertical: 10),
-                        child: Text('Specials for you', style: textTitle)),
+                        child: Text('Dành cho bạn', style: textTitle)),
                     _buildSpecialListView(),
                     Padding(
                         padding: const EdgeInsets.symmetric(vertical: 10),
-                        child: Text('Popular products', style: textTitle)),
+                        child: Text('Sản phẩm nổi bật', style: textTitle)),
                     _buildPopularGridView(controller),
                     SizedBox(
                       height: 15,
@@ -143,11 +140,11 @@ class HomeView extends GetView<HomeController> {
             crossAxisSpacing: 7,
             mainAxisSpacing: 7,
             crossAxisCount: 2,
-            childAspectRatio: 1 / 1.28),
+            childAspectRatio: 1 / 1.29),
         itemBuilder: (BuildContext context, int index) {
           return ProductCard(
             onTap: () {
-              Get.toNamed(Routes.DETAIL);
+              Get.toNamed(Routes.DETAIL_PRODUCT,arguments:controller.products[index].productNo);
             },
             product: controller.products[index],
           );

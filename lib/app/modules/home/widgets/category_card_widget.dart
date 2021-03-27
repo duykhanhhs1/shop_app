@@ -15,7 +15,7 @@ class CategoryCard extends StatelessWidget {
       child: Padding(
         padding: const EdgeInsets.all(3),
         child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: <Widget>[
             Container(
               width: Get.height*0.08,

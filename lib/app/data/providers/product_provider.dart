@@ -7,8 +7,13 @@ class ProductProvider extends GetConnect {
   void onInit() {
     httpClient.baseUrl = 'YOUR-API-URL';
   }
-  Future<List<ProductModel>> getProducts() async {
+  Future<List<ProductOverViewModel>> getProducts() async {
     return AppMock.products;
+  } 
+  
+  Future<ProductDetailModel> getProductDetail(productNo) async {
+    return AppMock.productDetails.firstWhere((element) => element.productNo == productNo);
   }
+  
 
 }

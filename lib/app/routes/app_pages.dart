@@ -4,8 +4,9 @@ import 'package:scrum_app/app/modules/admin/bindings/admin_binding.dart';
 import 'package:scrum_app/app/modules/admin/views/admin_view.dart';
 import 'package:scrum_app/app/modules/cart/bindings/cart_binding.dart';
 import 'package:scrum_app/app/modules/cart/views/cart_view.dart';
+import 'package:scrum_app/app/modules/detail_product/bindings/detail_product_binding.dart';
+import 'package:scrum_app/app/modules/detail_product/views/detail_product_view.dart';
 import 'package:scrum_app/app/modules/home/bindings/home_binding.dart';
-import 'package:scrum_app/app/modules/home/views/detail_product_view.dart';
 import 'package:scrum_app/app/modules/home/views/home_view.dart';
 import 'package:scrum_app/app/modules/home/views/profile_view.dart';
 import 'package:scrum_app/app/modules/login/bindings/login_binding.dart';
@@ -30,11 +31,6 @@ class AppPages {
       binding: HomeBinding(),
     ),
     GetPage(
-      name: _Paths.DETAIL,
-      page: () => DetailProductView(),
-      binding: HomeBinding(),
-    ),
-    GetPage(
       name: _Paths.PROFILE,
       page: () => ProfileView(),
       binding: HomeBinding(),
@@ -53,6 +49,11 @@ class AppPages {
       name: _Paths.CART,
       page: () => CartView(),
       binding: CartBinding(),
+    ),
+    GetPage(
+      name: _Paths.DETAIL_PRODUCT,
+      page: () => DetailProductView(),
+      binding: DetailProductBinding(),
     ),
   ];
 }

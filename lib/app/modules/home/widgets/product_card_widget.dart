@@ -10,7 +10,7 @@ class ProductCard extends StatelessWidget {
     this.onTap,
   }) : super(key: key);
 
-  final ProductModel product;
+  final ProductOverViewModel product;
   final Function onTap;
 
   @override
@@ -23,6 +23,7 @@ class ProductCard extends StatelessWidget {
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
         color: Colors.white,
         child: Column(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: <Widget>[
             ClipRRect(
               borderRadius: BorderRadius.vertical(top: Radius.circular(10)),
