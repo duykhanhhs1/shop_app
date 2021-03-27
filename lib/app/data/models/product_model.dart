@@ -23,6 +23,7 @@ class ProductDetailModel {
   final String name;
   final int price;
   final int oldPrice;
+  final int amount;
   final double rating;
   final List<String> imageUrls;
   final int shippingCost;
@@ -35,6 +36,7 @@ class ProductDetailModel {
 
   ProductDetailModel(
       {this.discount,
+      this.amount,
       this.shopImage,
       this.oldPrice,
       this.rating,
@@ -93,4 +95,20 @@ class ProductReviewModel {
       _$ProductReviewModelFromJson(json);
 
   Map<String, dynamic> toJson() => _$ProductReviewModelToJson(this);
+}
+
+@JsonSerializable()
+class CartItemModel {
+  final int cartItemNo;
+  final ProductDetailModel product;
+  int quantity;
+  bool isChecked;
+
+  CartItemModel(
+      {this.cartItemNo, this.product, this.quantity, this.isChecked = false});
+
+  factory CartItemModel.fromJson(Map<String, dynamic> json) =>
+      _$CartItemModelFromJson(json);
+
+  Map<String, dynamic> toJson() => _$CartItemModelToJson(this);
 }

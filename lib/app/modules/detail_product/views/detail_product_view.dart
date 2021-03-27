@@ -4,10 +4,12 @@ import 'package:get/get.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 
 import 'package:scrum_app/app/data/models/product_model.dart';
+import 'package:scrum_app/app/modules/cart/controllers/cart_controller.dart';
 import 'package:scrum_app/app/modules/detail_product/controllers/detail_product_controller.dart';
 import 'package:scrum_app/app/modules/detail_product/widgets/review_card_widget.dart';
 import 'package:scrum_app/app/modules/home/widgets/cart_icon_widget.dart';
 import 'package:scrum_app/app/theme/color_theme.dart';
+import 'package:scrum_app/app/widgets/number_input_field_widget.dart';
 import 'package:scrum_app/app/widgets/rounded_button.widget.dart';
 import 'package:scrum_app/app/widgets/rounded_input_field.widget.dart';
 
@@ -32,7 +34,7 @@ class DetailProductView extends GetView<DetailProductController> {
                 ),
                 floatingActionButton: FloatingActionButton(
                   onPressed: () {
-                    _buildBottomAddCart();
+                    _buildBottomAddCart(product);
                   },
                   backgroundColor: kPrimaryColor,
                   child: Icon(
@@ -63,26 +65,7 @@ class DetailProductView extends GetView<DetailProductController> {
                       Divider(height: 30, thickness: 5),
                       Padding(
                         padding: const EdgeInsets.symmetric(horizontal: 12),
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: <Widget>[
-                            Text('ĐÁNH GIÁ SẢN PHẨM',
-                                style: TextStyle(fontWeight: FontWeight.bold)),
-                            SizedBox(height: 10),
-                            _buildReviewRating(),
-                            Divider(height: 30),
-                            ListView.builder(
-                              physics: NeverScrollableScrollPhysics(),
-                              shrinkWrap: true,
-                              itemCount: product.productReviews.length,
-                              itemBuilder: (context, index) {
-                                return ReviewCard(
-                                  productReview: product.productReviews[index],
-                                );
-                              },
-                            ),
-                          ],
-                        ),
+                        child: _buildReviews(product),
                       ),
                       SizedBox(height: 100),
                     ],
@@ -93,7 +76,30 @@ class DetailProductView extends GetView<DetailProductController> {
     );
   }
 
-  Column _buildDetailInfo(ProductDetailModel product) {
+  Widget _buildReviews(ProductDetailModel product) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: <Widget>[
+        Text('ĐÁNH GIÁ SẢN PHẨM',
+            style: TextStyle(fontWeight: FontWeight.bold)),
+        SizedBox(height: 10),
+        _buildReviewRating(),
+        Divider(height: 30),
+        ListView.builder(
+          physics: NeverScrollableScrollPhysics(),
+          shrinkWrap: true,
+          itemCount: product.productReviews.length,
+          itemBuilder: (context, index) {
+            return ReviewCard(
+              productReview: product.productReviews[index],
+            );
+          },
+        ),
+      ],
+    );
+  }
+
+  Widget _buildDetailInfo(ProductDetailModel product) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: <Widget>[
@@ -120,7 +126,7 @@ class DetailProductView extends GetView<DetailProductController> {
     );
   }
 
-  Column _buildShopInfo(ProductDetailModel product) {
+  Widget _buildShopInfo(ProductDetailModel product) {
     return Column(
       children: [
         Row(
@@ -157,7 +163,7 @@ class DetailProductView extends GetView<DetailProductController> {
     );
   }
 
-  Column _buildOverviewInfo(ProductDetailModel product) {
+  Widget _buildOverviewInfo(ProductDetailModel product) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -215,7 +221,7 @@ class DetailProductView extends GetView<DetailProductController> {
     );
   }
 
-  Container _buildListImage(ProductDetailModel product) {
+  Widget _buildListImage(ProductDetailModel product) {
     return Container(
       width: Get.width,
       height: Get.width,
@@ -302,9 +308,10 @@ class DetailProductView extends GetView<DetailProductController> {
     );
   }
 
-  Future<dynamic> _buildBottomAddCart() {
+  Future<dynamic> _buildBottomAddCart(ProductDetailModel product) {
     controller.quantityController.clear();
-    controller.quantity.value = int.tryParse(controller.quantityController.text) ?? 0;
+    controller.quantity.value =
+        int.tryParse(controller.quantityController.text) ?? 0;
     return Get.bottomSheet(Container(
       padding: const EdgeInsets.all(15),
       decoration: BoxDecoration(
@@ -323,7 +330,7 @@ class DetailProductView extends GetView<DetailProductController> {
                     crossAxisAlignment: CrossAxisAlignment.end,
                     children: <Widget>[
                       Image.network(
-                        'https://fptshop.com.vn/Uploads/images/2015/Tin-Tuc/QuanLNH2/iphone-12-pro-1.jpg',
+                        product.imageUrls[0],
                         height: 80,
                         width: 80,
                         fit: BoxFit.cover,
@@ -333,11 +340,11 @@ class DetailProductView extends GetView<DetailProductController> {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         mainAxisAlignment: MainAxisAlignment.end,
                         children: <Widget>[
-                          Text('3000\$',
+                          Text('${product.price} VNĐ',
                               style: TextStyle(
                                   color: Colors.deepOrange,
                                   fontWeight: FontWeight.bold)),
-                          Text('Inventory: 277',
+                          Text('Inventory: ${product.amount}',
                               style: TextStyle(
                                   color: Colors.black.withOpacity(.6),
                                   fontWeight: FontWeight.bold)),
@@ -357,73 +364,40 @@ class DetailProductView extends GetView<DetailProductController> {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: <Widget>[
                   Text('Quantity'),
-                  Row(
-                    children: <Widget>[
-                      GestureDetector(
-                        onTap: (){
-                          controller.decreaseQuantity();
-                        },
-                        child: Container(
-                          decoration: BoxDecoration(
-                              border: Border.all(color: Colors.grey)),
-                          width: 30,
-                          height: 30,
-                          child: Icon(
-                            Icons.remove,
-                            size: 13,
-                          ),
-                        ),
-                      ),
-                      Container(
-                        decoration: BoxDecoration(
-                            border: Border.all(color: Colors.grey)),
-                        height: 30,
-                        width: 43,
-                        child: TextFormField(
-                          controller: controller.quantityController,
-                          inputFormatters:[
-                            LengthLimitingTextInputFormatter(3),
-                          ],
-                         textAlign: TextAlign.center,
-                          onChanged: (value) {
-                            if(int.tryParse(value) == null || int.tryParse(value) < 0){
-                              controller.clearInputQuantity();
-                            } else controller.setQuantityFromInput();
-                          },
-                          keyboardType: TextInputType.number,
-                          decoration: InputDecoration(
-                            isDense: true,
-                            enabledBorder: InputBorder.none,
-                            focusedBorder: InputBorder.none,
-                          ),
-                        ),
-                      ),
-                      GestureDetector(
-                        onTap: (){
-                          controller.increaseQuantity();
-                        },
-                        child: Container(
-                          decoration: BoxDecoration(
-                              border: Border.all(color: Colors.grey)),
-                          width: 30,
-                          height: 30,
-                          child: Icon(
-                            Icons.add,
-                            size: 13,
-                          ),
-                        ),
-                      )
-                    ],
-                  )
+                  NumberInputIncDec(
+                    onTapDecrease: () {
+                      controller.decreaseQuantity();
+                    },
+                    onTapIncrease: () {
+                      controller.increaseQuantity();
+                    },
+                    onChanged: (value) {
+                      if (int.tryParse(value) == null ||
+                          int.tryParse(value) < 0) {
+                        controller.clearInputQuantity();
+                      } else
+                        controller.setQuantityFromInput();
+                    },
+                    textController: controller.quantityController,
+                  ),
                 ],
               ),
               Divider(),
             ],
           ),
-          RoundedButton(
-            width: Get.width,
-            onPressed: () {},
-            textContent: 'Add to cart',
+          GetBuilder(
+            init: Get.find<CartController>(),
+            builder: (CartController cartController) {
+              return RoundedButton(
+                width: Get.width,
+                onPressed: () {
+                  cartController.addCartItem(CartItemModel(
+                      product: product, quantity: controller.quantity.value));
+                  Get.back();
+                },
+                textContent: 'Add to cart',
+              );
+            },
           )
         ],
       ),

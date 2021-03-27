@@ -27,6 +27,7 @@ Map<String, dynamic> _$ProductOverViewModelToJson(
 ProductDetailModel _$ProductDetailModelFromJson(Map<String, dynamic> json) {
   return ProductDetailModel(
     discount: json['discount'] as int,
+    amount: json['amount'] as int,
     shopImage: json['shopImage'] as String,
     oldPrice: json['oldPrice'] as int,
     rating: (json['rating'] as num)?.toDouble(),
@@ -56,6 +57,7 @@ Map<String, dynamic> _$ProductDetailModelToJson(ProductDetailModel instance) =>
       'name': instance.name,
       'price': instance.price,
       'oldPrice': instance.oldPrice,
+      'amount': instance.amount,
       'rating': instance.rating,
       'imageUrls': instance.imageUrls,
       'shippingCost': instance.shippingCost,
@@ -102,4 +104,21 @@ Map<String, dynamic> _$ProductReviewModelToJson(ProductReviewModel instance) =>
       'rating': instance.rating,
       'comment': instance.comment,
       'imageUrls': instance.imageUrls,
+    };
+
+CartItemModel _$CartItemModelFromJson(Map<String, dynamic> json) {
+  return CartItemModel(
+    cartItemNo: json['cartItemNo'] as int,
+    product: json['product'] == null
+        ? null
+        : ProductDetailModel.fromJson(json['product'] as Map<String, dynamic>),
+    quantity: json['quantity'] as int,
+  );
+}
+
+Map<String, dynamic> _$CartItemModelToJson(CartItemModel instance) =>
+    <String, dynamic>{
+      'cartItemNo': instance.cartItemNo,
+      'product': instance.product,
+      'quantity': instance.quantity,
     };

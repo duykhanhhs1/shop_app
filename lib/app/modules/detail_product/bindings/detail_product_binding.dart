@@ -1,6 +1,8 @@
 import 'package:get/get.dart';
+
 import 'package:scrum_app/app/data/providers/product_provider.dart';
 import 'package:scrum_app/app/data/repositories/product_repository.dart';
+import 'package:scrum_app/app/modules/cart/controllers/cart_controller.dart';
 
 import '../controllers/detail_product_controller.dart';
 

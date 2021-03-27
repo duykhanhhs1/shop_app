@@ -17,7 +17,7 @@ import 'package:scrum_app/app/modules/register/views/register_view.dart';
 part 'app_routes.dart';
 
 class AppPages {
-  static const INITIAL = Routes.LOGIN;
+  static const INITIAL = Routes.HOME;
 
   static final routes = [
     GetPage(
