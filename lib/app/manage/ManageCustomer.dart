@@ -32,6 +32,7 @@ class ManageCustomer{
   //signIn
   static bool signIn(String email, String password){
     FirebaseAuth.instance.signInWithEmailAndPassword(email:email, password: password).then((value)  {
+      Customer.uid = value.uid;
       print("login success!");
       return true;
     }).catchError((onError){
@@ -44,6 +45,7 @@ class ManageCustomer{
     FirebaseAuth.instance.createUserWithEmailAndPassword(email:email, password: password).then((value) {
       //upload info customer
       var idUser = value.uid;
+      Customer.uid = value.uid;
       CollectionReference users = FirebaseFirestore.instance.collection('users');
       users.doc(idUser).set({
         'id': idUser,
