@@ -32,7 +32,7 @@ class ManageCustomer{
   //signIn
   static bool signIn(String email, String password){
     FirebaseAuth.instance.signInWithEmailAndPassword(email:email, password: password).then((value)  {
-      Customer.uid = value.uid;
+      Customer.uid = FirebaseAuth.instance.currentUser.uid;
       print("login success!");
       return true;
     }).catchError((onError){
@@ -44,8 +44,8 @@ class ManageCustomer{
   static bool customerRegister(String email, String password, String fullName, String address, String phone){
     FirebaseAuth.instance.createUserWithEmailAndPassword(email:email, password: password).then((value) {
       //upload info customer
-      var idUser = value.uid;
-      Customer.uid = value.uid;
+      var idUser = FirebaseAuth.instance.currentUser.uid;
+//      Customer.uid = value.uid;
       CollectionReference users = FirebaseFirestore.instance.collection('users');
       users.doc(idUser).set({
         'id': idUser,

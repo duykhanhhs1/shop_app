@@ -4,10 +4,10 @@ part 'product_model.g.dart';
 
 @JsonSerializable()
 class ProductOverViewModel {
-  final int productNo;
-  final String name;
-  final int price;
-  final String imageUrl;
+  int productNo;
+ String name;
+  int price;
+  String imageUrl;
 
   ProductOverViewModel({this.productNo, this.name, this.price, this.imageUrl});
 

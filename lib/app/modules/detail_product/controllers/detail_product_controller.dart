@@ -13,11 +13,11 @@ class DetailProductController extends GetxController {
   static DetailProductController get to => Get.find<DetailProductController>();
 
 
-  Rx<ProductDetailModel> productDetail = Rx<ProductDetailModel>();
+  Rx<ProductDetailModel> productDetail = Rx<ProductDetailModel>(ProductDetailModel());
   RxBool isLoadingProduct = RxBool(false);
 
   TextEditingController quantityController = TextEditingController();
-  RxInt quantity = RxInt();
+  RxInt quantity = RxInt(0);
 
   @override
   void onInit() {

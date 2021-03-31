@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:scrum_app/app/data/models/product_model.dart';
 import 'package:scrum_app/app/data/repositories/product_repository.dart';
+import 'package:scrum_app/app/manage/ManageProduct.dart';
+import 'package:scrum_app/app/model/Product.dart';
 
 class HomeController extends GetxController {
   final ProductRepository repository;
@@ -13,10 +15,13 @@ class HomeController extends GetxController {
 
   RxInt currentIndexBottomBar = RxInt(0);
   RxList<ProductOverViewModel> products = RxList<ProductOverViewModel>();
+  List<ProductOverViewModel> productModels = <ProductOverViewModel>[];
 
   @override
-  void onInit() {
+  void onInit() async {
     getProducts();
+    productModels = ManageProduct.getAllProduct();
+    ManageProduct.addProduct(ProductOverViewModel(productNo: 12312233, name: 'zxcxvx 123c',price: 2323, imageUrl: 'zxczxc.png'));
     super.onInit();
   }
 
@@ -26,7 +31,7 @@ class HomeController extends GetxController {
     update();
   }
 
-  void setItemTapped(int index){
+  void setItemTapped(int index) {
     currentIndexBottomBar.value = index;
     update();
   }

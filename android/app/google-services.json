@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "316801963221",
+    "project_id": "shoponline-69684",
+    "storage_bucket": "shoponline-69684.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:316801963221:android:429790f66c8d99de793e5c",
+        "android_client_info": {
+          "package_name": "duykhanh.scrum_app"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "316801963221-mhuhtsf9bu2uqg1sqjnp2cj12bm22f01.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDV4nXc5oxk8Z1-btC6qzKQPERtmFbsMgE"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "316801963221-mhuhtsf9bu2uqg1sqjnp2cj12bm22f01.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
