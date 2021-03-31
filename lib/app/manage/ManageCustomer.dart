@@ -29,40 +29,7 @@ class ManageCustomer{
     }).then((value) => print("Update Customer Success!!"))
         .catchError((error) => print("Failed to Update Customer: $error"));
   }
-  //signIn
-  static bool signIn(String email, String password){
-    FirebaseAuth.instance.signInWithEmailAndPassword(email:email, password: password).then((value)  {
-      Customer.uid = FirebaseAuth.instance.currentUser.uid;
-      print("login success!");
-      return true;
-    }).catchError((onError){
-      print("login failure"+onError.toString());
-      return false;
-    });
-    return true;
-  }
-  static bool customerRegister(String email, String password, String fullName, String address, String phone){
-    FirebaseAuth.instance.createUserWithEmailAndPassword(email:email, password: password).then((value) {
-      //upload info customer
-      var idUser = FirebaseAuth.instance.currentUser.uid;
-//      Customer.uid = value.uid;
-      CollectionReference users = FirebaseFirestore.instance.collection('users');
-      users.doc(idUser).set({
-        'id': idUser,
-        'fullName': fullName,
-        'address': address,
-        'phone': phone
-      }).then((value) => print("Add Customer Success!!"))
-          .catchError((error) => print("Failed to add customer: $error"));
 
-      return true;
-    }).catchError((onError) {
-      print("register failure"+onError.toString());
-      return false;
-    });
-    return true;
-
-  }
   static void signOut(){
     FirebaseAuth.instance.signOut();
   }

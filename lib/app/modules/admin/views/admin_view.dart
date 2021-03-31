@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import 'package:get/get.dart';
+import 'package:scrum_app/app/modules/profile/views/profile_view.dart';
 
 import '../controllers/admin_controller.dart';
 
@@ -12,12 +13,7 @@ class AdminView extends GetView<AdminController> {
         title: Text('AdminView'),
         centerTitle: true,
       ),
-      body: Center(
-        child: Text(
-          'AdminView is working',
-          style: TextStyle(fontSize: 20),
-        ),
-      ),
+      body: Center(child: Text('zxc'),)
     );
   }
 }

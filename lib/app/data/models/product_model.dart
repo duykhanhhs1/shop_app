@@ -5,7 +5,7 @@ part 'product_model.g.dart';
 @JsonSerializable()
 class ProductOverViewModel {
   int productNo;
- String name;
+  String name;
   int price;
   String imageUrl;
 
@@ -19,20 +19,20 @@ class ProductOverViewModel {
 
 @JsonSerializable()
 class ProductDetailModel {
-  final int productNo;
-  final String name;
-  final int price;
-  final int oldPrice;
-  final int amount;
-  final double rating;
-  final List<String> imageUrls;
-  final int shippingCost;
-  final int discount;
-  final String shopName;
-  final String shopImage;
-  final String shopLocation;
-  final List<ProductPropertyModel> productProperties;
-  final List<ProductReviewModel> productReviews;
+  int productNo;
+  String name;
+  int price;
+  int oldPrice;
+  int amount;
+  double rating;
+  List<String> imageUrls;
+  int shippingCost;
+  int discount;
+  String shopName;
+  String shopImage;
+  String shopLocation;
+  List<ProductPropertyModel> productProperties;
+  List<ProductReviewModel> productReviews;
 
   ProductDetailModel(
       {this.discount,
@@ -58,9 +58,9 @@ class ProductDetailModel {
 
 @JsonSerializable()
 class ProductPropertyModel {
-  final int productNo;
-  final String property;
-  final String content;
+  int productNo;
+   String property;
+   String content;
 
   ProductPropertyModel({
     this.productNo,
@@ -76,12 +76,12 @@ class ProductPropertyModel {
 
 @JsonSerializable()
 class ProductReviewModel {
-  final int productNo;
-  final int reviewNo;
-  final String username;
-  final int rating;
-  final String comment;
-  final List<String> imageUrls;
+   int productNo;
+   int reviewNo;
+   String username;
+   int rating;
+   String comment;
+   List<String> imageUrls;
 
   ProductReviewModel(
       {this.productNo,
@@ -111,4 +111,41 @@ class CartItemModel {
       _$CartItemModelFromJson(json);
 
   Map<String, dynamic> toJson() => _$CartItemModelToJson(this);
+}
+
+@JsonSerializable()
+class ProductModel {
+  int productNo;
+  String name;
+  int price;
+  int amount;
+  double rating;
+  List<String> imageUrls;
+  int shippingCost;
+  int discount;
+  String shopName;
+  String shopImage;
+  String shopLocation;
+  List<ProductPropertyModel> productProperties;
+  List<ProductReviewModel> productReviews;
+
+  ProductModel(
+      {this.discount,
+        this.amount,
+        this.shopImage,
+        this.rating,
+        this.productNo,
+        this.name,
+        this.price,
+        this.imageUrls,
+        this.shippingCost,
+        this.shopLocation,
+        this.shopName,
+        this.productProperties,
+        this.productReviews});
+
+  factory ProductModel.fromJson(Map<String, dynamic> json) =>
+      _$ProductModelFromJson(json);
+
+  Map<String, dynamic> toJson() => _$ProductModelToJson(this);
 }

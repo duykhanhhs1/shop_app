@@ -113,6 +113,7 @@ CartItemModel _$CartItemModelFromJson(Map<String, dynamic> json) {
         ? null
         : ProductDetailModel.fromJson(json['product'] as Map<String, dynamic>),
     quantity: json['quantity'] as int,
+    isChecked: json['isChecked'] as bool,
   );
 }
 
@@ -121,4 +122,48 @@ Map<String, dynamic> _$CartItemModelToJson(CartItemModel instance) =>
       'cartItemNo': instance.cartItemNo,
       'product': instance.product,
       'quantity': instance.quantity,
+      'isChecked': instance.isChecked,
+    };
+
+ProductModel _$ProductModelFromJson(Map<String, dynamic> json) {
+  return ProductModel(
+    discount: json['discount'] as int,
+    amount: json['amount'] as int,
+    shopImage: json['shopImage'] as String,
+    rating: (json['rating'] as num)?.toDouble(),
+    productNo: json['productNo'] as int,
+    name: json['name'] as String,
+    price: json['price'] as int,
+    imageUrls: (json['imageUrls'] as List)?.map((e) => e as String)?.toList(),
+    shippingCost: json['shippingCost'] as int,
+    shopLocation: json['shopLocation'] as String,
+    shopName: json['shopName'] as String,
+    productProperties: (json['productProperties'] as List)
+        ?.map((e) => e == null
+            ? null
+            : ProductPropertyModel.fromJson(e as Map<String, dynamic>))
+        ?.toList(),
+    productReviews: (json['productReviews'] as List)
+        ?.map((e) => e == null
+            ? null
+            : ProductReviewModel.fromJson(e as Map<String, dynamic>))
+        ?.toList(),
+  );
+}
+
+Map<String, dynamic> _$ProductModelToJson(ProductModel instance) =>
+    <String, dynamic>{
+      'productNo': instance.productNo,
+      'name': instance.name,
+      'price': instance.price,
+      'amount': instance.amount,
+      'rating': instance.rating,
+      'imageUrls': instance.imageUrls,
+      'shippingCost': instance.shippingCost,
+      'discount': instance.discount,
+      'shopName': instance.shopName,
+      'shopImage': instance.shopImage,
+      'shopLocation': instance.shopLocation,
+      'productProperties': instance.productProperties,
+      'productReviews': instance.productReviews,
     };

@@ -14,6 +14,17 @@ class ManageProduct {
         .catchError((error) => print("Failed to add product: $error"));
   }
 
+  static void addProductDetail(ProductDetailModel product, int productNo) {
+    product.productNo = DateTime.now().millisecondsSinceEpoch;
+    CollectionReference products =
+        FirebaseFirestore.instance.collection('products');
+    products
+        .doc('${product.productNo}')
+        .set(product.toJson())
+        .then((value) => print("Add Product Success!!"))
+        .catchError((error) => print("Failed to add product: $error"));
+  }
+
   static void updateProduct(Product product) {
     CollectionReference products =
         FirebaseFirestore.instance.collection('products');
@@ -49,20 +60,4 @@ class ManageProduct {
     });
   }
 
-  static List<ProductOverViewModel> getAllProduct() {
-    List<ProductOverViewModel> products = [];
-    FirebaseFirestore.instance
-        .collection('products')
-        .get()
-        .then((QuerySnapshot querySnapshot) {
-      querySnapshot.docs.forEach((element) {
-        var map = element.data();
-        products
-            .add(ProductOverViewModel.fromJson(map));
-        print(products.length);
-      });
-      return products;
-    });
-    return [];
-  }
 }

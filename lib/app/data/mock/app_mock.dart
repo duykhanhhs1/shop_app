@@ -30,7 +30,6 @@ class AppMock {
 
   static List<ProductDetailModel> productDetails = [
     ProductDetailModel(
-        productNo: 1,
         price: 3000,
         name: 'Iphone 12 Pro Max 256 GB',
         imageUrls: [

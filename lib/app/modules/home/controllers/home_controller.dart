@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:scrum_app/app/data/models/product_model.dart';
@@ -19,11 +20,28 @@ class HomeController extends GetxController {
 
   @override
   void onInit() async {
-    getProducts();
-    productModels = ManageProduct.getAllProduct();
-    ManageProduct.addProduct(ProductOverViewModel(productNo: 12312233, name: 'zxcxvx 123c',price: 2323, imageUrl: 'zxczxc.png'));
+   // getProducts();
+
+    await getAllProduct();
     super.onInit();
   }
+
+   Future<List<ProductOverViewModel>> getAllProduct()async {
+     await FirebaseFirestore.instance
+        .collection('products')
+        .get()
+        .then((QuerySnapshot querySnapshot) {
+      querySnapshot.docs.forEach((element) {
+        var map = element.data();
+        products
+            .add(ProductOverViewModel.fromJson(map));
+        print(products.length);
+      });
+      return products;
+    });
+    return [];
+  }
+
 
   void getProducts() async {
     final List<ProductOverViewModel> data = await repository.getProducts();

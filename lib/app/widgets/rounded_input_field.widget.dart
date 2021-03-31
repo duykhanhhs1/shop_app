@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:scrum_app/app/theme/color_theme.dart';
 
 class FormRoundedInputField extends StatelessWidget {
@@ -21,6 +22,7 @@ class FormRoundedInputField extends StatelessWidget {
     this.onChanged,
     this.keyboardType = TextInputType.text,
     this.icon,
+    this.inputFormatters,
   });
 
   final Key key;
@@ -40,6 +42,7 @@ class FormRoundedInputField extends StatelessWidget {
   final Function onChanged;
   final TextInputType keyboardType;
   final Icon icon;
+  final List<TextInputFormatter> inputFormatters;
 
   @override
   Widget build(BuildContext context) {
@@ -54,23 +57,19 @@ class FormRoundedInputField extends StatelessWidget {
         contentPadding: contentPadding,
         border: OutlineInputBorder(
           borderRadius: borderRadius,
-          borderSide: BorderSide(
-              color: kPrimaryColor),
+          borderSide: BorderSide(color: kPrimaryColor),
         ),
         focusedBorder: OutlineInputBorder(
           borderRadius: borderRadius,
-          borderSide: BorderSide(
-              color: kPrimaryColor),
+          borderSide: BorderSide(color: kPrimaryColor),
         ),
         errorBorder: OutlineInputBorder(
           borderRadius: borderRadius,
-          borderSide: BorderSide(
-              color: kErrorColor),
+          borderSide: BorderSide(color: kErrorColor),
         ),
         enabledBorder: OutlineInputBorder(
           borderRadius: borderRadius,
-          borderSide: BorderSide(
-              color: kPrimaryColor),
+          borderSide: BorderSide(color: kPrimaryColor),
         ),
       ),
       onFieldSubmitted: onFieldSubmitted,
@@ -83,6 +82,7 @@ class FormRoundedInputField extends StatelessWidget {
       keyboardType: keyboardType,
       onChanged: onChanged,
       onSaved: onSaved,
+      inputFormatters: inputFormatters,
     );
   }
 }

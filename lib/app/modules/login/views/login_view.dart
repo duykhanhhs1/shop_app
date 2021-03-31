@@ -1,15 +1,12 @@
 import 'package:get/get.dart';
 import 'package:flutter/material.dart';
-
+import 'package:scrum_app/app/manage/ManageCustomer.dart';
 
 import 'package:scrum_app/app/modules/login/controllers/login_controller.dart';
 import 'package:scrum_app/app/routes/app_pages.dart';
 import 'package:scrum_app/app/widgets/rounded_button.widget.dart';
 import 'package:scrum_app/app/widgets/rounded_input_field.widget.dart';
 import 'package:form_field_validator/form_field_validator.dart';
-
-
-
 
 class LoginView extends GetView<LoginController> {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
@@ -42,8 +39,8 @@ class LoginView extends GetView<LoginController> {
                     prefixIcon: Icons.email,
                     hintText: 'Email',
                     validator: MultiValidator([
-                      RequiredValidator(errorText: 'Email is required'),
-                      EmailValidator(errorText: 'Invalid email'),
+                      RequiredValidator(errorText: 'Vui lòng nhập email'),
+                      EmailValidator(errorText: 'Email không hợp lệ'),
                     ]),
                     keyboardType: TextInputType.emailAddress,
                     onChanged: (value) => null,
@@ -57,33 +54,52 @@ class LoginView extends GetView<LoginController> {
                     ),
                     fillColor: Colors.white.withOpacity(0.75),
                     prefixIcon: Icons.lock,
-                    hintText: 'Password',
+                    hintText: 'Mật khẩu',
                     validator: MultiValidator(
                       [
-                        RequiredValidator(errorText: 'Password is required'),
+                        RequiredValidator(errorText: 'Vui lòng nhập mật khẩu'),
                       ],
                     ),
                     obscureText: true,
                     onChanged: (value) => null,
                     onSaved: (value) =>
-                    controller.passwordController.text = value,
+                        controller.passwordController.text = value,
                     maxLines: 1,
                   ),
                   SizedBox(height: 20),
                   Obx(
-                        () => RoundedButton(
-                          width: Get.width,
-                      textContent:
-                      controller.isProcessing.value ? 'Login...' : 'Login',
+                    () => RoundedButton(
+                      width: Get.width,
+                      textContent: controller.isProcessing.value
+                          ? 'Đăng nhập...'
+                          : 'Đăng nhập',
                       onPressed: () async {
-                        // if (_formKey.currentState.validate()) {
-                        //   controller.verifyUser();
-                        // }
-                        Get.offAllNamed(Routes.HOME);
+                        if (_formKey.currentState.validate()) {
+                         await controller.signIn(
+                              email: controller.emailController.text,
+                              password: controller.passwordController.text);
+                         if(!controller.isProcessing.value){
+                           Get.offAllNamed(Routes.HOME);
+                         }
+                        }
                       },
                     ),
                   ),
                   SizedBox(height: 20),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Text('Bạn chưa có tài khoản?'),
+                      GestureDetector(
+                          onTap: () {
+                            Get.toNamed(Routes.REGISTER);
+                          },
+                          child: Text(
+                            ' Đăng ký',
+                            style: TextStyle(fontWeight: FontWeight.bold),
+                          ))
+                    ],
+                  ),
                 ],
               ),
             ),
