@@ -1,3 +1,4 @@
+import 'package:flutter/material.dart';
 import 'package:json_annotation/json_annotation.dart';
 
 part 'product_model.g.dart';
@@ -7,9 +8,11 @@ class ProductOverViewModel {
   int productNo;
   String name;
   int price;
+  int discount;
   String imageUrl;
 
-  ProductOverViewModel({this.productNo, this.name, this.price, this.imageUrl});
+  ProductOverViewModel(
+      {this.productNo, this.discount, this.name, this.price, this.imageUrl});
 
   factory ProductOverViewModel.fromJson(Map<String, dynamic> json) =>
       _$ProductOverViewModelFromJson(json);
@@ -59,8 +62,8 @@ class ProductDetailModel {
 @JsonSerializable()
 class ProductPropertyModel {
   int productNo;
-   String property;
-   String content;
+  String property;
+  String content;
 
   ProductPropertyModel({
     this.productNo,
@@ -76,12 +79,12 @@ class ProductPropertyModel {
 
 @JsonSerializable()
 class ProductReviewModel {
-   int productNo;
-   int reviewNo;
-   String username;
-   int rating;
-   String comment;
-   List<String> imageUrls;
+  int productNo;
+  int reviewNo;
+  String username;
+  int rating;
+  String comment;
+  List<String> imageUrls;
 
   ProductReviewModel(
       {this.productNo,
@@ -98,19 +101,26 @@ class ProductReviewModel {
 }
 
 @JsonSerializable()
-class CartItemModel {
-  final int cartItemNo;
-  final ProductDetailModel product;
+class OrderModel {
+  int orderNo;
+  int productNo;
+  ProductOverViewModel product;
   int quantity;
   bool isChecked;
+  @JsonKey(ignore: true)
+  TextEditingController quantityController = TextEditingController();
 
-  CartItemModel(
-      {this.cartItemNo, this.product, this.quantity, this.isChecked = false});
+  OrderModel(
+      {this.orderNo,
+      this.productNo,
+      this.product,
+      this.quantity,
+      this.isChecked = false});
 
-  factory CartItemModel.fromJson(Map<String, dynamic> json) =>
-      _$CartItemModelFromJson(json);
+  factory OrderModel.fromJson(Map<String, dynamic> json) =>
+      _$OrderModelFromJson(json);
 
-  Map<String, dynamic> toJson() => _$CartItemModelToJson(this);
+  Map<String, dynamic> toJson() => _$OrderModelToJson(this);
 }
 
 @JsonSerializable()
@@ -120,6 +130,7 @@ class ProductModel {
   int price;
   int amount;
   double rating;
+  String imageUrl;
   List<String> imageUrls;
   int shippingCost;
   int discount;
@@ -131,18 +142,19 @@ class ProductModel {
 
   ProductModel(
       {this.discount,
-        this.amount,
-        this.shopImage,
-        this.rating,
-        this.productNo,
-        this.name,
-        this.price,
-        this.imageUrls,
-        this.shippingCost,
-        this.shopLocation,
-        this.shopName,
-        this.productProperties,
-        this.productReviews});
+      this.amount,
+      this.imageUrl,
+      this.shopImage,
+      this.rating,
+      this.productNo,
+      this.name,
+      this.price,
+      this.imageUrls,
+      this.shippingCost,
+      this.shopLocation,
+      this.shopName,
+      this.productProperties,
+      this.productReviews});
 
   factory ProductModel.fromJson(Map<String, dynamic> json) =>
       _$ProductModelFromJson(json);

@@ -9,6 +9,7 @@ part of 'product_model.dart';
 ProductOverViewModel _$ProductOverViewModelFromJson(Map<String, dynamic> json) {
   return ProductOverViewModel(
     productNo: json['productNo'] as int,
+    discount: json['discount'] as int,
     name: json['name'] as String,
     price: json['price'] as int,
     imageUrl: json['imageUrl'] as String,
@@ -21,6 +22,7 @@ Map<String, dynamic> _$ProductOverViewModelToJson(
       'productNo': instance.productNo,
       'name': instance.name,
       'price': instance.price,
+      'discount': instance.discount,
       'imageUrl': instance.imageUrl,
     };
 
@@ -106,20 +108,23 @@ Map<String, dynamic> _$ProductReviewModelToJson(ProductReviewModel instance) =>
       'imageUrls': instance.imageUrls,
     };
 
-CartItemModel _$CartItemModelFromJson(Map<String, dynamic> json) {
-  return CartItemModel(
-    cartItemNo: json['cartItemNo'] as int,
+OrderModel _$OrderModelFromJson(Map<String, dynamic> json) {
+  return OrderModel(
+    orderNo: json['orderNo'] as int,
+    productNo: json['productNo'] as int,
     product: json['product'] == null
         ? null
-        : ProductDetailModel.fromJson(json['product'] as Map<String, dynamic>),
+        : ProductOverViewModel.fromJson(
+            json['product'] as Map<String, dynamic>),
     quantity: json['quantity'] as int,
     isChecked: json['isChecked'] as bool,
   );
 }
 
-Map<String, dynamic> _$CartItemModelToJson(CartItemModel instance) =>
+Map<String, dynamic> _$OrderModelToJson(OrderModel instance) =>
     <String, dynamic>{
-      'cartItemNo': instance.cartItemNo,
+      'orderNo': instance.orderNo,
+      'productNo': instance.productNo,
       'product': instance.product,
       'quantity': instance.quantity,
       'isChecked': instance.isChecked,
@@ -129,6 +134,7 @@ ProductModel _$ProductModelFromJson(Map<String, dynamic> json) {
   return ProductModel(
     discount: json['discount'] as int,
     amount: json['amount'] as int,
+    imageUrl: json['imageUrl'] as String,
     shopImage: json['shopImage'] as String,
     rating: (json['rating'] as num)?.toDouble(),
     productNo: json['productNo'] as int,
@@ -158,6 +164,7 @@ Map<String, dynamic> _$ProductModelToJson(ProductModel instance) =>
       'price': instance.price,
       'amount': instance.amount,
       'rating': instance.rating,
+      'imageUrl': instance.imageUrl,
       'imageUrls': instance.imageUrls,
       'shippingCost': instance.shippingCost,
       'discount': instance.discount,

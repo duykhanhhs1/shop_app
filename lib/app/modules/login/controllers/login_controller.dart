@@ -1,8 +1,14 @@
+import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:flutter/cupertino.dart';
-import 'package:get/get.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
+
+
 import 'package:scrum_app/app/model/Customer.dart';
+import 'package:scrum_app/app/routes/app_pages.dart';
 
 class LoginController extends GetxController {
   //TODO: Implement LoginController
@@ -14,10 +20,11 @@ class LoginController extends GetxController {
   TextEditingController addressController = TextEditingController();
   RxBool isProcessing = RxBool(false);
 
+
   final count = 0.obs;
 
   @override
-  void onInit() {
+  void onInit() async {
     super.onInit();
   }
 
@@ -41,9 +48,11 @@ class LoginController extends GetxController {
       Customer.uid = FirebaseAuth.instance.currentUser.uid;
       print("login success!");
       isProcessing.value = false;
+      Get.offAllNamed(Routes.HOME);
     }).catchError((onError) {
-      print("login failure" + onError.toString());
-      isProcessing.value = true;
+      Get.snackbar('Error', 'User not found',
+          snackPosition: SnackPosition.BOTTOM, colorText: Colors.red);
+      isProcessing.value = false;
     });
   }
 
@@ -62,20 +71,21 @@ class LoginController extends GetxController {
 //      Customer.uid = value.uid;
       CollectionReference users =
           FirebaseFirestore.instance.collection('users');
-      users
-          .doc(idUser)
-          .set({
-            'id': idUser,
-            'fullName': fullName,
-            'address': address,
-            'phone': phone
-          })
-          .then((value) => print("Add Customer Success!!"))
-          .catchError((error) => print("Failed to add customer: $error"));
+      users.doc(idUser).set({
+        'id': idUser,
+        'fullName': fullName,
+        'address': address,
+        'phone': phone
+      }).then((value) {
+        print("Add Customer Success!!");
+        Get.offAllNamed(Routes.LOGIN);
+        Get.snackbar('Success', 'Register success',
+            snackPosition: SnackPosition.BOTTOM, colorText: Colors.green);
+      }).catchError((error) => print("Failed to add customer: $error"));
       isProcessing.value = false;
     }).catchError((onError) {
       print("register failure" + onError.toString());
-      isProcessing.value = true;
+      isProcessing.value = false;
     });
   }
 }

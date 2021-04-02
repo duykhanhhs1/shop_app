@@ -3,18 +3,7 @@ import 'package:scrum_app/app/data/models/product_model.dart';
 import 'package:scrum_app/app/model/Product.dart';
 
 class ManageProduct {
-  static void addProduct(ProductOverViewModel product) {
-    product.productNo = DateTime.now().millisecondsSinceEpoch;
-    CollectionReference products =
-        FirebaseFirestore.instance.collection('products');
-    products
-        .doc('${product.productNo}')
-        .set(product.toJson())
-        .then((value) => print("Add Product Success!!"))
-        .catchError((error) => print("Failed to add product: $error"));
-  }
-
-  static void addProductDetail(ProductDetailModel product, int productNo) {
+  static void addProduct(ProductModel product) {
     product.productNo = DateTime.now().millisecondsSinceEpoch;
     CollectionReference products =
         FirebaseFirestore.instance.collection('products');
@@ -60,4 +49,55 @@ class ManageProduct {
     });
   }
 
+  static Future<List<ProductOverViewModel>> getAllProductFB() async {
+    List<ProductOverViewModel> products = [];
+    await FirebaseFirestore.instance
+        .collection('products')
+        .get()
+        .then((QuerySnapshot querySnapshot) {
+      querySnapshot.docs.forEach((element) {
+        var map = element.data();
+        products.add(ProductOverViewModel.fromJson(map));
+      });
+      return products;
+    });
+    return products;
+  }
+
+  static Future<ProductOverViewModel> getProductOverViewFB(
+      int productNo) async {
+    ProductOverViewModel product;
+    await FirebaseFirestore.instance
+        .collection('products')
+        .doc('$productNo')
+        .get()
+        .then((DocumentSnapshot documentSnapshot) {
+      if (documentSnapshot.exists) {
+        product = ProductOverViewModel.fromJson(documentSnapshot.data());
+        return product;
+      } else {
+        print('product detail not exists');
+        return product;
+      }
+    });
+    return product;
+  }
+
+  static Future<ProductDetailModel> getProductDetailFB(int productNo) async {
+    ProductDetailModel product = ProductDetailModel();
+    await FirebaseFirestore.instance
+        .collection('products')
+        .doc('$productNo')
+        .get()
+        .then((DocumentSnapshot documentSnapshot) {
+      if (documentSnapshot.exists) {
+        product = ProductDetailModel.fromJson(documentSnapshot.data());
+        return product;
+      } else {
+        print('product detail not exists');
+        return product;
+      }
+    });
+    return product;
+  }
 }

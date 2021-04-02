@@ -1,7 +1,7 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 import 'package:get/get.dart';
+import 'package:scrum_app/app/routes/app_pages.dart';
 import 'package:scrum_app/app/theme/color_theme.dart';
 import 'package:scrum_app/app/widgets/rounded_button.widget.dart';
 import 'package:scrum_app/app/widgets/rounded_input_field.widget.dart';
@@ -92,7 +92,9 @@ class ProfileView extends GetView<ProfileController> {
                       color: Colors.deepOrange,
                       textContent: 'Đăng xuất',
                       width: Get.width * 0.9,
-                      onPressed: () {}))
+                      onPressed: () {
+                        Get.offAllNamed(Routes.LOGIN);
+                      }))
             ],
           );
         },
@@ -166,15 +168,22 @@ class ProfileView extends GetView<ProfileController> {
                                     child: Text(value),
                                   );
                                 }).toList(),
-
                               )),
                             )),
                           SizedBox(height: 15),
-                          ProfileField(
-                              title: 'Số điện thoại', content: '0328264648'),
+                          ProfileFormField(
+                            title: 'Số điện thoại',
+                            child: FormRoundedInputField(
+                              borderRadius: BorderRadius.circular(5),
+                            ),
+                          ),
                           SizedBox(height: 15),
-                          ProfileField(
-                              title: 'Email', content: 'duykhanh@gmail.com'),
+                          ProfileFormField(
+                            title: 'Email',
+                            child: FormRoundedInputField(
+                              borderRadius: BorderRadius.circular(5),
+                            ),
+                          ),
                           SizedBox(height: 15),
                         ],
                       )

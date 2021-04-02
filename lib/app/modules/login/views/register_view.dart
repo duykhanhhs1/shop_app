@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:form_field_validator/form_field_validator.dart';
 
 import 'package:get/get.dart';
-import 'package:scrum_app/app/manage/ManageCustomer.dart';
 import 'package:scrum_app/app/modules/login/controllers/login_controller.dart';
 import 'package:scrum_app/app/routes/app_pages.dart';
 import 'package:scrum_app/app/theme/color_theme.dart';
@@ -141,9 +140,7 @@ class RegisterView extends GetView<LoginController> {
                               fullName: controller.fullNameController.text,
                               address: controller.addressController.text,
                               phone: controller.phoneNumberController.text);
-                          if(!controller.isProcessing.value){
-                            Get.offAllNamed(Routes.LOGIN);
-                          }
+
                         }
                       },
                     ),

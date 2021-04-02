@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 
 import 'package:scrum_app/app/data/models/product_model.dart';
+import 'package:scrum_app/app/manage/ManageOrder.dart';
 import 'package:scrum_app/app/modules/cart/controllers/cart_controller.dart';
 import 'package:scrum_app/app/modules/detail_product/controllers/detail_product_controller.dart';
 import 'package:scrum_app/app/modules/detail_product/widgets/review_card_widget.dart';
-import 'package:scrum_app/app/modules/home/widgets/cart_icon_widget.dart';
+import '../../../widgets/cart_icon_widget.dart';
 import 'package:scrum_app/app/theme/color_theme.dart';
 import 'package:scrum_app/app/widgets/number_input_field_widget.dart';
 import 'package:scrum_app/app/widgets/rounded_button.widget.dart';
@@ -58,15 +58,15 @@ class DetailProductView extends GetView<DetailProductController> {
                         child: _buildShopInfo(product),
                       ),
                       Divider(height: 30, thickness: 5),
-                      Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 12),
-                        child: _buildDetailInfo(product),
-                      ),
-                      Divider(height: 30, thickness: 5),
-                      Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 12),
-                        child: _buildReviews(product),
-                      ),
+                      // Padding(
+                      //   padding: const EdgeInsets.symmetric(horizontal: 12),
+                      //   child: _buildDetailInfo(product),
+                      // ),
+                      // Divider(height: 30, thickness: 5),
+                      // Padding(
+                      //   padding: const EdgeInsets.symmetric(horizontal: 12),
+                      //   child: _buildReviews(product),
+                      // ),
                       SizedBox(height: 100),
                     ],
                   ),
@@ -235,6 +235,7 @@ class DetailProductView extends GetView<DetailProductController> {
                 '${product.imageUrls[index]}',
                 width: Get.width,
                 height: Get.height,
+                fit: BoxFit.contain,
               ),
               Positioned(
                 child: Container(
@@ -309,9 +310,7 @@ class DetailProductView extends GetView<DetailProductController> {
   }
 
   Future<dynamic> _buildBottomAddCart(ProductDetailModel product) {
-    controller.quantityController.clear();
-    controller.quantity.value =
-        int.tryParse(controller.quantityController.text) ?? 0;
+    controller.quantityController.text = '1';
     return Get.bottomSheet(Container(
       padding: const EdgeInsets.all(15),
       decoration: BoxDecoration(
@@ -365,19 +364,7 @@ class DetailProductView extends GetView<DetailProductController> {
                 children: <Widget>[
                   Text('Quantity'),
                   NumberInputIncDec(
-                    onTapDecrease: () {
-                      controller.decreaseQuantity();
-                    },
-                    onTapIncrease: () {
-                      controller.increaseQuantity();
-                    },
-                    onChanged: (value) {
-                      if (int.tryParse(value) == null ||
-                          int.tryParse(value) < 0) {
-                        controller.clearInputQuantity();
-                      } else
-                        controller.setQuantityFromInput();
-                    },
+                    setValue: () {},
                     textController: controller.quantityController,
                   ),
                 ],
@@ -391,8 +378,10 @@ class DetailProductView extends GetView<DetailProductController> {
               return RoundedButton(
                 width: Get.width,
                 onPressed: () {
-                  cartController.addCartItem(CartItemModel(
-                      product: product, quantity: controller.quantity.value));
+                  cartController.addOrder(OrderModel(
+                      productNo: product.productNo,
+                      quantity:
+                          int.tryParse(controller.quantityController.text)));
                   Get.back();
                 },
                 textContent: 'Add to cart',

@@ -13,12 +13,13 @@ class CartItemContainer extends StatelessWidget {
     this.controller,
   }) : super(key: key);
 
-  final CartItemModel cartItem;
+  final OrderModel cartItem;
   final Function onTap;
   final CartController controller;
 
   @override
   Widget build(BuildContext context) {
+    cartItem.quantityController.text = '${cartItem.quantity}';
     return Slidable(
       actionPane: SlidableDrawerActionPane(),
       actionExtentRatio: .2,
@@ -39,7 +40,7 @@ class CartItemContainer extends StatelessWidget {
                 children: <Widget>[
                   GestureDetector(
                     onTap: () {
-                     controller.toggleChecked(cartItem);
+                      controller.toggleChecked(cartItem);
                     },
                     child: Icon(
                         cartItem.isChecked
@@ -49,7 +50,7 @@ class CartItemContainer extends StatelessWidget {
                             ? Colors.deepOrange
                             : Colors.black54),
                   ),
-                  Image.network(cartItem.product.imageUrls[0],
+                  Image.network(cartItem.product.imageUrl,
                       height: 70, width: 70, fit: BoxFit.cover),
                   SizedBox(width: 10),
                   Expanded(
@@ -66,23 +67,18 @@ class CartItemContainer extends StatelessWidget {
                             Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
-                                Text('${cartItem.product.price}',
+                                Text('${controller.getPrice(cartItem)}',
                                     style: TextStyle(
                                         color: Colors.deepOrange,
                                         fontSize: 16,
                                         fontWeight: FontWeight.bold)),
-                                Text('${cartItem.product.oldPrice}',
-                                    style: TextStyle(
-                                        color: Colors.black.withOpacity(.6),
-                                        fontSize: 12,
-                                        decoration:
-                                            TextDecoration.lineThrough)),
                               ],
                             ),
                             NumberInputIncDec(
-                              onChanged: (value) {
-                                controller.updateQuantityCartItem(
-                                    cartItem, value);
+                              textController: cartItem.quantityController,
+                              setValue: () {
+                                cartItem.quantity = int.tryParse(
+                                    cartItem.quantityController.text);
                               },
                             )
                           ],

@@ -4,6 +4,7 @@ import 'package:get/get.dart';
 
 import 'package:scrum_app/app/data/models/product_model.dart';
 import 'package:scrum_app/app/data/repositories/product_repository.dart';
+import 'package:scrum_app/app/manage/ManageProduct.dart';
 
 class DetailProductController extends GetxController {
   //TODO: Implement DetailProductController
@@ -21,41 +22,25 @@ class DetailProductController extends GetxController {
 
   @override
   void onInit() {
-    int productNo = Get.arguments;
-    getProductDetail(productNo);
+    final int productNo = Get.arguments;
+    getProductDetailFB(productNo);
     super.onInit();
   }
 
-  void getProductDetail(int productNo) async {
+
+  // void getProductDetail(int productNo) async {
+  //   isLoadingProduct.value = true;
+  //   final ProductDetailModel data = await repository.getProductDetail(productNo);
+  //   productDetail = data.obs;
+  //   isLoadingProduct.value = false;
+  //   update();
+  // }
+  //
+  void getProductDetailFB(int productNo) async {
     isLoadingProduct.value = true;
-    final ProductDetailModel data = await repository.getProductDetail(productNo);
+    final ProductDetailModel data = await ManageProduct.getProductDetailFB(productNo);
     productDetail = data.obs;
     isLoadingProduct.value = false;
-    update();
-  }
-
-  void clearInputQuantity(){
-    quantityController.clear();
-    update();
-  }
-
-  void increaseQuantity(){
-    if(quantity.value < 999){
-      quantity.value ++;
-      quantityController.text = quantity.value.toString();
-      update();
-    }
-  }
-  void decreaseQuantity(){
-    if(quantity.value > 0){
-      quantity.value --;
-      quantityController.text = quantity.value.toString();
-      update();
-    }
-  }
-
-  void setQuantityFromInput(){
-    quantity.value = int.tryParse(quantityController.text);
     update();
   }
 

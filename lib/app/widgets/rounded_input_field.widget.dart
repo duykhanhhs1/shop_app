@@ -71,6 +71,10 @@ class FormRoundedInputField extends StatelessWidget {
           borderRadius: borderRadius,
           borderSide: BorderSide(color: kPrimaryColor),
         ),
+       focusedErrorBorder: OutlineInputBorder(
+        borderRadius: borderRadius,
+        borderSide: BorderSide(color: kPrimaryColor),
+      ),
       ),
       onFieldSubmitted: onFieldSubmitted,
       style: style,

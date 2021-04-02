@@ -1,6 +1,5 @@
 import 'package:get/get.dart';
 import 'package:flutter/material.dart';
-import 'package:scrum_app/app/manage/ManageCustomer.dart';
 
 import 'package:scrum_app/app/modules/login/controllers/login_controller.dart';
 import 'package:scrum_app/app/routes/app_pages.dart';
@@ -78,9 +77,6 @@ class LoginView extends GetView<LoginController> {
                          await controller.signIn(
                               email: controller.emailController.text,
                               password: controller.passwordController.text);
-                         if(!controller.isProcessing.value){
-                           Get.offAllNamed(Routes.HOME);
-                         }
                         }
                       },
                     ),
@@ -92,6 +88,7 @@ class LoginView extends GetView<LoginController> {
                       Text('Bạn chưa có tài khoản?'),
                       GestureDetector(
                           onTap: () {
+                            controller.isProcessing.value = false;
                             Get.toNamed(Routes.REGISTER);
                           },
                           child: Text(

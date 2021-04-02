@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 
 import 'package:get/get.dart';
-import 'package:scrum_app/app/modules/profile/views/profile_view.dart';
 
 import '../controllers/admin_controller.dart';
 

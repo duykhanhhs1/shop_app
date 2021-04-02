@@ -3,19 +3,15 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 import 'package:scrum_app/app/modules/home/controllers/home_controller.dart';
-import 'package:scrum_app/app/modules/home/widgets/cart_icon_widget.dart';
 import 'package:scrum_app/app/modules/home/widgets/category_card_widget.dart';
 import 'package:scrum_app/app/modules/home/widgets/product_card_widget.dart';
 import 'package:scrum_app/app/modules/home/widgets/special_card_widget.dart';
 import 'package:scrum_app/app/routes/app_pages.dart';
 import 'package:scrum_app/app/theme/text_theme.dart';
 import 'package:scrum_app/app/widgets/app_bottom_navigation_bar_widget.dart';
+import 'package:scrum_app/app/widgets/cart_icon_widget.dart';
 import 'package:scrum_app/app/widgets/rounded_input_field.widget.dart';
 
-enum FilterOptions {
-  Favorites,
-  All,
-}
 
 class HomeView extends GetView<HomeController> {
   @override
@@ -37,23 +33,8 @@ class HomeView extends GetView<HomeController> {
               ),
             ),
             actions: <Widget>[
-              CartIcon(),
-              PopupMenuButton(
-                onSelected: (FilterOptions selectedValue) {},
-                icon: Icon(
-                  Icons.filter_alt_outlined,
-                ),
-                itemBuilder: (_) => [
-                  PopupMenuItem(
-                    child: Text('Only Favorites'),
-                    value: FilterOptions.Favorites,
-                  ),
-                  PopupMenuItem(
-                    child: Text('Show All'),
-                    value: FilterOptions.All,
-                  )
-                ],
-              ),
+              Center(child: CartIcon()),
+              SizedBox(width: 18),
             ],
           ),
           bottomNavigationBar: AppBottomNavigationBar(),

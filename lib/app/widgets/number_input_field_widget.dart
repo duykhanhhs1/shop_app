@@ -1,29 +1,34 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:scrum_app/app/data/models/product_model.dart';
 
 class NumberInputIncDec extends StatelessWidget {
-  const NumberInputIncDec({
+  NumberInputIncDec({
     Key key,
-    this.onTapIncrease,
-    this.onTapDecrease,
-    this.onChanged,
+
+    this.setValue,
     this.textController,
   }) : super(key: key);
 
-  final Function onTapIncrease;
-  final Function onTapDecrease;
-  final Function onChanged;
+
+  final Function setValue;
   final TextEditingController textController;
+
 
   @override
   Widget build(BuildContext context) {
+    int quantityTemp = 0;
     return Row(
       children: <Widget>[
         GestureDetector(
-          onTap: onTapDecrease,
+          onTap: () {
+            quantityTemp = int.tryParse(textController.text);
+            if (quantityTemp > 1) quantityTemp--;
+            textController.text = quantityTemp.toString();
+            setValue();
+          },
           child: Container(
-            decoration:
-            BoxDecoration(border: Border.all(color: Colors.grey)),
+            decoration: BoxDecoration(border: Border.all(color: Colors.grey)),
             width: 30,
             height: 30,
             child: Icon(
@@ -42,7 +47,12 @@ class NumberInputIncDec extends StatelessWidget {
               LengthLimitingTextInputFormatter(3),
             ],
             textAlign: TextAlign.center,
-            onChanged: onChanged,
+            onChanged: (value) {
+              print(value);
+              if (int.tryParse(textController.text) == null || int.tryParse(textController.text) < 1) {
+                textController.clear();
+              } else setValue();
+            },
             keyboardType: TextInputType.number,
             decoration: InputDecoration(
               isDense: true,
@@ -52,10 +62,14 @@ class NumberInputIncDec extends StatelessWidget {
           ),
         ),
         GestureDetector(
-          onTap: onTapIncrease,
+          onTap: () {
+            quantityTemp = int.tryParse(textController.text);
+            if (quantityTemp < 999) quantityTemp++;
+            textController.text = quantityTemp.toString();
+            setValue();
+          },
           child: Container(
-            decoration:
-            BoxDecoration(border: Border.all(color: Colors.grey)),
+            decoration: BoxDecoration(border: Border.all(color: Colors.grey)),
             width: 30,
             height: 30,
             child: Icon(
