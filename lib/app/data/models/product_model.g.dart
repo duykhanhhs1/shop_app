@@ -9,6 +9,7 @@ part of 'product_model.dart';
 ProductOverViewModel _$ProductOverViewModelFromJson(Map<String, dynamic> json) {
   return ProductOverViewModel(
     productNo: json['productNo'] as int,
+    amount: json['amount'] as int,
     discount: json['discount'] as int,
     name: json['name'] as String,
     price: json['price'] as int,
@@ -22,6 +23,7 @@ Map<String, dynamic> _$ProductOverViewModelToJson(
       'productNo': instance.productNo,
       'name': instance.name,
       'price': instance.price,
+      'amount': instance.amount,
       'discount': instance.discount,
       'imageUrl': instance.imageUrl,
     };
@@ -134,6 +136,7 @@ ProductModel _$ProductModelFromJson(Map<String, dynamic> json) {
   return ProductModel(
     discount: json['discount'] as int,
     amount: json['amount'] as int,
+    desc: json['desc'] as String,
     imageUrl: json['imageUrl'] as String,
     shopImage: json['shopImage'] as String,
     rating: (json['rating'] as num)?.toDouble(),
@@ -161,6 +164,7 @@ Map<String, dynamic> _$ProductModelToJson(ProductModel instance) =>
     <String, dynamic>{
       'productNo': instance.productNo,
       'name': instance.name,
+      'desc': instance.desc,
       'price': instance.price,
       'amount': instance.amount,
       'rating': instance.rating,

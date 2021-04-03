@@ -8,11 +8,12 @@ class ProductOverViewModel {
   int productNo;
   String name;
   int price;
+  int amount;
   int discount;
   String imageUrl;
 
   ProductOverViewModel(
-      {this.productNo, this.discount, this.name, this.price, this.imageUrl});
+      {this.productNo,this.amount, this.discount, this.name, this.price, this.imageUrl});
 
   factory ProductOverViewModel.fromJson(Map<String, dynamic> json) =>
       _$ProductOverViewModelFromJson(json);
@@ -127,6 +128,7 @@ class OrderModel {
 class ProductModel {
   int productNo;
   String name;
+  String desc;
   int price;
   int amount;
   double rating;
@@ -143,6 +145,7 @@ class ProductModel {
   ProductModel(
       {this.discount,
       this.amount,
+      this.desc,
       this.imageUrl,
       this.shopImage,
       this.rating,

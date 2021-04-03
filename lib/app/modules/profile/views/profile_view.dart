@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:scrum_app/app/routes/app_pages.dart';
 import 'package:scrum_app/app/theme/color_theme.dart';
+import 'package:scrum_app/app/widgets/form_input_field.dart';
 import 'package:scrum_app/app/widgets/rounded_button.widget.dart';
 import 'package:scrum_app/app/widgets/rounded_input_field.widget.dart';
 
@@ -141,14 +142,14 @@ class ProfileView extends GetView<ProfileController> {
                     ? Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          ProfileFormField(
+                          FormInputField(
                             title: 'Tên',
                             child: FormRoundedInputField(
                               borderRadius: BorderRadius.circular(5),
                             ),
                           ),
                           SizedBox(height: 15),
-                          ProfileFormField(
+                          FormInputField(
                             title: 'Giới tính',
                             child: Container(
                               decoration: BoxDecoration(
@@ -171,14 +172,14 @@ class ProfileView extends GetView<ProfileController> {
                               )),
                             )),
                           SizedBox(height: 15),
-                          ProfileFormField(
+                          FormInputField(
                             title: 'Số điện thoại',
                             child: FormRoundedInputField(
                               borderRadius: BorderRadius.circular(5),
                             ),
                           ),
                           SizedBox(height: 15),
-                          ProfileFormField(
+                          FormInputField(
                             title: 'Email',
                             child: FormRoundedInputField(
                               borderRadius: BorderRadius.circular(5),
@@ -286,29 +287,3 @@ class ProfileField extends StatelessWidget {
   }
 }
 
-class ProfileFormField extends StatelessWidget {
-  const ProfileFormField({
-    Key key,
-    this.title,
-    this.child,
-  }) : super(key: key);
-
-  final String title;
-  final Widget child;
-
-  @override
-  Widget build(BuildContext context) {
-    return GetBuilder(
-      init: Get.find<ProfileController>(),
-      builder: (ProfileController controller) {
-        return Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text(title, style: TextStyle(fontWeight: FontWeight.bold)),
-            child,
-          ],
-        );
-      },
-    );
-  }
-}

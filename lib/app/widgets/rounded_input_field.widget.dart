@@ -22,7 +22,7 @@ class FormRoundedInputField extends StatelessWidget {
     this.onChanged,
     this.keyboardType = TextInputType.text,
     this.icon,
-    this.inputFormatters,
+    this.inputFormatters, this.borderColor = kPrimaryColor,
   });
 
   final Key key;
@@ -38,6 +38,7 @@ class FormRoundedInputField extends StatelessWidget {
   final EdgeInsetsGeometry contentPadding;
   final FormFieldValidator<String> validator;
   final Color fillColor;
+  final Color borderColor;
   final Function onSaved;
   final Function onChanged;
   final TextInputType keyboardType;
@@ -57,11 +58,11 @@ class FormRoundedInputField extends StatelessWidget {
         contentPadding: contentPadding,
         border: OutlineInputBorder(
           borderRadius: borderRadius,
-          borderSide: BorderSide(color: kPrimaryColor),
+          borderSide: BorderSide(color: borderColor),
         ),
         focusedBorder: OutlineInputBorder(
           borderRadius: borderRadius,
-          borderSide: BorderSide(color: kPrimaryColor),
+          borderSide: BorderSide(color: borderColor),
         ),
         errorBorder: OutlineInputBorder(
           borderRadius: borderRadius,
@@ -69,11 +70,11 @@ class FormRoundedInputField extends StatelessWidget {
         ),
         enabledBorder: OutlineInputBorder(
           borderRadius: borderRadius,
-          borderSide: BorderSide(color: kPrimaryColor),
+          borderSide: BorderSide(color: borderColor),
         ),
        focusedErrorBorder: OutlineInputBorder(
         borderRadius: borderRadius,
-        borderSide: BorderSide(color: kPrimaryColor),
+        borderSide: BorderSide(color: borderColor),
       ),
       ),
       onFieldSubmitted: onFieldSubmitted,

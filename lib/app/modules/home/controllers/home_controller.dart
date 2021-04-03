@@ -17,7 +17,6 @@ class HomeController extends GetxController {
 
   RxInt currentIndexBottomBar = RxInt(0);
   RxList<ProductOverViewModel> products = RxList<ProductOverViewModel>();
-  List<ProductOverViewModel> productModels = <ProductOverViewModel>[];
 
   @override
   void onInit() async {
@@ -42,12 +41,12 @@ class HomeController extends GetxController {
     }*/
 
 
-    getAllProductFB();
+    getAllProductOverview();
     super.onInit();
   }
 
-  void getAllProductFB() async {
-    final List<ProductOverViewModel> data = await ManageProduct.getAllProductFB();
+  void getAllProductOverview() async {
+    final List<ProductOverViewModel> data = await repository.getAllProductOverview();
     products = data.obs;
     update();
   }

@@ -1,7 +1,8 @@
 import 'package:get/get.dart';
 
 import 'package:scrum_app/app/modules/admin/bindings/admin_binding.dart';
-import 'package:scrum_app/app/modules/admin/views/admin_view.dart';
+import 'package:scrum_app/app/modules/admin/views/customer_management_view.dart';
+import 'package:scrum_app/app/modules/admin/views/product_management_view.dart';
 import 'package:scrum_app/app/modules/cart/bindings/cart_binding.dart';
 import 'package:scrum_app/app/modules/cart/views/cart_view.dart';
 import 'package:scrum_app/app/modules/detail_product/bindings/detail_product_binding.dart';
@@ -17,7 +18,7 @@ import 'package:scrum_app/app/modules/profile/views/profile_view.dart';
 part 'app_routes.dart';
 
 class AppPages {
-  static const INITIAL = Routes.LOGIN;
+  static const INITIAL = Routes.ADMIN;
 
   static final routes = [
     GetPage(
@@ -42,7 +43,7 @@ class AppPages {
     ),
     GetPage(
       name: _Paths.ADMIN,
-      page: () => AdminView(),
+      page: () => CustomerManagementView(),
       binding: AdminBinding(),
     ),
     GetPage(
@@ -54,6 +55,11 @@ class AppPages {
       name: _Paths.DETAIL_PRODUCT,
       page: () => DetailProductView(),
       binding: DetailProductBinding(),
+    ),
+    GetPage(
+      name: _Paths.PRODUCT_MANAGEMENT,
+      page: () => ProductManagementView(),
+      binding: AdminBinding(),
     ),
   ];
 }

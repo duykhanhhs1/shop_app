@@ -19,7 +19,22 @@ class ProductProvider extends GetConnect {
   }
 
   ///FIRE BASE
-  Future<List<ProductOverViewModel>> getAllProductFB() async {
+  Future<List<ProductModel>> getAllProductFB() async {
+    List<ProductModel> products = [];
+    await FirebaseFirestore.instance
+        .collection('products')
+        .get()
+        .then((QuerySnapshot querySnapshot) {
+      querySnapshot.docs.forEach((element) {
+        var map = element.data();
+        products.add(ProductModel.fromJson(map));
+      });
+      return products;
+    });
+    return products;
+  }
+
+  Future<List<ProductOverViewModel>> getAllProductOverview() async {
     List<ProductOverViewModel> products = [];
     await FirebaseFirestore.instance
         .collection('products')
@@ -32,6 +47,37 @@ class ProductProvider extends GetConnect {
       return products;
     });
     return products;
+  }
+
+  Future<void> addProduct(ProductModel product) async {
+    product.productNo = DateTime.now().millisecondsSinceEpoch;
+    CollectionReference products =
+    FirebaseFirestore.instance.collection('products');
+    await products
+        .doc('${product.productNo}')
+        .set(product.toJson())
+        .then((value) => print("Add product Success!!"))
+        .catchError((error) => print("Failed to add product: $error"));
+  }
+
+  Future<void> removeProduct(ProductModel product) async {
+    CollectionReference products =
+    FirebaseFirestore.instance.collection('products');
+    await products
+        .doc('${product.productNo}')
+        .delete()
+        .then((value) => print("Delete product Success!!"))
+        .catchError((error) => print("Failed to Delete product: $error"));
+  }
+
+  Future<void> updateProduct(ProductModel product) async {
+    CollectionReference products =
+    FirebaseFirestore.instance.collection('products');
+    await products
+        .doc('${product.productNo}')
+        .update(product.toJson())
+        .then((value) => print("Update product Success!!"))
+        .catchError((error) => print("Failed to Update product: $error"));
   }
 
   Future<ProductOverViewModel> getProductOverViewFB(int productNo) async {

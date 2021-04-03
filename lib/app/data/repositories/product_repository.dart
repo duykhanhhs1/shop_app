@@ -16,10 +16,18 @@ class ProductRepository {
     return apiClient.getProductDetail(productNo);
   }
 
-
   ///Firebase
-  Future<List<ProductOverViewModel>> getAllProductFB() {
+  Future<List<ProductModel>> getAllProductFB() {
+    return apiClient.getAllProductFB();
+  }
+  Future<void> updateProduct(ProductModel product) {
+    return apiClient.updateProduct(product);
+  }  Future<void> removeProduct(ProductModel product) {
+    return apiClient.removeProduct(product);
+  }
 
+  Future<List<ProductOverViewModel>> getAllProductOverview() {
+    return apiClient.getAllProductOverview();
   }
 
   Future<List<OrderModel>> getAllOrderFB() async {
@@ -38,5 +46,7 @@ class ProductRepository {
     return apiClient.addOrder(order);
   }
 
-
+  Future<void> addProduct(ProductModel product) {
+    return apiClient.addProduct(product);
+  }
 }
