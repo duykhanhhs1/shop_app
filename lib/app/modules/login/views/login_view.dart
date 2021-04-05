@@ -1,11 +1,11 @@
-import 'package:get/get.dart';
 import 'package:flutter/material.dart';
-
+import 'package:form_field_validator/form_field_validator.dart';
+import 'package:get/get.dart';
 import 'package:scrum_app/app/modules/login/controllers/login_controller.dart';
 import 'package:scrum_app/app/routes/app_pages.dart';
+import 'package:scrum_app/app/theme/color_theme.dart';
 import 'package:scrum_app/app/widgets/rounded_button.widget.dart';
 import 'package:scrum_app/app/widgets/rounded_input_field.widget.dart';
-import 'package:form_field_validator/form_field_validator.dart';
 
 class LoginView extends GetView<LoginController> {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
@@ -86,14 +86,16 @@ class LoginView extends GetView<LoginController> {
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       Text('Bạn chưa có tài khoản?'),
-                      GestureDetector(
+                      InkWell(
                           onTap: () {
                             controller.isProcessing.value = false;
                             Get.toNamed(Routes.REGISTER);
                           },
                           child: Text(
                             ' Đăng ký',
-                            style: TextStyle(fontWeight: FontWeight.bold),
+                            style: TextStyle(
+                                fontWeight: FontWeight.bold,
+                                color: kPrimaryColor),
                           ))
                     ],
                   ),

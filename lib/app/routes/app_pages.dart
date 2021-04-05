@@ -1,5 +1,4 @@
 import 'package:get/get.dart';
-
 import 'package:scrum_app/app/modules/admin/bindings/admin_binding.dart';
 import 'package:scrum_app/app/modules/admin/views/customer_management_view.dart';
 import 'package:scrum_app/app/modules/admin/views/product_management_view.dart';
@@ -18,7 +17,7 @@ import 'package:scrum_app/app/modules/profile/views/profile_view.dart';
 part 'app_routes.dart';
 
 class AppPages {
-  static const INITIAL = Routes.ADMIN;
+  static const INITIAL = Routes.LOGIN;
 
   static final routes = [
     GetPage(

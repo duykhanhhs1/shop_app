@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:form_field_validator/form_field_validator.dart';
-
 import 'package:get/get.dart';
+import 'package:scrum_app/app/data/models/user_model.dart';
 import 'package:scrum_app/app/modules/login/controllers/login_controller.dart';
 import 'package:scrum_app/app/routes/app_pages.dart';
 import 'package:scrum_app/app/theme/color_theme.dart';
@@ -39,7 +39,7 @@ class RegisterView extends GetView<LoginController> {
                         fontSize: 25,
                         color: kPrimaryColor),
                   ),
-                  SizedBox(height: 50.0),
+                  SizedBox(height: 60.0),
                   FormRoundedInputField(
                     controller: controller.fullNameController,
                     style: TextStyle(
@@ -89,7 +89,8 @@ class RegisterView extends GetView<LoginController> {
                     onChanged: (value) => null,
                     onSaved: (value) => controller.emailController.text = value,
                   ),
-                  SizedBox(height: 20), FormRoundedInputField(
+                  SizedBox(height: 20),
+                  FormRoundedInputField(
                     controller: controller.addressController,
                     style: TextStyle(
                       color: Colors.black,
@@ -98,10 +99,9 @@ class RegisterView extends GetView<LoginController> {
                     prefixIcon: Icons.location_on_outlined,
                     hintText: 'Địa chỉ',
                     validator: MultiValidator([
-                      RequiredValidator(
-                          errorText: 'Vui lòng nhập địa chỉ'),
+                      RequiredValidator(errorText: 'Vui lòng nhập địa chỉ'),
                     ]),
-                    keyboardType: TextInputType.phone,
+                    keyboardType: TextInputType.text,
                     onChanged: (value) => null,
                     onSaved: (value) => controller.emailController.text = value,
                   ),
@@ -117,6 +117,8 @@ class RegisterView extends GetView<LoginController> {
                     validator: MultiValidator(
                       [
                         RequiredValidator(errorText: 'Vui lòng nhập mật khẩu'),
+                        MinLengthValidator(6,
+                            errorText: 'Mật khẩu ít nhất 6 kí tự')
                       ],
                     ),
                     obscureText: true,
@@ -134,13 +136,15 @@ class RegisterView extends GetView<LoginController> {
                           : 'Đăng ký',
                       onPressed: () async {
                         if (_formKey.currentState.validate()) {
-                          await controller.customerRegister(
-                              email: controller.emailController.text,
-                              password: controller.passwordController.text,
-                              fullName: controller.fullNameController.text,
-                              address: controller.addressController.text,
-                              phone: controller.phoneNumberController.text);
-
+                          await controller.addCustomer(
+                            email: controller.emailController.text,
+                            password: controller.passwordController.text,
+                            user: UserModel(
+                                fullName: controller.fullNameController.text,
+                                phone: controller.phoneNumberController.text,
+                                address: controller.addressController.text,
+                                role: 'user'),
+                          );
                         }
                       },
                     ),
@@ -150,16 +154,19 @@ class RegisterView extends GetView<LoginController> {
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       Text('Bạn đã có tài khoản?'),
-                      GestureDetector(
+                      InkWell(
                           onTap: () {
                             Get.toNamed(Routes.LOGIN);
                           },
                           child: Text(
                             ' Đăng nhập',
-                            style: TextStyle(fontWeight: FontWeight.bold),
+                            style: TextStyle(
+                                fontWeight: FontWeight.bold,
+                                color: kPrimaryColor),
                           ))
                     ],
                   ),
+                  SizedBox(height: 40),
                 ],
               ),
             ),

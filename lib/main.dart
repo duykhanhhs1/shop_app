@@ -1,15 +1,11 @@
 import 'package:firebase_core/firebase_core.dart';
-import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_local_notifications/flutter_local_notifications.dart';
-
 import 'package:get/get.dart';
 import 'package:scrum_app/app/theme/app_theme.dart';
-import 'package:scrum_app/app/widgets/rounded_button.widget.dart';
 
 import 'app/routes/app_pages.dart';
 
-const AndroidNotificationChannel channel = AndroidNotificationChannel(
+/*const AndroidNotificationChannel channel = AndroidNotificationChannel(
   'high_importance_channel', // id
   'High Importance Notifications', // title
   'This channel is used for important notifications.', // description
@@ -17,18 +13,17 @@ const AndroidNotificationChannel channel = AndroidNotificationChannel(
 );
 
 final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
-FlutterLocalNotificationsPlugin();
+FlutterLocalNotificationsPlugin();*/
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
 
 
-
-  await flutterLocalNotificationsPlugin
+/*  await flutterLocalNotificationsPlugin
       .resolvePlatformSpecificImplementation<
           AndroidFlutterLocalNotificationsPlugin>()
-      ?.createNotificationChannel(channel);
+      ?.createNotificationChannel(channel);*/
 
   ///Background Notification
   // Future<void> _firebaseMessagingBackgroundHandler(
@@ -39,8 +34,9 @@ void main() async {
 //  FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
 
 
-  await FirebaseMessaging.instance.getToken();
+  //await FirebaseMessaging.instance.getToken();
 
+/*
   FirebaseMessaging.onMessage.listen((RemoteMessage message) {
     Map<String, dynamic> data = message.data;
     if (message.notification != null) {
@@ -64,6 +60,7 @@ void main() async {
         ],
       ));
     }
+*/
 /*    RemoteNotification notification = message.notification;
     AndroidNotification android = message.notification?.android;
     if (notification != null && android != null) {
@@ -82,9 +79,10 @@ void main() async {
               icon: 'launch_background',
             ),
           ));
-    }*/
-  });
+    }*/ /*
 
+  });
+*/
 
   runApp(
     GetMaterialApp(
