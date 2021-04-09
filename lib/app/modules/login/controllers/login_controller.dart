@@ -14,6 +14,7 @@ class LoginController extends GetxController {
   TextEditingController phoneNumberController = TextEditingController();
   TextEditingController addressController = TextEditingController();
   RxBool isProcessing = RxBool(false);
+  Rx<UserModel> userLogged = Rx(UserModel());
 
 
   final count = 0.obs;
@@ -41,6 +42,7 @@ class LoginController extends GetxController {
         .signInWithEmailAndPassword(email: email, password: password)
         .then((value) {
       getCustomer(value.user.uid).then((value) {
+        userLogged.value = value;
         if (value.role == 'admin') {
           Get.offAllNamed(Routes.ADMIN);
         } else {

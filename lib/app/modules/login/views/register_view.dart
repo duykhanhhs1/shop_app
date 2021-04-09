@@ -140,6 +140,7 @@ class RegisterView extends GetView<LoginController> {
                             email: controller.emailController.text,
                             password: controller.passwordController.text,
                             user: UserModel(
+                              email: controller.emailController.text,
                                 fullName: controller.fullNameController.text,
                                 phone: controller.phoneNumberController.text,
                                 address: controller.addressController.text,

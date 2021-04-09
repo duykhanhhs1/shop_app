@@ -1,7 +1,10 @@
 import 'package:firebase_core/firebase_core.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:get/get.dart';
 import 'package:scrum_app/app/theme/app_theme.dart';
+import 'package:scrum_app/app/widgets/rounded_button.widget.dart';
 
 import 'app/routes/app_pages.dart';
 
@@ -9,62 +12,39 @@ import 'app/routes/app_pages.dart';
   'high_importance_channel', // id
   'High Importance Notifications', // title
   'This channel is used for important notifications.', // description
-  importance: Importance.high,
+  importance: Importance.max,
 );
 
 final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
-FlutterLocalNotificationsPlugin();*/
+FlutterLocalNotificationsPlugin();
+
+Future<void> _firebaseMessagingBackgroundHandler(
+    RemoteMessage message) async {
+  print("Handling a background message: ${message.messageId}");
+}*/
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
 
-
 /*  await flutterLocalNotificationsPlugin
-      .resolvePlatformSpecificImplementation<
-          AndroidFlutterLocalNotificationsPlugin>()
-      ?.createNotificationChannel(channel);*/
+      .resolvePlatformSpecificImplementation<AndroidFlutterLocalNotificationsPlugin>()
+      ?.createNotificationChannel(channel);
 
   ///Background Notification
-  // Future<void> _firebaseMessagingBackgroundHandler(
-  //     RemoteMessage message) async {
-  //   print("Handling a background message: ${message.messageId}");
-  // }
 
-//  FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
+  await FirebaseMessaging.instance.getToken().then((value) => print(value));
 
+ FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
 
-  //await FirebaseMessaging.instance.getToken();
-
-/*
+ ///Foreground Notification
   FirebaseMessaging.onMessage.listen((RemoteMessage message) {
-    Map<String, dynamic> data = message.data;
-    if (message.notification != null) {
-      RemoteNotification remoteNotification = message.notification;
-      Get.dialog(AlertDialog(
-        title: Column(
-          children: [
-            Text(remoteNotification.title),
-          ],
-        ),
-        content: Column(
-          children: [
-            Text(remoteNotification.body),
-          ],
-        ),
-        actions: [
-          RoundedButton(
-            textContent: 'Close',
-            onPressed: () {},
-          )
-        ],
-      ));
-    }
-*/
-/*    RemoteNotification notification = message.notification;
+    RemoteNotification notification = message.notification;
     AndroidNotification android = message.notification?.android;
+
+    // If `onMessage` is triggered with a notification, construct our own
+    // local notification to show to users using the created channel.
     if (notification != null && android != null) {
-      print(notification.title);
       flutterLocalNotificationsPlugin.show(
           notification.hashCode,
           notification.title,
@@ -79,10 +59,8 @@ void main() async {
               icon: 'launch_background',
             ),
           ));
-    }*/ /*
-
-  });
-*/
+    }
+  });*/
 
   runApp(
     GetMaterialApp(
