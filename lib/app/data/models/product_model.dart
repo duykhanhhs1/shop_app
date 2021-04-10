@@ -13,7 +13,12 @@ class ProductOverViewModel {
   String imageUrl;
 
   ProductOverViewModel(
-      {this.productNo,this.amount, this.discount, this.name, this.price, this.imageUrl});
+      {this.productNo,
+      this.amount,
+      this.discount,
+      this.name,
+      this.price,
+      this.imageUrl});
 
   factory ProductOverViewModel.fromJson(Map<String, dynamic> json) =>
       _$ProductOverViewModelFromJson(json);
@@ -105,15 +110,22 @@ class ProductReviewModel {
 class OrderModel {
   int orderNo;
   int productNo;
+  String userNo;
+  String status;
+  @JsonKey(ignore: true)
   ProductOverViewModel product;
   int quantity;
   bool isChecked;
   @JsonKey(ignore: true)
   TextEditingController quantityController = TextEditingController();
 
+  int get getPriceOrder => this.quantity * this.product.price;
+
   OrderModel(
       {this.orderNo,
       this.productNo,
+      this.status,
+      this.userNo,
       this.product,
       this.quantity,
       this.isChecked = false});

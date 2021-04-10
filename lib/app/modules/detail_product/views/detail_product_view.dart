@@ -1,17 +1,17 @@
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
-
+import 'package:get/get.dart';
 import 'package:scrum_app/app/data/models/product_model.dart';
-import 'package:scrum_app/app/manage/ManageOrder.dart';
 import 'package:scrum_app/app/modules/cart/controllers/cart_controller.dart';
 import 'package:scrum_app/app/modules/detail_product/controllers/detail_product_controller.dart';
 import 'package:scrum_app/app/modules/detail_product/widgets/review_card_widget.dart';
-import '../../../widgets/cart_icon_widget.dart';
+import 'package:scrum_app/app/modules/login/controllers/login_controller.dart';
 import 'package:scrum_app/app/theme/color_theme.dart';
 import 'package:scrum_app/app/widgets/number_input_field_widget.dart';
 import 'package:scrum_app/app/widgets/rounded_button.widget.dart';
 import 'package:scrum_app/app/widgets/rounded_input_field.widget.dart';
+
+import '../../../widgets/cart_icon_widget.dart';
 
 class DetailProductView extends GetView<DetailProductController> {
   @override
@@ -176,16 +176,18 @@ class DetailProductView extends GetView<DetailProductController> {
                 children: <Widget>[
                   _buildRating(product),
                   SizedBox(width: 5),
-                  Text(
-                    product.name,
-                    style: TextStyle(fontSize: 18),
-                    maxLines: 2,
-                    overflow: TextOverflow.ellipsis,
+                  Expanded(
+                    child: Text(
+                      product.name,
+                      style: TextStyle(fontSize: 18),
+                      maxLines: 2,
+                      overflow: TextOverflow.ellipsis,
+                    ),
                   ),
                 ],
               ),
             ),
-            _buildDiscount(product)
+            //_buildDiscount(product)
           ],
         ),
         SizedBox(height: 10),
@@ -379,6 +381,8 @@ class DetailProductView extends GetView<DetailProductController> {
                 width: Get.width,
                 onPressed: () {
                   cartController.addOrder(OrderModel(
+                      status: 'pending',
+                      userNo: LoginController.to.userLogged.value.userNo,
                       productNo: product.productNo,
                       quantity:
                           int.tryParse(controller.quantityController.text)));
@@ -407,7 +411,7 @@ class DetailProductView extends GetView<DetailProductController> {
 
   Widget _buildRating(ProductDetailModel product) {
     return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 5, vertical: 2),
+      padding: const EdgeInsets.symmetric(horizontal: 5),
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(15),
         color: kPrimaryColor.withOpacity(.4),

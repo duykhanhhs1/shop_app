@@ -1,8 +1,7 @@
 import 'package:flutter/material.dart';
-
 import 'package:get/get.dart';
-import 'package:scrum_app/app/manage/ManageProduct.dart';
-import 'package:scrum_app/app/modules/cart/widgets/cart_item_widget.dart';
+import 'package:scrum_app/app/modules/cart/widgets/order_cart_item.dart';
+import 'package:scrum_app/app/routes/app_pages.dart';
 import 'package:scrum_app/app/widgets/rounded_button.widget.dart';
 
 import '../controllers/cart_controller.dart';
@@ -54,7 +53,9 @@ class CartView extends GetView<CartController> {
                       SizedBox(width: 5),
                       RoundedButton(
                         height: 40,
-                        onPressed: () {},
+                        onPressed: () {
+                          Get.toNamed(Routes.PAYMENT);
+                        },
                         color: Colors.deepOrange,
                         textContent: 'Mua hàng',
                         radius: 0,
@@ -69,25 +70,28 @@ class CartView extends GetView<CartController> {
             builder: (CartController controller) {
               return Column(
                 children: [
-                  if (controller.carts.length > 0)
-                    Divider(
-                      thickness: 10,
-                      height: 10,
-                    ),
+                  if (controller.orders.length > 0)
+                          Divider(
+                            thickness: 5,
+                            height: 5,
+                          ),
                   Expanded(
                     child: ListView.builder(
-                      itemCount: controller.carts.length,
-                      itemBuilder: (context, index) {
-                        return Column(
-                          children: <Widget>[
-                            CartItemContainer(
-                              controller: controller,
-                              onTap: () {
-                                controller.removeCartItem(index);
-                              },
-                              cartItem: controller.carts[index],
-                            ),
-                            Divider(
+                      itemCount: controller.orders
+                                .where((_) => _.status == 'pending')
+                                .toList()
+                                .length,
+                            itemBuilder: (context, index) {
+                              return Column(
+                                children: <Widget>[
+                                  OrderCartItem(
+                                    controller: controller,
+                                    onTap: () {
+                                      controller.removeCartItem(index);
+                                    },
+                                    order: controller.orders[index],
+                                  ),
+                                  Divider(
                               thickness: 5,
                               height: 5,
                             ),

@@ -1,80 +1,87 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-
-
 import 'package:scrum_app/app/data/models/product_model.dart';
 import 'package:scrum_app/app/data/repositories/product_repository.dart';
-
+import 'package:scrum_app/app/modules/login/controllers/login_controller.dart';
 
 class CartController extends GetxController {
   //TODO: Implement CartController
 
   final ProductRepository repository;
+
   CartController({@required this.repository}) : assert(repository != null);
 
   static CartController get to => Get.find<CartController>();
 
-  RxList<OrderModel> carts = RxList<OrderModel>();
+  RxList<OrderModel> orders = RxList<OrderModel>();
+
+  List<OrderModel> get checkedOrders =>
+      orders.where((_) => _.isChecked).toList();
   RxInt total = RxInt(0);
   RxBool isCheckedAll = RxBool(false);
   RxBool isLoadingCart = RxBool(false);
 
   @override
   void onInit() {
-    getOrders();
+    getOrders(LoginController.to.userLogged.value.userNo);
     super.onInit();
   }
 
-  Future<void> getOrders() async {
+  Future<void> getOrders(String userNo) async {
     isLoadingCart.value = true;
-    final List<OrderModel> data = await repository.getAllOrderFB();
-    carts = data.obs;
+    final List<OrderModel> data = await repository.getAllOrderFB(userNo);
+    orders = data.obs;
     isLoadingCart.value = false;
     update();
   }
 
   void addOrder(OrderModel order) async {
-    repository.addOrder(order);
-    carts.add(order);
+    OrderModel orderCheck = orders.singleWhere(
+      (element) => element.productNo == order.productNo,
+      orElse: () => null,
+    );
+    if (orderCheck != null) {
+      order.orderNo = orderCheck.orderNo;
+      order.quantity += orderCheck.quantity;
+      await repository.updateOrder(order);
+    } else {
+      await repository.addOrder(order);
+      orders.add(order);
+    }
     update();
   }
 
   void removeCartItem(int index) {
-    carts.removeAt(index);
+    orders.removeAt(index);
     update();
   }
 
-  // void updateQuantityCartItem(OrderModel order, String value) {
-  //   order.quantity = int.tryParse(value);
-  //   update();
-  // }
-
   int getTotalPrice() {
     total.value = 0;
-    carts.forEach((element) {
-      if(element.isChecked == true){
+    checkedOrders.forEach((element) {
+      if (element.isChecked == true) {
         total.value += element.product.price * element.quantity;
       }
     });
+    /* orders.forEach((element) {
+      if (element.isChecked == true) {
+        total.value += element.product.price * element.quantity;
+      }
+    });*/
     update();
     return total.value;
   }
 
-  int getPrice(OrderModel order) {
-    update();
-    return order.product.price * order.quantity;
+  void setPaidStatus() async {
+    checkedOrders.forEach((element) async {
+      element.status = 'paid';
+      await repository.updateOrder(element);
+    });
   }
 
   void toggleChecked(OrderModel order) {
-    int count = 0;
     order.isChecked = !order.isChecked;
-    carts.forEach((element) {
-      if (element.isChecked == true) {
-        count++;
-      }
-    });
-    if (count == carts.length) {
+    if (checkedOrders.length == orders.length) {
       isCheckedAll.value = true;
     } else
       isCheckedAll.value = false;
@@ -83,12 +90,12 @@ class CartController extends GetxController {
 
   void setCheckAllItem() {
     if (isCheckedAll.value) {
-      carts.forEach((element) {
+      orders.forEach((element) {
         element.isChecked = false;
       });
       isCheckedAll.value = false;
     } else {
-      carts.forEach((element) {
+      orders.forEach((element) {
         element.isChecked = true;
       });
       isCheckedAll.value = true;

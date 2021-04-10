@@ -16,6 +16,7 @@ class LoginController extends GetxController {
   RxBool isProcessing = RxBool(false);
   Rx<UserModel> userLogged = Rx(UserModel());
 
+  static LoginController get to => Get.find<LoginController>();
 
   final count = 0.obs;
 

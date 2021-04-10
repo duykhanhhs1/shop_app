@@ -2,24 +2,23 @@ import 'package:flutter/material.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:scrum_app/app/data/models/product_model.dart';
 import 'package:scrum_app/app/modules/cart/controllers/cart_controller.dart';
-
 import 'package:scrum_app/app/widgets/number_input_field_widget.dart';
 
-class CartItemContainer extends StatelessWidget {
-  const CartItemContainer({
+class OrderCartItem extends StatelessWidget {
+  const OrderCartItem({
     Key key,
-    this.cartItem,
+    this.order,
     this.onTap,
     this.controller,
   }) : super(key: key);
 
-  final OrderModel cartItem;
+  final OrderModel order;
   final Function onTap;
   final CartController controller;
 
   @override
   Widget build(BuildContext context) {
-    cartItem.quantityController.text = '${cartItem.quantity}';
+    order.quantityController.text = '${order.quantity}';
     return Slidable(
       actionPane: SlidableDrawerActionPane(),
       actionExtentRatio: .2,
@@ -40,17 +39,17 @@ class CartItemContainer extends StatelessWidget {
                 children: <Widget>[
                   GestureDetector(
                     onTap: () {
-                      controller.toggleChecked(cartItem);
+                      controller.toggleChecked(order);
                     },
                     child: Icon(
-                        cartItem.isChecked
+                        order.isChecked
                             ? Icons.check_box_outlined
                             : Icons.check_box_outline_blank,
-                        color: cartItem.isChecked
+                        color: order.isChecked
                             ? Colors.deepOrange
                             : Colors.black54),
                   ),
-                  Image.network(cartItem.product.imageUrl,
+                  Image.network(order.product.imageUrl,
                       height: 70, width: 70, fit: BoxFit.cover),
                   SizedBox(width: 10),
                   Expanded(
@@ -58,7 +57,7 @@ class CartItemContainer extends StatelessWidget {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: <Widget>[
                         Text(
-                          cartItem.product.name,
+                          order.product.name,
                           maxLines: 2,
                         ),
                         Row(
@@ -67,7 +66,7 @@ class CartItemContainer extends StatelessWidget {
                             Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
-                                Text('${controller.getPrice(cartItem)}',
+                                Text('${order.getPriceOrder}',
                                     style: TextStyle(
                                         color: Colors.deepOrange,
                                         fontSize: 16,
@@ -75,10 +74,10 @@ class CartItemContainer extends StatelessWidget {
                               ],
                             ),
                             NumberInputIncDec(
-                              textController: cartItem.quantityController,
+                              textController: order.quantityController,
                               setValue: () {
-                                cartItem.quantity = int.tryParse(
-                                    cartItem.quantityController.text);
+                                order.quantity =
+                                    int.tryParse(order.quantityController.text);
                               },
                             )
                           ],

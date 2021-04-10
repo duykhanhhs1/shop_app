@@ -1,7 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-
 import 'package:scrum_app/app/modules/home/controllers/home_controller.dart';
 import 'package:scrum_app/app/modules/home/widgets/category_card_widget.dart';
 import 'package:scrum_app/app/modules/home/widgets/product_card_widget.dart';
@@ -11,7 +10,6 @@ import 'package:scrum_app/app/theme/text_theme.dart';
 import 'package:scrum_app/app/widgets/app_bottom_navigation_bar_widget.dart';
 import 'package:scrum_app/app/widgets/cart_icon_widget.dart';
 import 'package:scrum_app/app/widgets/rounded_input_field.widget.dart';
-
 
 class HomeView extends GetView<HomeController> {
   @override
@@ -38,33 +36,37 @@ class HomeView extends GetView<HomeController> {
             ],
           ),
           bottomNavigationBar: AppBottomNavigationBar(),
-          body: GetBuilder(builder: (HomeController controller) {
-            return SingleChildScrollView(
-              child: Container(
-                padding: const EdgeInsets.symmetric(horizontal: 10),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: <Widget>[
-                    Padding(
-                        padding: const EdgeInsets.symmetric(vertical: 10),
-                        child: Text('Danh mục', style: textTitle)),
-                    _buildCategoryGridView(),
-                    Padding(
-                        padding: const EdgeInsets.symmetric(vertical: 10),
-                        child: Text('Dành cho bạn', style: textTitle)),
-                    _buildSpecialListView(),
-                    Padding(
-                        padding: const EdgeInsets.symmetric(vertical: 10),
-                        child: Text('Sản phẩm nổi bật', style: textTitle)),
-                    _buildPopularGridView(controller),
-                    SizedBox(
-                      height: 15,
-                    )
-                  ],
+          body: GetBuilder(
+            builder: (HomeController controller) {
+              return SingleChildScrollView(
+                child: Container(
+                  padding: const EdgeInsets.symmetric(horizontal: 10),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: <Widget>[
+                      /*    Padding(
+                          padding: const EdgeInsets.symmetric(vertical: 10),
+                          child: Text('Danh mục', style: textTitle)),
+                      _buildCategoryGridView(),
+                      Padding(
+                          padding: const EdgeInsets.symmetric(vertical: 10),
+                          child: Text('Dành cho bạn', style: textTitle)),
+                      _buildSpecialListView(),*/
+                      Padding(
+                          padding: const EdgeInsets.symmetric(vertical: 10),
+                          child: Text('Sản phẩm nổi bật', style: textTitle)),
+                      controller.isLoading.value
+                          ? Center(child: CircularProgressIndicator())
+                          : _buildPopularGridView(controller),
+                      SizedBox(
+                        height: 15,
+                      )
+                    ],
+                  ),
                 ),
-              ),
-            );
-          }),
+              );
+            },
+          ),
         );
       },
     );
@@ -125,7 +127,8 @@ class HomeView extends GetView<HomeController> {
         itemBuilder: (BuildContext context, int index) {
           return ProductCard(
             onTap: () {
-              Get.toNamed(Routes.DETAIL_PRODUCT,arguments:controller.products[index].productNo);
+              Get.toNamed(Routes.DETAIL_PRODUCT,
+                  arguments: controller.products[index].productNo);
             },
             product: controller.products[index],
           );

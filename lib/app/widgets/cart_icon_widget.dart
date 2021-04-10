@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:scrum_app/app/manage/ManageProduct.dart';
 import 'package:scrum_app/app/modules/cart/controllers/cart_controller.dart';
+import 'package:scrum_app/app/modules/login/controllers/login_controller.dart';
 import 'package:scrum_app/app/routes/app_pages.dart';
 
 class CartIcon extends StatelessWidget {
@@ -19,7 +19,8 @@ class CartIcon extends StatelessWidget {
             return IconButton(
                 onPressed: () {
                   Get.toNamed(Routes.CART);
-                  controller.getOrders();
+                  controller
+                      .getOrders(LoginController.to.userLogged.value.userNo);
                 },
                 icon: Icon(
                   Icons.shopping_cart,
@@ -32,7 +33,7 @@ class CartIcon extends StatelessWidget {
           child: GetBuilder(
             init: Get.find<CartController>(),
             builder: (CartController cartController) {
-              return cartController.carts.length > 0
+              return cartController.orders.length > 0
                   ? Container(
                       padding: const EdgeInsets.all(5),
                       decoration: BoxDecoration(
@@ -40,7 +41,7 @@ class CartIcon extends StatelessWidget {
                           color: Colors.red,
                           border: Border.all(color: Colors.white)),
                       child: Text(
-                        '${cartController.carts.length}',
+                        '${cartController.orders.length}',
                         style: TextStyle(
                             fontSize: 12, fontWeight: FontWeight.bold),
                       ),

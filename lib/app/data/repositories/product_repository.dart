@@ -1,4 +1,3 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:scrum_app/app/data/models/product_model.dart';
 import 'package:scrum_app/app/data/providers/product_provider.dart';
@@ -20,9 +19,12 @@ class ProductRepository {
   Future<List<ProductModel>> getAllProductFB() {
     return apiClient.getAllProductFB();
   }
+
   Future<void> updateProduct(ProductModel product) {
     return apiClient.updateProduct(product);
-  }  Future<void> removeProduct(ProductModel product) {
+  }
+
+  Future<void> removeProduct(ProductModel product) {
     return apiClient.removeProduct(product);
   }
 
@@ -30,8 +32,8 @@ class ProductRepository {
     return apiClient.getAllProductOverview();
   }
 
-  Future<List<OrderModel>> getAllOrderFB() async {
-    return await apiClient.getAllOrderFB();
+  Future<List<OrderModel>> getAllOrderFB(String userNo) async {
+    return await apiClient.getAllOrderFB(userNo);
   }
 
   Future<ProductOverViewModel> getProductOverViewFB(int productNo) {
@@ -44,6 +46,14 @@ class ProductRepository {
 
   Future<void> addOrder(OrderModel order) {
     return apiClient.addOrder(order);
+  }
+
+  Future<void> updateOrder(OrderModel order) {
+    return apiClient.updateOrder(order);
+  }
+
+  Future<OrderModel> getOrder(int orderNo, int productNo) {
+    return apiClient.getOrder(orderNo, productNo);
   }
 
   Future<void> addProduct(ProductModel product) {

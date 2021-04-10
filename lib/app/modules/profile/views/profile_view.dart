@@ -1,9 +1,8 @@
 import 'package:flutter/material.dart';
-
 import 'package:get/get.dart';
-import 'package:scrum_app/app/data/models/user_model.dart';
 import 'package:scrum_app/app/routes/app_pages.dart';
 import 'package:scrum_app/app/theme/color_theme.dart';
+import 'package:scrum_app/app/widgets/custom_list_tile_widget.dart';
 import 'package:scrum_app/app/widgets/form_input_field.dart';
 import 'package:scrum_app/app/widgets/rounded_button.widget.dart';
 import 'package:scrum_app/app/widgets/rounded_input_field.widget.dart';
@@ -60,13 +59,18 @@ class ProfileView extends GetView<ProfileController> {
                           ),
                         ),
                         Divider(thickness: 5, height: 0),
-                        _buildListTile(
-                            iconData: Icons.article_outlined,
-                            title: 'Đơn mua',
-                            color: kPrimaryColor,
-                            secondText: 'Xem lịch sử mua hàng'),
+                        InkWell(
+                          onTap: () {
+                            Get.toNamed(Routes.ORDER_MANAGEMENT);
+                          },
+                          child: CustomListTile(
+                              iconData: Icons.article_outlined,
+                              title: 'Đơn mua',
+                              color: kPrimaryColor,
+                              secondText: 'Xem lịch sử mua hàng'),
+                        ),
                         Divider(height: 0),
-                        _buildListTile(
+                        CustomListTile(
                             iconData: Icons.favorite_border,
                             color: Colors.deepOrange,
                             title: 'Yêu thích'),
@@ -75,18 +79,18 @@ class ProfileView extends GetView<ProfileController> {
                           onTap: () {
                             _showFormEditDialog();
                           },
-                          child: _buildListTile(
+                          child: CustomListTile(
                               iconData: Icons.account_box_outlined,
                               color: Colors.blue,
                               title: 'Tài khoản'),
                         ),
                         Divider(height: 0),
-                        _buildListTile(
+                        CustomListTile(
                             color: Colors.yellowAccent.shade700,
                             iconData: Icons.help_outline,
                             title: 'Trung tâm trợ giúp'),
                         Divider(height: 0),
-                        _buildListTile(
+                        CustomListTile(
                             color: Colors.red,
                             iconData: Icons.account_balance_wallet_outlined,
                             title: 'Ví voucher'),
@@ -110,8 +114,8 @@ class ProfileView extends GetView<ProfileController> {
   }
 
   Future<dynamic> _showFormEditDialog() {
-   controller.userCreate = controller.userModel;
-  // UserModel user = controller.currentUser;
+    controller.userCreate = controller.userModel;
+    // UserModel user = controller.currentUser;
     return Get.dialog(GetBuilder(
       builder: (ProfileController controller) {
         return AlertDialog(
@@ -153,7 +157,8 @@ class ProfileView extends GetView<ProfileController> {
                           FormInputField(
                             title: 'Tên',
                             child: FormRoundedInputField(
-                              initialValue: controller.userCreate.value.fullName,
+                              initialValue:
+                                  controller.userCreate.value.fullName,
                               borderRadius: BorderRadius.circular(5),
                             ),
                           ),
@@ -167,7 +172,8 @@ class ProfileView extends GetView<ProfileController> {
                                 width: Get.width,
                                 child: DropdownButtonHideUnderline(
                                     child: DropdownButton(
-                                  value: controller.userCreate.value.gender ?? null,
+                                  value: controller.userCreate.value.gender ??
+                                      null,
                                   onChanged: (value) {},
                                   items: <String>[
                                     'Nam',
@@ -263,34 +269,6 @@ class ProfileView extends GetView<ProfileController> {
               SizedBox(height: 15),
             ],
           ),
-      ],
-    );
-  }
-
-  Widget _buildListTile(
-      {IconData iconData, Color color, String title, String secondText = ''}) {
-    return Row(
-      children: [
-        Expanded(
-          child: ListTile(
-            horizontalTitleGap: 0,
-            leading: Icon(
-              iconData,
-              color: color,
-            ),
-            title: Text(title),
-          ),
-        ),
-        Row(
-          children: [
-            Text(secondText),
-            Icon(
-              Icons.keyboard_arrow_right,
-              color: Colors.black.withOpacity(.6),
-            ),
-            SizedBox(width: 12)
-          ],
-        )
       ],
     );
   }

@@ -1,19 +1,18 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:scrum_app/app/data/models/product_model.dart';
 import 'package:scrum_app/app/data/repositories/product_repository.dart';
-import 'package:scrum_app/app/manage/ManageProduct.dart';
-import 'package:scrum_app/app/model/Product.dart';
+import 'package:scrum_app/app/modules/cart/controllers/cart_controller.dart';
+import 'package:scrum_app/app/modules/login/controllers/login_controller.dart';
 
 class HomeController extends GetxController {
   final ProductRepository repository;
+
   HomeController({@required this.repository}) : assert(repository != null);
 
   static HomeController get to => Get.find<HomeController>();
 
-  final count = 0.obs;
+  RxBool isLoading = false.obs;
 
   RxInt currentIndexBottomBar = RxInt(0);
   RxList<ProductOverViewModel> products = RxList<ProductOverViewModel>();
@@ -40,17 +39,19 @@ class HomeController extends GetxController {
     ));
     }*/
 
-
     getAllProductOverview();
+    CartController.to.getOrders(LoginController.to.userLogged.value.userNo);
     super.onInit();
   }
 
   void getAllProductOverview() async {
-    final List<ProductOverViewModel> data = await repository.getAllProductOverview();
+    isLoading.value = true;
+    final List<ProductOverViewModel> data =
+        await repository.getAllProductOverview();
     products = data.obs;
+    isLoading.value = false;
     update();
   }
-
 
   // void getProducts() async {
   //   final List<ProductOverViewModel> data = await repository.getProducts();
@@ -74,10 +75,8 @@ class HomeController extends GetxController {
     //     print('Message also contained a notification: ${message.notification}');
     //   }
     // });
-
   }
 
   @override
   void onClose() {}
-  void increment() => count.value++;
 }

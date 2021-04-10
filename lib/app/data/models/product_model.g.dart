@@ -114,10 +114,8 @@ OrderModel _$OrderModelFromJson(Map<String, dynamic> json) {
   return OrderModel(
     orderNo: json['orderNo'] as int,
     productNo: json['productNo'] as int,
-    product: json['product'] == null
-        ? null
-        : ProductOverViewModel.fromJson(
-            json['product'] as Map<String, dynamic>),
+    status: json['status'] as String,
+    userNo: json['userNo'] as String,
     quantity: json['quantity'] as int,
     isChecked: json['isChecked'] as bool,
   );
@@ -127,7 +125,8 @@ Map<String, dynamic> _$OrderModelToJson(OrderModel instance) =>
     <String, dynamic>{
       'orderNo': instance.orderNo,
       'productNo': instance.productNo,
-      'product': instance.product,
+      'userNo': instance.userNo,
+      'status': instance.status,
       'quantity': instance.quantity,
       'isChecked': instance.isChecked,
     };

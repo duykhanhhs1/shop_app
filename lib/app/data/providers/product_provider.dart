@@ -115,7 +115,7 @@ class ProductProvider extends GetConnect {
     return product;
   }
 
-  Future<List<OrderModel>> getAllOrderFB() async {
+  Future<List<OrderModel>> getAllOrderFB(String userNo) async {
     List<OrderModel> orders = [];
     List<Future> futures = <Future>[];
 
@@ -125,10 +125,12 @@ class ProductProvider extends GetConnect {
         .then((QuerySnapshot querySnapshot) {
       querySnapshot.docs.forEach((map) async {
         OrderModel order = OrderModel.fromJson(map.data());
-        futures.add(getProductOverViewFB(order.productNo).then((value) {
-          order.product = value;
-          orders.add(order);
-        }));
+        if (order.userNo == userNo && order.status == 'pending') {
+          futures.add(getProductOverViewFB(order.productNo).then((value) {
+            order.product = value;
+            orders.add(order);
+          }));
+        }
       });
     });
     await Future.wait(futures);
@@ -156,5 +158,22 @@ class ProductProvider extends GetConnect {
         .update(order.toJson())
         .then((value) => print("Update Product Success!!"))
         .catchError((error) => print("Failed to Update product: $error"));
+  }
+
+  Future<OrderModel> getOrder(int orderNo, int productNo) async {
+    OrderModel order;
+
+    await FirebaseFirestore.instance
+        .collection('orders')
+        .doc('$orderNo')
+        .get()
+        .then((DocumentSnapshot documentSnapshot) {
+      if (documentSnapshot.exists) {
+        order = OrderModel.fromJson(documentSnapshot.data());
+      } else {
+        print('order not exists');
+      }
+    });
+    return order;
   }
 }

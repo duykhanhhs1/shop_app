@@ -4,6 +4,7 @@ import 'package:scrum_app/app/modules/admin/views/customer_management_view.dart'
 import 'package:scrum_app/app/modules/admin/views/product_management_view.dart';
 import 'package:scrum_app/app/modules/cart/bindings/cart_binding.dart';
 import 'package:scrum_app/app/modules/cart/views/cart_view.dart';
+import 'package:scrum_app/app/modules/cart/views/payment_view.dart';
 import 'package:scrum_app/app/modules/detail_product/bindings/detail_product_binding.dart';
 import 'package:scrum_app/app/modules/detail_product/views/detail_product_view.dart';
 import 'package:scrum_app/app/modules/home/bindings/home_binding.dart';
@@ -12,6 +13,7 @@ import 'package:scrum_app/app/modules/login/bindings/login_binding.dart';
 import 'package:scrum_app/app/modules/login/views/login_view.dart';
 import 'package:scrum_app/app/modules/login/views/register_view.dart';
 import 'package:scrum_app/app/modules/profile/bindings/profile_binding.dart';
+import 'package:scrum_app/app/modules/profile/views/order_management_view.dart';
 import 'package:scrum_app/app/modules/profile/views/profile_view.dart';
 
 part 'app_routes.dart';
@@ -41,6 +43,11 @@ class AppPages {
       binding: ProfileBinding(),
     ),
     GetPage(
+      name: _Paths.ORDER_MANAGEMENT,
+      page: () => OrderManagementView(),
+      binding: ProfileBinding(),
+    ),
+    GetPage(
       name: _Paths.ADMIN,
       page: () => CustomerManagementView(),
       binding: AdminBinding(),
@@ -48,6 +55,11 @@ class AppPages {
     GetPage(
       name: _Paths.CART,
       page: () => CartView(),
+      binding: CartBinding(),
+    ),
+    GetPage(
+      name: _Paths.PAYMENT,
+      page: () => PaymentView(),
       binding: CartBinding(),
     ),
     GetPage(
