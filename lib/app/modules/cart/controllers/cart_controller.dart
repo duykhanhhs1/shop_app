@@ -3,6 +3,7 @@ import 'package:get/get.dart';
 import 'package:scrum_app/app/data/models/product_model.dart';
 import 'package:scrum_app/app/data/repositories/product_repository.dart';
 import 'package:scrum_app/app/modules/login/controllers/login_controller.dart';
+import 'package:scrum_app/app/routes/app_pages.dart';
 
 class CartController extends GetxController {
   //TODO: Implement CartController
@@ -17,6 +18,17 @@ class CartController extends GetxController {
 
   List<OrderModel> get checkedOrders =>
       orders.where((_) => _.isChecked).toList();
+
+  List<OrderModel> get paidOrders {
+    List<OrderModel> paidOrders =
+        orders.where((_) => _.status == 'paid').toList();
+    paidOrders.sort((a, b) => a.createAt.compareTo(b.createAt));
+    return paidOrders;
+  }
+
+  List<OrderModel> get pendingOrders =>
+      orders.where((_) => _.status == 'pending').toList();
+
   RxInt total = RxInt(0);
   RxBool isCheckedAll = RxBool(false);
   RxBool isLoadingCart = RxBool(false);
@@ -37,7 +49,8 @@ class CartController extends GetxController {
 
   void addOrder(OrderModel order) async {
     OrderModel orderCheck = orders.singleWhere(
-      (element) => element.productNo == order.productNo,
+      (element) =>
+          element.productNo == order.productNo && element.status == 'pending',
       orElse: () => null,
     );
     if (orderCheck != null) {
@@ -46,13 +59,28 @@ class CartController extends GetxController {
       await repository.updateOrder(order);
     } else {
       await repository.addOrder(order);
+      await repository
+          .getProductOverViewFB(order.productNo)
+          .then((product) => order.product = product);
       orders.add(order);
     }
     update();
   }
 
-  void removeCartItem(int index) {
-    orders.removeAt(index);
+  void removeOrder(OrderModel order) async {
+    await repository.removeOrder(order.orderNo);
+    orders.remove(order);
+    if (pendingOrders.length == 0) isCheckedAll.value = false;
+    update();
+  }
+
+  void removeCheckedOrders() async {
+    checkedOrders.forEach((order) async {
+      await repository
+          .removeOrder(order.orderNo)
+          .then((value) => orders.remove(order));
+    });
+    isCheckedAll.value = false;
     update();
   }
 
@@ -72,16 +100,31 @@ class CartController extends GetxController {
     return total.value;
   }
 
-  void setPaidStatus() async {
+  void updatePaidOrder() async {
     checkedOrders.forEach((element) async {
       element.status = 'paid';
+      element.isChecked = false;
+      element.createAt = DateTime.now();
       await repository.updateOrder(element);
     });
   }
 
+  void reBuy(OrderModel order) async {
+    orders.forEach((element) {
+      element.isChecked = false;
+    });
+
+    //
+    OrderModel orderReBuy = order;
+    orderReBuy.status = 'pending';
+    orderReBuy.isChecked = true;
+    await repository.addOrder(orderReBuy);
+    Get.toNamed(Routes.CART);
+  }
+
   void toggleChecked(OrderModel order) {
     order.isChecked = !order.isChecked;
-    if (checkedOrders.length == orders.length) {
+    if (checkedOrders.length == pendingOrders.length) {
       isCheckedAll.value = true;
     } else
       isCheckedAll.value = false;
@@ -90,12 +133,12 @@ class CartController extends GetxController {
 
   void setCheckAllItem() {
     if (isCheckedAll.value) {
-      orders.forEach((element) {
+      pendingOrders.forEach((element) {
         element.isChecked = false;
       });
       isCheckedAll.value = false;
     } else {
-      orders.forEach((element) {
+      pendingOrders.forEach((element) {
         element.isChecked = true;
       });
       isCheckedAll.value = true;

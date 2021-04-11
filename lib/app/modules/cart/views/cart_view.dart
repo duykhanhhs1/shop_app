@@ -16,6 +16,14 @@ class CartView extends GetView<CartController> {
           appBar: AppBar(
             title: Text('Giỏ hàng'),
             centerTitle: true,
+            actions: [
+              if (controller.checkedOrders.length > 0)
+                IconButton(
+                    onPressed: () {
+                      controller.removeCheckedOrders();
+                    },
+                    icon: Icon(Icons.delete_outline))
+            ],
           ),
           bottomNavigationBar: Container(
             padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
@@ -38,7 +46,9 @@ class CartView extends GetView<CartController> {
                     ],
                   ),
                   onTap: () {
-                    controller.setCheckAllItem();
+                    if (controller.pendingOrders.length > 0) {
+                      controller.setCheckAllItem();
+                    }
                   },
                 ),
                 Expanded(
@@ -46,7 +56,7 @@ class CartView extends GetView<CartController> {
                     mainAxisAlignment: MainAxisAlignment.end,
                     children: <Widget>[
                       Text('Tổng tiền: '),
-                      Text('${controller.getTotalPrice()} VNĐ',
+                      Text('₫${controller.getTotalPrice()}',
                           style: TextStyle(
                               color: Colors.deepOrange,
                               fontWeight: FontWeight.bold)),
@@ -66,44 +76,40 @@ class CartView extends GetView<CartController> {
               ],
             ),
           ),
-          body: controller.isLoadingCart.value ? Center(child: CircularProgressIndicator()) : GetBuilder(
-            builder: (CartController controller) {
-              return Column(
-                children: [
-                  if (controller.orders.length > 0)
+          body: controller.isLoadingCart.value
+              ? Center(child: CircularProgressIndicator())
+              : GetBuilder(
+                  builder: (CartController controller) {
+                    return Column(
+                      children: [
+                        if (controller.pendingOrders.length > 0)
                           Divider(
                             thickness: 5,
                             height: 5,
                           ),
-                  Expanded(
-                    child: ListView.builder(
-                      itemCount: controller.orders
-                                .where((_) => _.status == 'pending')
-                                .toList()
-                                .length,
+                        Expanded(
+                          child: ListView.builder(
+                            itemCount: controller.pendingOrders.length,
                             itemBuilder: (context, index) {
                               return Column(
                                 children: <Widget>[
                                   OrderCartItem(
                                     controller: controller,
-                                    onTap: () {
-                                      controller.removeCartItem(index);
-                                    },
-                                    order: controller.orders[index],
+                                    order: controller.pendingOrders[index],
                                   ),
                                   Divider(
-                              thickness: 5,
-                              height: 5,
-                            ),
-                          ],
-                        );
-                      },
-                    ),
-                  )
-                ],
-              );
-            },
-          ),
+                                    thickness: 5,
+                                    height: 5,
+                                  ),
+                                ],
+                              );
+                            },
+                          ),
+                        )
+                      ],
+                    );
+                  },
+                ),
         );
       },
     );

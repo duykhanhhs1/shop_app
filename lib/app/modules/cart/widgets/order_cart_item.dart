@@ -8,12 +8,10 @@ class OrderCartItem extends StatelessWidget {
   const OrderCartItem({
     Key key,
     this.order,
-    this.onTap,
     this.controller,
   }) : super(key: key);
 
   final OrderModel order;
-  final Function onTap;
   final CartController controller;
 
   @override
@@ -27,7 +25,9 @@ class OrderCartItem extends StatelessWidget {
           icon: Icons.delete,
           color: Colors.deepOrange,
           caption: 'Xóa',
-          onTap: onTap,
+          onTap: () {
+            controller.removeOrder(order);
+          },
         )
       ],
       child: Container(
@@ -66,7 +66,7 @@ class OrderCartItem extends StatelessWidget {
                             Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
-                                Text('${order.getPriceOrder}',
+                                Text('₫${order.getPriceOrder}',
                                     style: TextStyle(
                                         color: Colors.deepOrange,
                                         fontSize: 16,

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:json_annotation/json_annotation.dart';
 
 part 'product_model.g.dart';
@@ -112,19 +113,25 @@ class OrderModel {
   int productNo;
   String userNo;
   String status;
+  DateTime createAt;
+  int quantity;
+
   @JsonKey(ignore: true)
   ProductOverViewModel product;
-  int quantity;
+  @JsonKey(ignore: true)
   bool isChecked;
   @JsonKey(ignore: true)
   TextEditingController quantityController = TextEditingController();
 
   int get getPriceOrder => this.quantity * this.product.price;
 
+  String get getCreateAt => DateFormat('HH:mm dd-MM-yyyy').format(createAt);
+
   OrderModel(
       {this.orderNo,
       this.productNo,
       this.status,
+      this.createAt,
       this.userNo,
       this.product,
       this.quantity,

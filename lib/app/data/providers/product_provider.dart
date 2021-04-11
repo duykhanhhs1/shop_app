@@ -125,7 +125,7 @@ class ProductProvider extends GetConnect {
         .then((QuerySnapshot querySnapshot) {
       querySnapshot.docs.forEach((map) async {
         OrderModel order = OrderModel.fromJson(map.data());
-        if (order.userNo == userNo && order.status == 'pending') {
+        if (order.userNo == userNo) {
           futures.add(getProductOverViewFB(order.productNo).then((value) {
             order.product = value;
             orders.add(order);
@@ -175,5 +175,14 @@ class ProductProvider extends GetConnect {
       }
     });
     return order;
+  }
+
+  Future<void> removeOrder(int orderNo) async {
+    await FirebaseFirestore.instance
+        .collection('orders')
+        .doc('$orderNo')
+        .delete()
+        .then((value) => print('remove order success'))
+        .catchError((e) => print('remove order fail + $e'));
   }
 }

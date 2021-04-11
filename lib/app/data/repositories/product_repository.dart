@@ -56,6 +56,10 @@ class ProductRepository {
     return apiClient.getOrder(orderNo, productNo);
   }
 
+  Future<void> removeOrder(int orderNo) {
+    return apiClient.removeOrder(orderNo);
+  }
+
   Future<void> addProduct(ProductModel product) {
     return apiClient.addProduct(product);
   }
