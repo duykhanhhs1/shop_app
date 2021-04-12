@@ -2,10 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:scrum_app/app/modules/cart/controllers/cart_controller.dart';
 import 'package:scrum_app/app/modules/cart/widgets/order_payment_item_widget.dart';
-import 'package:scrum_app/app/modules/profile/controllers/profile_controller.dart';
 import 'package:scrum_app/app/widgets/rounded_button.widget.dart';
 
-class OrderManagementView extends GetView<ProfileController> {
+class OrderManagementView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return DefaultTabController(

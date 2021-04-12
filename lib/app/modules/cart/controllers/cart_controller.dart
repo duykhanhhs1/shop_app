@@ -47,23 +47,21 @@ class CartController extends GetxController {
     update();
   }
 
-  void addOrder(OrderModel order) async {
-    OrderModel orderCheck = orders.singleWhere(
-      (element) =>
-          element.productNo == order.productNo && element.status == 'pending',
-      orElse: () => null,
-    );
-    if (orderCheck != null) {
-      order.orderNo = orderCheck.orderNo;
-      order.quantity += orderCheck.quantity;
-      await repository.updateOrder(order);
-    } else {
-      await repository.addOrder(order);
-      await repository
-          .getProductOverViewFB(order.productNo)
-          .then((product) => order.product = product);
-      orders.add(order);
-    }
+  Future<void> addOrder(OrderModel order) async {
+    orders.forEach((element) async {
+      if (element.productNo == order.productNo && element.status == 'pending') {
+        element.quantity += order.quantity;
+        element.isChecked = order.isChecked;
+        await repository.updateOrder(element);
+        return;
+      } else if (element == orders.last) {
+        await repository.addOrder(order);
+        await repository
+            .getProductOverViewFB(order.productNo)
+            .then((product) => order.product = product);
+        orders.add(order);
+      }
+    });
     update();
   }
 
@@ -109,16 +107,17 @@ class CartController extends GetxController {
     });
   }
 
-  void reBuy(OrderModel order) async {
+  void reBuy(OrderModel order) {
     orders.forEach((element) {
       element.isChecked = false;
     });
 
     //
-    OrderModel orderReBuy = order;
+    OrderModel orderReBuy = OrderModel.fromJson(order.toJson());
+    orderReBuy.product = order.product;
     orderReBuy.status = 'pending';
     orderReBuy.isChecked = true;
-    await repository.addOrder(orderReBuy);
+    addOrder(orderReBuy);
     Get.toNamed(Routes.CART);
   }
 
@@ -152,5 +151,9 @@ class CartController extends GetxController {
   }
 
   @override
-  void onClose() {}
+  void onClose() {
+    // orders.forEach((element) {
+    //   element.isChecked = false;
+    // });
+  }
 }

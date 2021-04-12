@@ -7,11 +7,11 @@ import '../controllers/cart_controller.dart';
 class CartBinding extends Bindings {
   @override
   void dependencies() {
-    Get.lazyPut<CartController>(
-      () => CartController(
-          repository: ProductRepository(
-        apiClient: ProductProvider(),
-      )),
-    );
+    Get.put<CartController>(
+        CartController(
+            repository: ProductRepository(
+          apiClient: ProductProvider(),
+        )),
+        permanent: true);
   }
 }

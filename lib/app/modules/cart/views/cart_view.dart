@@ -25,57 +25,7 @@ class CartView extends GetView<CartController> {
                     icon: Icon(Icons.delete_outline))
             ],
           ),
-          bottomNavigationBar: Container(
-            padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: <Widget>[
-                InkWell(
-                  child: Row(
-                    children: [
-                      Icon(
-                        controller.isCheckedAll.value
-                            ? Icons.check_box_outlined
-                            : Icons.check_box_outline_blank,
-                        color: controller.isCheckedAll.value
-                            ? Colors.deepOrange
-                            : Colors.black54,
-                      ),
-                      SizedBox(width: 5),
-                      Text('Tất cả')
-                    ],
-                  ),
-                  onTap: () {
-                    if (controller.pendingOrders.length > 0) {
-                      controller.setCheckAllItem();
-                    }
-                  },
-                ),
-                Expanded(
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.end,
-                    children: <Widget>[
-                      Text('Tổng tiền: '),
-                      Text('₫${controller.getTotalPrice()}',
-                          style: TextStyle(
-                              color: Colors.deepOrange,
-                              fontWeight: FontWeight.bold)),
-                      SizedBox(width: 5),
-                      RoundedButton(
-                        height: 40,
-                        onPressed: () {
-                          Get.toNamed(Routes.PAYMENT);
-                        },
-                        color: Colors.deepOrange,
-                        textContent: 'Mua hàng',
-                        radius: 0,
-                      )
-                    ],
-                  ),
-                ),
-              ],
-            ),
-          ),
+          bottomNavigationBar: _buildBottomNavigationBar(controller),
           body: controller.isLoadingCart.value
               ? Center(child: CircularProgressIndicator())
               : GetBuilder(
@@ -112,6 +62,61 @@ class CartView extends GetView<CartController> {
                 ),
         );
       },
+    );
+  }
+
+  Widget _buildBottomNavigationBar(CartController controller) {
+    return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: <Widget>[
+          InkWell(
+            child: Row(
+              children: [
+                Icon(
+                  controller.isCheckedAll.value
+                      ? Icons.check_box_outlined
+                      : Icons.check_box_outline_blank,
+                  color: controller.isCheckedAll.value
+                      ? Colors.deepOrange
+                      : Colors.black54,
+                ),
+                SizedBox(width: 5),
+                Text('Tất cả')
+              ],
+            ),
+            onTap: () {
+              if (controller.pendingOrders.length > 0) {
+                controller.setCheckAllItem();
+              }
+            },
+          ),
+          Expanded(
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.end,
+              children: <Widget>[
+                Text('Tổng tiền: '),
+                Text('₫${controller.getTotalPrice()}',
+                    style: TextStyle(
+                        color: Colors.deepOrange, fontWeight: FontWeight.bold)),
+                SizedBox(width: 5),
+                RoundedButton(
+                  height: 40,
+                  onPressed: controller.checkedOrders.length > 0
+                      ? () {
+                          Get.toNamed(Routes.PAYMENT);
+                        }
+                      : null,
+                  color: Colors.deepOrange,
+                  textContent: 'Mua hàng',
+                  radius: 0,
+                )
+              ],
+            ),
+          ),
+        ],
+      ),
     );
   }
 }
