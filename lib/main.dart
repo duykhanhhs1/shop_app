@@ -3,8 +3,10 @@ import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:get/get.dart';
+import 'package:get_storage/get_storage.dart';
+
+
 import 'package:scrum_app/app/theme/app_theme.dart';
-import 'package:scrum_app/app/widgets/rounded_button.widget.dart';
 
 import 'app/routes/app_pages.dart';
 
@@ -26,6 +28,10 @@ Future<void> _firebaseMessagingBackgroundHandler(
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
+
+  await GetStorage.init();
+
+
 
 /*  await flutterLocalNotificationsPlugin
       .resolvePlatformSpecificImplementation<AndroidFlutterLocalNotificationsPlugin>()

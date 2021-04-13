@@ -74,7 +74,7 @@ class LoginView extends GetView<LoginController> {
                           : 'Đăng nhập',
                       onPressed: () async {
                         if (_formKey.currentState.validate()) {
-                         await controller.signIn(
+                         await controller.login(
                               email: controller.emailController.text,
                               password: controller.passwordController.text);
                         }

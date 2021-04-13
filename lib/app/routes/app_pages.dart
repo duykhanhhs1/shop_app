@@ -12,6 +12,7 @@ import 'package:scrum_app/app/modules/home/views/home_view.dart';
 import 'package:scrum_app/app/modules/login/bindings/login_binding.dart';
 import 'package:scrum_app/app/modules/login/views/login_view.dart';
 import 'package:scrum_app/app/modules/login/views/register_view.dart';
+import 'package:scrum_app/app/modules/login/views/splash_view.dart';
 import 'package:scrum_app/app/modules/profile/bindings/profile_binding.dart';
 import 'package:scrum_app/app/modules/profile/views/order_management_view.dart';
 import 'package:scrum_app/app/modules/profile/views/profile_view.dart';
@@ -19,9 +20,14 @@ import 'package:scrum_app/app/modules/profile/views/profile_view.dart';
 part 'app_routes.dart';
 
 class AppPages {
-  static const INITIAL = Routes.LOGIN;
+  static const INITIAL = Routes.SPLASH;
 
   static final routes = [
+    GetPage(
+      name: _Paths.SPLASH,
+      page: () => SplashView(),
+      binding: LoginBinding(),
+    ),
     GetPage(
       name: _Paths.LOGIN,
       page: () => LoginView(),
@@ -32,11 +38,20 @@ class AppPages {
       page: () => RegisterView(),
       binding: LoginBinding(),
     ),
+
+    //
     GetPage(
       name: _Paths.HOME,
       page: () => HomeView(),
       binding: HomeBinding(),
     ),
+    GetPage(
+      name: _Paths.DETAIL_PRODUCT,
+      page: () => DetailProductView(),
+      binding: DetailProductBinding(),
+    ),
+
+    //
     GetPage(
       name: _Paths.PROFILE,
       page: () => ProfileView(),
@@ -47,11 +62,8 @@ class AppPages {
       page: () => OrderManagementView(),
       binding: ProfileBinding(),
     ),
-    GetPage(
-      name: _Paths.ADMIN,
-      page: () => CustomerManagementView(),
-      binding: AdminBinding(),
-    ),
+
+    //
     GetPage(
       name: _Paths.CART,
       page: () => CartView(),
@@ -62,10 +74,12 @@ class AppPages {
       page: () => PaymentView(),
       binding: CartBinding(),
     ),
+
+    //
     GetPage(
-      name: _Paths.DETAIL_PRODUCT,
-      page: () => DetailProductView(),
-      binding: DetailProductBinding(),
+      name: _Paths.ADMIN,
+      page: () => CustomerManagementView(),
+      binding: AdminBinding(),
     ),
     GetPage(
       name: _Paths.PRODUCT_MANAGEMENT,

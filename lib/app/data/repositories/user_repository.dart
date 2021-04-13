@@ -7,7 +7,16 @@ class UserRepository {
 
   UserRepository({@required this.apiClient}) : assert(apiClient != null);
 
-  Future<UserModel>getProfile(String userNo) async {
-    return apiClient.getProfile(userNo);
+  Future<UserModel> getUserLogged(String userNo) async {
+    return apiClient.getUserLogged(userNo);
+  }
+
+  Future<void> register({String email, String password, UserModel user}) async {
+    return apiClient.register(email: email, password: password, user: user);
+  }
+
+  ///ADMIN
+  Future<List<UserModel>> getUsers() async {
+    return apiClient.getUsers();
   }
 }

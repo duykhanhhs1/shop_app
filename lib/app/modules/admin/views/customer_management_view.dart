@@ -3,6 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 
 import 'package:get/get.dart';
+import 'package:scrum_app/app/modules/admin/widgets/bottom_check_remove_widget.dart';
+import 'package:scrum_app/app/modules/admin/widgets/user_manage_card.dart';
 import 'package:scrum_app/app/theme/color_theme.dart';
 import 'package:scrum_app/app/widgets/app_bottom_bar_admin_widget.dart';
 import 'package:scrum_app/app/widgets/form_input_field.dart';
@@ -28,7 +30,7 @@ class CustomerManagementView extends GetView<AdminController> {
               ),
               title: Text('Quản lý khách hàng'),
               centerTitle: true,
-              actions: [
+             /* actions: [
                 IconButton(
                   onPressed: () {
                     Get.dialog(AlertDialog(
@@ -122,7 +124,7 @@ class CustomerManagementView extends GetView<AdminController> {
                     color: Colors.white,
                   ),
                 ),
-              ],
+              ],*/
             ),
             bottomNavigationBar: controller.isCheck.value
                 ? BottomCheckRemove()
@@ -138,8 +140,21 @@ class CustomerManagementView extends GetView<AdminController> {
                       fillColor: Colors.grey.shade300,
                       borderRadius: BorderRadius.circular(10),
                     )),
-                UserCard(),
+                if(controller.users.length > 0)
                 Divider(thickness: 1, height: 1),
+                Expanded(
+                  child: ListView.builder(
+                    shrinkWrap: true,
+                    itemCount: controller.users.length,
+                    itemBuilder: (context, index) {
+                    return Column(
+                      children: [
+                        UserCard(controller.users[index]),
+                        Divider(thickness: 1, height: 0),
+                      ],
+                    );
+                  },),
+                ),
               ],
             ));
       },
@@ -147,105 +162,5 @@ class CustomerManagementView extends GetView<AdminController> {
   }
 }
 
-class BottomCheckRemove extends StatelessWidget {
-  const BottomCheckRemove({
-    Key key,
-  }) : super(key: key);
 
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      height: 60,
-      color: Colors.grey.shade100,
-      padding: EdgeInsets.symmetric(vertical: 5, horizontal: 14),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: [
-          Row(
-            children: [
-              InkWell(
-                  onTap: () {},
-                  child: Icon(
-                    Icons.check_box_outline_blank,
-                    color: Colors.black.withOpacity(.6),
-                  )),
-              SizedBox(width: 5),
-              Text('Tất cả')
-            ],
-          ),
-          Text(
-            'Xóa',
-            style: TextStyle(color: Colors.deepOrange),
-          )
-        ],
-      ),
-    );
-  }
-}
 
-class UserCard extends GetView<AdminController> {
-  const UserCard({
-    Key key,
-  }) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return Slidable(
-      actionExtentRatio: .2,
-      actionPane: SlidableDrawerActionPane(),
-      secondaryActions: [
-        IconSlideAction(
-          icon: Icons.edit_outlined,
-          caption: 'Sửa',
-          color: Colors.blue,
-        ),
-        IconSlideAction(
-          icon: Icons.delete_outline,
-          caption: 'Xóa',
-          color: Colors.deepOrange,
-        ),
-      ],
-      child: Padding(
-        padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 14),
-        child: Row(
-          children: [
-            if (controller.isCheck.value)
-              Row(
-                children: [
-                  InkWell(
-                      onTap: () {},
-                      child: Icon(
-                        Icons.check_box_outline_blank,
-                        color: Colors.black.withOpacity(.6),
-                      )),
-                  SizedBox(width: 14),
-                ],
-              ),
-            Expanded(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    'Tran Duy Khanh',
-                    style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
-                  ),
-                  Text('Vinh, Nghe An'),
-                  Text('0328264648')
-                ],
-              ),
-            ),
-            SizedBox(width: 14),
-            ClipRRect(
-              child: Image.network(
-                'https://kenh14cdn.com/2018/10/30/photo-1-15409085973371237270098.jpg',
-                width: 60,
-                height: 60,
-              ),
-              borderRadius: BorderRadius.circular(100),
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-}

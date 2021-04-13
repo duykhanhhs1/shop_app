@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:scrum_app/app/data/models/order_model.dart';
 import 'package:scrum_app/app/data/models/product_model.dart';
 
 class OrderPaymentItem extends StatelessWidget {

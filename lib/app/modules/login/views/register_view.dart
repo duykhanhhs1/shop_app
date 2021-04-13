@@ -136,7 +136,7 @@ class RegisterView extends GetView<LoginController> {
                           : 'Đăng ký',
                       onPressed: () async {
                         if (_formKey.currentState.validate()) {
-                          await controller.addCustomer(
+                          await controller.register(
                             email: controller.emailController.text,
                             password: controller.passwordController.text,
                             user: UserModel(

@@ -123,7 +123,7 @@ class HomeView extends GetView<HomeController> {
             crossAxisSpacing: 7,
             mainAxisSpacing: 7,
             crossAxisCount: 2,
-            childAspectRatio: 1 / 1.29),
+            childAspectRatio: 1 / 1.23),
         itemBuilder: (BuildContext context, int index) {
           return ProductCard(
             onTap: () {

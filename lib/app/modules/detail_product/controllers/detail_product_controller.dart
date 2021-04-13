@@ -4,7 +4,6 @@ import 'package:get/get.dart';
 
 import 'package:scrum_app/app/data/models/product_model.dart';
 import 'package:scrum_app/app/data/repositories/product_repository.dart';
-import 'package:scrum_app/app/manage/ManageProduct.dart';
 
 class DetailProductController extends GetxController {
   //TODO: Implement DetailProductController
@@ -38,7 +37,7 @@ class DetailProductController extends GetxController {
   //
   void getProductDetailFB(int productNo) async {
     isLoadingProduct.value = true;
-    final ProductDetailModel data = await ManageProduct.getProductDetailFB(productNo);
+    final ProductDetailModel data = await repository.getProductDetailFB(productNo);
     productDetail = data.obs;
     isLoadingProduct.value = false;
     update();

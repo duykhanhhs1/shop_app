@@ -18,13 +18,13 @@ class _AppBottomNavigationBarState extends State<AppBottomNavigationBar> {
           icon: Icon(
             Icons.home_rounded,
           ),
-          label: 'Home',
+          label: 'Trang chủ',
         ),
         BottomNavigationBarItem(
           icon: Icon(
             Icons.person,
           ),
-          label: 'Profile',
+          label: 'Trang cá nhân',
         ),
       ],
       unselectedFontSize: 12,

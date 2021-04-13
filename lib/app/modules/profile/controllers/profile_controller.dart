@@ -17,17 +17,17 @@ class ProfileController extends GetxController {
 
   ProfileController({@required this.repository}) : assert(repository != null);
 
-  Rx<UserModel> userModel = Rx(UserModel());
+  Rx<UserModel> userModel = LoginController.to.userLogged;
   Rx<UserModel> userCreate = Rx(UserModel());
   UserModel get currentUser=> userModel.value;
 
   static ProfileController get to => Get.find<ProfileController>();
 
-  static LoginController get _login => Get.find<LoginController>();
+ // static LoginController get _login => Get.find<LoginController>();
 
   @override
   void onInit()  {
-    getProfile(_login.userLogged.value.userNo);
+    //getProfile(_login.userLogged.value.userNo);
     super.onInit();
   }
 
@@ -41,13 +41,13 @@ class ProfileController extends GetxController {
     update();
   }
 
-  void getProfile(String userNo) async{
-    isLoading.value = true;
-    final UserModel data = await repository.getProfile(userNo);
-    userModel = data.obs;
-    isLoading.value = false;
-    update();
-  }
+  // void getProfile(String userNo) async{
+  //   isLoading.value = true;
+  //   final UserModel data = _login.userLogged.value;
+  //   userModel = data.obs;
+  //   isLoading.value = false;
+  //   update();
+  // }
 
   @override
   void onClose() {}

@@ -47,7 +47,7 @@ class ProductDetailModel {
   ProductDetailModel(
       {this.discount,
       this.amount,
-      this.shopImage,
+      shopImage,
       this.oldPrice,
       this.rating,
       this.productNo,
@@ -56,9 +56,12 @@ class ProductDetailModel {
       this.imageUrls,
       this.shippingCost,
       this.shopLocation,
-      this.shopName,
+      shopName,
       this.productProperties,
-      this.productReviews});
+      this.productReviews})
+      : shopName = shopName ?? 'thegioibanve',
+        shopImage = shopImage ??
+            'https://firebasestorage.googleapis.com/v0/b/shoponline-69684.appspot.com/o/images%2Fae86abf7-1e7f-43fc-bc99-4f6077c6422d3398657205301469443.jp?alt=media&token=d3089516-9931-4c85-8602-9ebd0b3844e7';
 
   factory ProductDetailModel.fromJson(Map<String, dynamic> json) =>
       _$ProductDetailModelFromJson(json);
@@ -108,42 +111,6 @@ class ProductReviewModel {
 }
 
 @JsonSerializable()
-class OrderModel {
-  int orderNo;
-  int productNo;
-  String userNo;
-  String status;
-  DateTime createAt;
-  int quantity;
-
-  @JsonKey(ignore: true)
-  ProductOverViewModel product;
-  @JsonKey(ignore: true)
-  bool isChecked;
-  @JsonKey(ignore: true)
-  TextEditingController quantityController = TextEditingController();
-
-  int get getPriceOrder => this.quantity * this.product.price;
-
-  String get getCreateAt => DateFormat('HH:mm dd-MM-yyyy').format(createAt);
-
-  OrderModel(
-      {this.orderNo,
-      this.productNo,
-      this.status,
-      this.createAt,
-      this.userNo,
-      this.product,
-      this.quantity,
-      this.isChecked = false});
-
-  factory OrderModel.fromJson(Map<String, dynamic> json) =>
-      _$OrderModelFromJson(json);
-
-  Map<String, dynamic> toJson() => _$OrderModelToJson(this);
-}
-
-@JsonSerializable()
 class ProductModel {
   int productNo;
   String name;
@@ -152,6 +119,7 @@ class ProductModel {
   int amount;
   double rating;
   String imageUrl;
+  @JsonKey(defaultValue: [])
   List<String> imageUrls;
   int shippingCost;
   int discount;
@@ -171,12 +139,13 @@ class ProductModel {
       this.productNo,
       this.name,
       this.price,
-      this.imageUrls,
+      imageUrls,
       this.shippingCost,
       this.shopLocation,
       this.shopName,
       this.productProperties,
-      this.productReviews});
+      this.productReviews})
+      : imageUrls = imageUrls ?? [];
 
   factory ProductModel.fromJson(Map<String, dynamic> json) =>
       _$ProductModelFromJson(json);

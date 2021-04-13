@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
+import 'package:scrum_app/app/data/models/order_model.dart';
 import 'package:scrum_app/app/data/models/product_model.dart';
 import 'package:scrum_app/app/modules/cart/controllers/cart_controller.dart';
 import 'package:scrum_app/app/widgets/number_input_field_widget.dart';

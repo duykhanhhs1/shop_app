@@ -15,6 +15,8 @@ UserModel _$UserModelFromJson(Map<String, dynamic> json) {
     email: json['email'] as String,
     fullName: json['fullName'] as String,
     address: json['address'] as String,
+    token: json['token'] as String,
+    refreshToken: json['refreshToken'] as String,
     phone: json['phone'] as String,
   );
 }
@@ -28,4 +30,6 @@ Map<String, dynamic> _$UserModelToJson(UserModel instance) => <String, dynamic>{
       'phone': instance.phone,
       'email': instance.email,
       'role': instance.role,
+      'token': instance.token,
+      'refreshToken': instance.refreshToken,
     };

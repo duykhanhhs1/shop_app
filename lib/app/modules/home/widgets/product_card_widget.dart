@@ -23,7 +23,6 @@ class ProductCard extends StatelessWidget {
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
         color: Colors.white,
         child: Column(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: <Widget>[
             ClipRRect(
               borderRadius: BorderRadius.vertical(top: Radius.circular(10)),
@@ -34,36 +33,38 @@ class ProductCard extends StatelessWidget {
                 fit: BoxFit.cover,
               ),
             ),
-            Padding(
-              padding: const EdgeInsets.only(left: 8.0, right: 8, top: 3),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  SizedBox(
-                      height: Get.height * 0.057,
-                      child: Text(
-                        product.name,
-                        maxLines: 2,
-                        overflow: TextOverflow.ellipsis,
-                      )),
-                  SizedBox(
-                    height: 5,
-                  ),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: <Widget>[
-                      Text('${product.price}\$',
-                          style: TextStyle(
-                              color: Colors.deepOrange,
-                              fontSize: 18,
-                              fontWeight: FontWeight.bold)),
-                      Icon(
-                        Icons.favorite_border_rounded,
-                        color: Colors.deepOrange,
-                      )
-                    ],
-                  )
-                ],
+            Expanded(
+              child: Padding(
+                padding: const EdgeInsets.only(left: 8.0, right: 8, top: 3),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Text(
+                      product.name,style: TextStyle(fontSize: 15),
+                      maxLines: 2,
+                      overflow: TextOverflow.ellipsis,
+                    ),
+                    SizedBox(height: 5),
+                    Padding(
+                      padding: const EdgeInsets.only(bottom: 3.0),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: <Widget>[
+                          Text('${product.price}\$',
+                              style: TextStyle(
+                                  color: Colors.deepOrange,
+                                  fontSize: 18,
+                                  fontWeight: FontWeight.bold)),
+                          Icon(
+                            Icons.favorite_border_rounded,
+                            color: Colors.deepOrange,
+                          )
+                        ],
+                      ),
+                    ),
+                  ],
+                ),
               ),
             )
           ],

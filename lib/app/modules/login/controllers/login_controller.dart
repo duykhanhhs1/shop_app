@@ -2,11 +2,20 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:get_storage/get_storage.dart';
 import 'package:scrum_app/app/data/models/user_model.dart';
+import 'package:scrum_app/app/data/repositories/user_repository.dart';
 import 'package:scrum_app/app/routes/app_pages.dart';
+import 'package:scrum_app/app/utils/keys.dart';
 
 class LoginController extends GetxController {
   //TODO: Implement LoginController
+
+  final UserRepository repository;
+
+  LoginController({@required this.repository}) : assert(repository != null);
+
+  static LoginController get to => Get.find<LoginController>();
 
   TextEditingController emailController = TextEditingController();
   TextEditingController passwordController = TextEditingController();
@@ -16,40 +25,46 @@ class LoginController extends GetxController {
   RxBool isProcessing = RxBool(false);
   Rx<UserModel> userLogged = Rx(UserModel());
 
-  static LoginController get to => Get.find<LoginController>();
-
-  final count = 0.obs;
+  final GetStorage _store = GetStorage();
 
   @override
   void onInit() async {
+    await verifyUser();
     super.onInit();
   }
 
   @override
-  void onReady() {
+  void onReady() async {
     super.onReady();
   }
-
-  void verifyUser() {}
 
   @override
   void onClose() {}
 
-  void increment() => count.value++;
+  Future<void> verifyUser() async {
+    final String storedToken = await _store.read(AppStorageKey.ACCESS_TOKEN);
+    if (storedToken != null) {
+      setUserLogged(FirebaseAuth.instance.currentUser.uid);
+    } else
+      Get.offAllNamed(Routes.LOGIN);
+  }
+
+  Future<void> logout() async {
+    _store.remove(AppStorageKey.ACCESS_TOKEN);
+    FirebaseAuth.instance.signOut();
+    Get.offAllNamed(Routes.LOGIN);
+  }
+
   //signIn
-  Future<void> signIn({String email, String password}) async {
+  Future<void> login({String email, String password}) async {
     isProcessing.value = true;
     await FirebaseAuth.instance
         .signInWithEmailAndPassword(email: email, password: password)
-        .then((value) {
-      getCustomer(value.user.uid).then((value) {
-        userLogged.value = value;
-        if (value.role == 'admin') {
-          Get.offAllNamed(Routes.ADMIN);
-        } else {
-          Get.offAllNamed(Routes.HOME);
-        }
+        .then((value) async {
+      await FirebaseAuth.instance.currentUser.getIdToken(true).then((token) {
+        _store.write(AppStorageKey.ACCESS_TOKEN, token);
       });
+      setUserLogged(value.user.uid);
       isProcessing.value = false;
     }).catchError((onError) {
       Get.snackbar('Error', 'User not found',
@@ -58,46 +73,27 @@ class LoginController extends GetxController {
     });
   }
 
-  Future<UserModel> getCustomer(String id) async {
-    UserModel customer = UserModel();
-    await FirebaseFirestore.instance
-        .collection('users')
-        .doc('$id')
-        .get()
-        .then((DocumentSnapshot documentSnapshot) {
-      if (documentSnapshot.exists) {
-        var map = documentSnapshot.data();
-        customer = UserModel.fromJson(map);
-        return customer;
-      } else {
-        return customer;
-      }
-    });
-    return customer;
+  void setUserLogged(String uid) async {
+    await getUserLogged(uid);
+    if (userLogged.value.role == 'admin') {
+      Get.offAllNamed(Routes.ADMIN);
+    } else {
+      Get.offAllNamed(Routes.HOME);
+    }
   }
 
-  Future<void> addCustomer(
-      {String email, String password, UserModel user}) async {
+  Future<void> getUserLogged(String userNo) async {
+    UserModel data = await repository.getUserLogged(userNo);
+    userLogged = data.obs;
+    update();
+  }
+
+  void register({String email, String password, UserModel user}) async{
     isProcessing.value = true;
-    await FirebaseAuth.instance
-        .createUserWithEmailAndPassword(email: email, password: password)
-        .then((value) {
-      //upload info customer
-      user.userNo = FirebaseAuth.instance.currentUser.uid;
-      //var idUser = FirebaseAuth.instance.currentUser.uid;
-//      Customer.uid = value.uid;
-      CollectionReference users =
-          FirebaseFirestore.instance.collection('users');
-      users.doc(user.userNo).set(user.toJson()).then((value) {
-        print("Add Customer Success!!");
-        Get.offAllNamed(Routes.LOGIN);
-        Get.snackbar('Success', 'Register success',
-            snackPosition: SnackPosition.BOTTOM, colorText: Colors.green);
-      }).catchError((error) => print("Failed to add customer: $error"));
-      isProcessing.value = false;
-    }).catchError((onError) {
-      print("register failure" + onError.toString());
-      isProcessing.value = false;
-    });
+    await repository.register(email:email,password:password,user:user);
+    isProcessing.value = false;
+    Get.offAllNamed(Routes.LOGIN);
+    Get.snackbar('Success', 'Register success',
+        snackPosition: SnackPosition.BOTTOM, colorText: Colors.green);
   }
 }

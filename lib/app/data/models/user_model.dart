@@ -12,14 +12,23 @@ class UserModel {
   String phone;
   String email;
   String role;
+  String token;
+  String refreshToken;
+
+  @JsonKey(ignore: true)
+  bool isChecked;
 
   UserModel(
       {this.userNo,
       this.gender,
+      this.isChecked = false,
       this.description,
-      this.role, this.email,
+      this.role,
+      this.email,
       this.fullName,
       this.address,
+      this.token,
+      this.refreshToken,
       this.phone});
 
   factory UserModel.fromJson(Map<String, dynamic> json) =>

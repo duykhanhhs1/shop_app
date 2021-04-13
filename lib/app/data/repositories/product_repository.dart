@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:scrum_app/app/data/models/order_model.dart';
 import 'package:scrum_app/app/data/models/product_model.dart';
 import 'package:scrum_app/app/data/providers/product_provider.dart';
 

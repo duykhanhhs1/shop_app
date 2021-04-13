@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:scrum_app/app/modules/admin/controllers/admin_controller.dart';
+import 'package:scrum_app/app/modules/login/controllers/login_controller.dart';
 import 'package:scrum_app/app/routes/app_pages.dart';
 
 class AppBottomNavigationBarAdmin extends StatefulWidget {
@@ -23,13 +24,19 @@ class _AppBottomNavigationBarAdminState extends State<AppBottomNavigationBarAdmi
           icon: Icon(
             Icons.supervised_user_circle,
           ),
-          label: 'User management',
+          label: 'Người dùng',
         ),
         BottomNavigationBarItem(
           icon: Icon(
             Icons.widgets,
           ),
-          label: 'Product management',
+          label: 'Sản phẩm',
+        ),
+        BottomNavigationBarItem(
+          icon: Icon(
+            Icons.logout,
+          ),
+          label: 'Đăng xuất',
         ),
       ],
       unselectedFontSize: 12,
@@ -38,10 +45,13 @@ class _AppBottomNavigationBarAdminState extends State<AppBottomNavigationBarAdmi
       backgroundColor: Colors.grey.shade100,
       onTap: (tabIndex) {
           if (tabIndex == 0) {
-            Get.offAllNamed(Routes.ADMIN);
-          } else if (tabIndex == 1) {
-
-            Get.offAllNamed(Routes.PRODUCT_MANAGEMENT);
+            Get.toNamed(Routes.ADMIN);
+          }
+          if (tabIndex == 1) {
+            Get.toNamed(Routes.PRODUCT_MANAGEMENT);
+          }
+          if (tabIndex == 2) {
+            LoginController.to.logout();
           }
       },
     );

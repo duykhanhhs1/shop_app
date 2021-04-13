@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:scrum_app/app/modules/login/controllers/login_controller.dart';
 import 'package:scrum_app/app/routes/app_pages.dart';
 import 'package:scrum_app/app/theme/color_theme.dart';
 import 'package:scrum_app/app/widgets/custom_list_tile_widget.dart';
@@ -104,7 +105,7 @@ class ProfileView extends GetView<ProfileController> {
                             textContent: 'Đăng xuất',
                             width: Get.width * 0.9,
                             onPressed: () {
-                              Get.offAllNamed(Routes.LOGIN);
+                              LoginController.to.logout();
                             }))
                   ],
                 );

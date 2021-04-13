@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:get/get.dart';
+import 'package:scrum_app/app/data/models/order_model.dart';
 import 'package:scrum_app/app/data/models/product_model.dart';
 import 'package:scrum_app/app/modules/cart/controllers/cart_controller.dart';
 import 'package:scrum_app/app/modules/detail_product/controllers/detail_product_controller.dart';
@@ -47,17 +48,17 @@ class DetailProductView extends GetView<DetailProductController> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: <Widget>[
                       _buildListImage(product),
-                      Divider(height: 0, thickness: 5),
+                      Divider(height: 4, thickness: 4),
                       Padding(
                         padding: const EdgeInsets.symmetric(horizontal: 12),
                         child: _buildOverviewInfo(product),
                       ),
-                      Divider(height: 30, thickness: 5),
+                      Divider(height: 30, thickness: 4),
                       Padding(
                         padding: const EdgeInsets.symmetric(horizontal: 12),
                         child: _buildShopInfo(product),
                       ),
-                      Divider(height: 30, thickness: 5),
+                      Divider(height: 30, thickness: 4),
                       // Padding(
                       //   padding: const EdgeInsets.symmetric(horizontal: 12),
                       //   child: _buildDetailInfo(product),
@@ -150,7 +151,9 @@ class DetailProductView extends GetView<DetailProductController> {
                     Icon(Icons.location_on_outlined,
                         size: 15, color: Colors.black.withOpacity(.7)),
                     Text(
-                      product.shopLocation,
+                      product.shopLocation == null
+                          ? 'Vinh'
+                          : product.shopLocation,
                       style: TextStyle(color: Colors.black.withOpacity(.7)),
                     ),
                   ],
@@ -196,6 +199,7 @@ class DetailProductView extends GetView<DetailProductController> {
                 color: Colors.deepOrange,
                 fontSize: 18,
                 fontWeight: FontWeight.bold)),
+        if(product.oldPrice != null)
         Text('${product.oldPrice}\$',
             style: TextStyle(
                 color: Colors.black.withOpacity(.6),
@@ -213,7 +217,10 @@ class DetailProductView extends GetView<DetailProductController> {
                 style: TextStyle(
                   color: Colors.black.withOpacity(.7),
                 )),
-            Text('${product.shippingCost} VNĐ',
+            Text(
+                product.shippingCost == null
+                    ? '₫0'
+                    : '₫${product.shippingCost}',
                 style: TextStyle(
                   color: Colors.black87,
                 )),
@@ -419,7 +426,7 @@ class DetailProductView extends GetView<DetailProductController> {
       child: Row(
         children: <Widget>[
           Text(
-            '${product.rating}',
+            product.rating == null ? '4.9' : '${product.rating}',
             style: TextStyle(
                 fontWeight: FontWeight.bold,
                 color: Colors.black.withOpacity(.6)),

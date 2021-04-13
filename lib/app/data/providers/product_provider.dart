@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:get/get.dart';
 import 'package:scrum_app/app/data/mock/app_mock.dart';
+import 'package:scrum_app/app/data/models/order_model.dart';
 import 'package:scrum_app/app/data/models/product_model.dart';
 
 class ProductProvider extends GetConnect {

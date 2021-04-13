@@ -1,20 +1,15 @@
-import 'dart:io';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:get/get.dart';
-import 'package:image_picker/image_picker.dart';
-import 'package:scrum_app/app/data/models/product_model.dart';
+import 'package:scrum_app/app/data/models/user_model.dart';
 import 'package:scrum_app/app/modules/admin/controllers/admin_controller.dart';
-import 'package:scrum_app/app/modules/admin/views/product_management_view.dart';
 
-class ProductManageCard extends GetView<AdminController> {
-  const ProductManageCard(
-      this.product, {
-        Key key,
-      }) : super(key: key);
+class UserCard extends GetView<AdminController> {
+  const UserCard(this.user, {
+    Key key,
+  }) : super(key: key);
 
-  final ProductModel product;
+  final UserModel user;
 
   @override
   Widget build(BuildContext context) {
@@ -26,15 +21,11 @@ class ProductManageCard extends GetView<AdminController> {
           icon: Icons.edit_outlined,
           caption: 'Sửa',
           color: Colors.blue,
-          onTap: (){
-            ProductManagementView().buildFormAddCustomerDialog(productReceive: product,title: 'Cập nhật sản phẩm');
-          },
         ),
         IconSlideAction(
           icon: Icons.delete_outline,
           caption: 'Xóa',
           color: Colors.deepOrange,
-          onTap: (){controller.removeProduct(product);},
         ),
       ],
       child: Padding(
@@ -58,19 +49,22 @@ class ProductManageCard extends GetView<AdminController> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    product.name,
-                    style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),maxLines: 2,overflow: TextOverflow.ellipsis,
+                    user.fullName,
+                    style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
                   ),
-                  Text('₫${product.price}',style: TextStyle(color: Colors.deepOrange,fontWeight: FontWeight.bold),),
-                  Text('Kho: ${product.amount}')
+                  Text(user.address),
+                  Text(user.phone)
                 ],
               ),
             ),
             SizedBox(width: 14),
-            Image.network(
-              product.imageUrls[0],fit: BoxFit.cover,
-              width: 75,
-              height: 75,
+            ClipRRect(
+              child: Image.network(
+                'https://kenh14cdn.com/2018/10/30/photo-1-15409085973371237270098.jpg',
+                width: 60,
+                height: 60,
+              ),
+              borderRadius: BorderRadius.circular(100),
             ),
           ],
         ),
