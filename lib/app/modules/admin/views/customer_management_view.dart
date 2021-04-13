@@ -30,101 +30,6 @@ class CustomerManagementView extends GetView<AdminController> {
               ),
               title: Text('Quản lý khách hàng'),
               centerTitle: true,
-             /* actions: [
-                IconButton(
-                  onPressed: () {
-                    Get.dialog(AlertDialog(
-                      insetPadding: const EdgeInsets.symmetric(horizontal: 14),
-                      contentPadding: const EdgeInsets.all(14),
-                      titlePadding: const EdgeInsets.all(14),
-                      actionsPadding: const EdgeInsets.all(14),
-                      title: Column(
-                        children: [
-                          Text(
-                            'Thêm khách hàng',
-                            style: TextStyle(fontWeight: FontWeight.bold),
-                          ),
-                          Divider(height: 0,)
-                        ],
-                      ),
-                      content: Container(
-                        width: Get.width,
-                        child: SingleChildScrollView(
-                            child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            FormInputField(
-                              title: 'Tên',
-                              child: FormRoundedInputField(
-                                borderRadius: BorderRadius.circular(5),
-                              ),
-                            ),
-                            SizedBox(height: 15),
-                            FormInputField(
-                                title: 'Giới tính',
-                                child: Container(
-                                  decoration: BoxDecoration(
-                                      border: Border.all(color: kPrimaryColor),
-                                      borderRadius: BorderRadius.circular(5)),
-                                  width: Get.width,
-                                  child: DropdownButtonHideUnderline(
-                                      child: DropdownButton(
-                                    value: null,
-                                    onChanged: (value) {},
-                                    items: <String>[
-                                      'Nam',
-                                      'Nữ',
-                                    ].map<DropdownMenuItem<String>>(
-                                        (String value) {
-                                      return DropdownMenuItem<String>(
-                                        value: value,
-                                        child: Text(value),
-                                      );
-                                    }).toList(),
-                                  )),
-                                )),
-                            SizedBox(height: 15),
-                            FormInputField(
-                              title: 'Số điện thoại',
-                              child: FormRoundedInputField(
-                                borderRadius: BorderRadius.circular(5),
-                              ),
-                            ),
-                            SizedBox(height: 15),
-                            FormInputField(
-                              title: 'Email',
-                              child: FormRoundedInputField(
-                                borderRadius: BorderRadius.circular(5),
-                              ),
-                            ),
-                            SizedBox(height: 15),
-                          ],
-                        )),
-                      ),
-                      actions: [
-                        RoundedButton(
-                          radius: 5,
-                          height: 40,
-                          textContent: 'Lưu',
-                          onPressed: () {},
-                        ),
-                        RoundedButton(
-                          radius: 5,
-                          height: 40,
-                          textContent: 'Đóng',
-                          onPressed: () {
-                            Get.back();
-                          },
-                        ),
-                      ],
-                    ));
-                  },
-                  icon: Icon(
-                    Icons.add,
-                    color: Colors.white,
-                  ),
-                ),
-              ],*/
             ),
             bottomNavigationBar: controller.isCheck.value
                 ? BottomCheckRemove()
@@ -137,7 +42,7 @@ class CustomerManagementView extends GetView<AdminController> {
                     child: FormRoundedInputField(
                       borderColor: Colors.transparent,
                       prefixIcon: Icons.search,
-                      fillColor: Colors.grey.shade300,
+                      fillColor: Colors.grey.shade200,
                       borderRadius: BorderRadius.circular(10),
                     )),
                 if(controller.users.length > 0)

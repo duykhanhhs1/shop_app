@@ -15,18 +15,25 @@ class AdminController extends GetxController {
 
   final UserRepository userRepository;
 
-  AdminController({@required this.productRepository,@required this.userRepository }) : assert(productRepository != null &&userRepository != null );
+  AdminController(
+      {@required this.productRepository, @required this.userRepository})
+      : assert(productRepository != null && userRepository != null);
 
   static AdminController get to => Get.find<AdminController>();
 
   RxList<ProductModel> products = RxList<ProductModel>();
+  RxList<ProductModel> lowerProducts = RxList<ProductModel>();
+
+  TextEditingController productInputController = TextEditingController();
+
+  RxList<ProductModel> showProducts = RxList<ProductModel>();
+
   RxList<UserModel> users = RxList<UserModel>();
 
   RxBool isCheck = false.obs;
 
   RxList<String> imagePickedUrls = RxList<String>(['icon']);
   Rx<ProductModel> product = Rx(ProductModel());
-  ProductModel get getProductCreate => product.value;
 
   @override
   void onInit() {
@@ -51,6 +58,7 @@ class AdminController extends GetxController {
   void getAllProductFB() async {
     final List<ProductModel> data = await productRepository.getAllProductFB();
     products = data.obs;
+    showProducts = products;
     update();
   }
 
@@ -67,20 +75,48 @@ class AdminController extends GetxController {
   }
 
   void addProduct(ProductModel product) async {
-    await productRepository.addProduct(product).then((value) => products.add(product));
+    await productRepository
+        .addProduct(product)
+        .then((value) => products.add(product));
     update();
   }
 
   void pickImage() async {
-    final PickedFile pickedFile = await ImagePicker()
-        .getImage(source: ImageSource.camera);
+    final PickedFile pickedFile =
+        await ImagePicker().getImage(source: ImageSource.camera);
     if (pickedFile != null) {
       File imageFile = File(pickedFile.path);
-      String imageName = imageFile.path.substring(imageFile.path.lastIndexOf('/'),imageFile.path.length-1);
-     product.value.imageUrls.add(await FirebaseHelper.uploadImage(imageFile, imageName));
-     product.value.imageUrl = product.value.imageUrls[0];
-     update();
+      String imageName = imageFile.path.substring(
+          imageFile.path.lastIndexOf('/'), imageFile.path.length - 1);
+      product.value.imageUrls
+          .add(await FirebaseHelper.uploadImage(imageFile, imageName));
+      product.value.imageUrl = product.value.imageUrls[0];
+      update();
     }
+  }
+
+  void searchProducts() {
+    //showProducts.clear();
+    String input = productInputController.text.toLowerCase();
+    products.forEach((element) {
+      lowerProducts.add(ProductModel.fromJson(element.toJson()));
+    });
+    lowerProducts.forEach((element) {
+      element.name = element.name.toLowerCase();
+    });
+    if (input == '')
+      showProducts = products;
+    else {
+      showProducts =
+          lowerProducts.where((_) => _.name.contains(input)).toList().obs;
+      print(showProducts.length);
+      showProducts.forEach((sp) {
+        products.forEach((p) {
+          if (p.productNo == sp.productNo) sp.name = p.name;
+        });
+      });
+    }
+    update();
   }
 
   @override

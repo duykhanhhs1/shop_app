@@ -35,7 +35,9 @@ class ProductManagementView extends GetView<AdminController> {
               actions: [
                 IconButton(
                     onPressed: () {
-                      buildFormAddCustomerDialog(productReceive: ProductModel(),title: 'Thêm sản phẩm');
+                      buildFormAddCustomerDialog(
+                          productReceive: ProductModel(),
+                          title: 'Thêm sản phẩm');
                     },
                     icon: Icon(Icons.add, color: Colors.white))
               ],
@@ -49,6 +51,10 @@ class ProductManagementView extends GetView<AdminController> {
                     padding: EdgeInsets.symmetric(vertical: 5, horizontal: 14),
                     height: 50,
                     child: FormRoundedInputField(
+                      onChanged: (_){
+                        controller.searchProducts();
+                      },
+                      controller: controller.productInputController,
                       borderColor: Colors.transparent,
                       prefixIcon: Icons.search,
                       fillColor: Colors.grey.shade200,
@@ -57,11 +63,11 @@ class ProductManagementView extends GetView<AdminController> {
                 Expanded(
                   child: ListView.builder(
                     shrinkWrap: true,
-                    itemCount: controller.products.length,
+                    itemCount: controller.showProducts.length,
                     itemBuilder: (context, index) {
                       return Column(
                         children: [
-                          ProductManageCard(controller.products[index]),
+                          ProductManageCard(controller.showProducts[index]),
                           Divider(thickness: 1, height: 0)
                         ],
                       );
@@ -74,7 +80,8 @@ class ProductManagementView extends GetView<AdminController> {
     );
   }
 
-  Future<dynamic> buildFormAddCustomerDialog({ProductModel productReceive,String title}) {
+  Future<dynamic> buildFormAddCustomerDialog(
+      {ProductModel productReceive, String title}) {
     controller.product.value = productReceive;
     return Get.dialog(GetBuilder(
       init: AdminController.to,
@@ -172,62 +179,7 @@ class ProductManagementView extends GetView<AdminController> {
                     ),
                   ),
                   SizedBox(height: 15),
-                  Row(
-                    children: [
-                      Expanded(
-                        child: GridView.builder(
-                          gridDelegate:
-                              SliverGridDelegateWithFixedCrossAxisCount(
-                                  crossAxisCount: 4,
-                                  mainAxisSpacing: 5,
-                                  crossAxisSpacing: 5),
-                          shrinkWrap: true,
-                          itemCount:
-                              controller.product.value.imageUrls.length + 1,
-                          itemBuilder: (context, index) {
-                            if (index == 0)
-                              return Padding(
-                                padding: const EdgeInsets.all(2),
-                                child: InkWell(
-                                  onTap: () async {
-                                    controller.pickImage();
-                                  },
-                                  child: Container(
-                                    padding: const EdgeInsets.all(5),
-                                    child: Column(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.center,
-                                      children: [
-                                        Icon(
-                                          Icons.camera_alt_outlined,
-                                          color: kPrimaryColor,
-                                          size: 27,
-                                        ),
-                                        Text(
-                                          'Thêm ảnh',
-                                          style: TextStyle(
-                                              fontSize: 14,
-                                              fontWeight: FontWeight.bold,
-                                              color: kPrimaryColor),
-                                        )
-                                      ],
-                                    ),
-                                    decoration: BoxDecoration(boxShadow: [
-                                      BoxShadow(color: Colors.black)
-                                    ], color: Colors.white),
-                                  ),
-                                ),
-                              );
-                            return SizedBox(
-                                child: Image.network(
-                              controller.product.value.imageUrls[index - 1],
-                              fit: BoxFit.cover,
-                            ));
-                          },
-                        ),
-                      )
-                    ],
-                  ),
+                  buildFormUploadImage(controller),
                   SizedBox(height: 15),
                 ],
               ),
@@ -261,5 +213,59 @@ class ProductManagementView extends GetView<AdminController> {
         );
       },
     ));
+  }
+
+  Row buildFormUploadImage(AdminController controller) {
+    return Row(
+      children: [
+        Expanded(
+          child: GridView.builder(
+            gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                crossAxisCount: 4, mainAxisSpacing: 5, crossAxisSpacing: 5),
+            shrinkWrap: true,
+            itemCount: controller.product.value.imageUrls.length + 1,
+            itemBuilder: (context, index) {
+              if (index == 0)
+                return Padding(
+                  padding: const EdgeInsets.all(2),
+                  child: InkWell(
+                    onTap: () async {
+                      controller.pickImage();
+                    },
+                    child: Container(
+                      padding: const EdgeInsets.all(5),
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Icon(
+                            Icons.camera_alt_outlined,
+                            color: kPrimaryColor,
+                            size: 27,
+                          ),
+                          Text(
+                            'Thêm ảnh',
+                            style: TextStyle(
+                                fontSize: 14,
+                                fontWeight: FontWeight.bold,
+                                color: kPrimaryColor),
+                          )
+                        ],
+                      ),
+                      decoration: BoxDecoration(
+                          boxShadow: [BoxShadow(color: Colors.black)],
+                          color: Colors.white),
+                    ),
+                  ),
+                );
+              return SizedBox(
+                  child: Image.network(
+                controller.product.value.imageUrls[index - 1],
+                fit: BoxFit.cover,
+              ));
+            },
+          ),
+        )
+      ],
+    );
   }
 }

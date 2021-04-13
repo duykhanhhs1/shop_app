@@ -18,11 +18,6 @@ class UserCard extends GetView<AdminController> {
       actionPane: SlidableDrawerActionPane(),
       secondaryActions: [
         IconSlideAction(
-          icon: Icons.edit_outlined,
-          caption: 'Sửa',
-          color: Colors.blue,
-        ),
-        IconSlideAction(
           icon: Icons.delete_outline,
           caption: 'Xóa',
           color: Colors.deepOrange,
