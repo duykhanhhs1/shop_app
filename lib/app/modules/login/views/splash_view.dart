@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:scrum_app/app/theme/color_theme.dart';
 
 class SplashView extends StatelessWidget {
   @override

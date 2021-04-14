@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+
+
 import 'package:scrum_app/app/data/models/product_model.dart';
 import 'package:scrum_app/app/theme/color_theme.dart';
 
@@ -51,7 +53,7 @@ class ProductCard extends StatelessWidget {
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: <Widget>[
-                          Text('${product.price}\$',
+                          Text('₫${product.price}',
                               style: TextStyle(
                                   color: Colors.deepOrange,
                                   fontSize: 18,

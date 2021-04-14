@@ -1,8 +1,8 @@
 import 'dart:io';
-
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
+
 import 'package:scrum_app/app/data/models/product_model.dart';
 import 'package:scrum_app/app/data/models/user_model.dart';
 import 'package:scrum_app/app/data/repositories/product_repository.dart';
@@ -12,25 +12,27 @@ import 'package:scrum_app/app/utils/firebase_untils.dart';
 class AdminController extends GetxController {
   //TODO: Implement AdminController
   final ProductRepository productRepository;
-
   final UserRepository userRepository;
 
   AdminController(
       {@required this.productRepository, @required this.userRepository})
       : assert(productRepository != null && userRepository != null);
 
+  final GlobalKey<FormState> formKey = GlobalKey<FormState>();
+
   static AdminController get to => Get.find<AdminController>();
 
   RxList<ProductModel> products = RxList<ProductModel>();
-  RxList<ProductModel> lowerProducts = RxList<ProductModel>();
+
+  //RxList<ProductModel> lowerProducts = RxList<ProductModel>();
+  // RxList<ProductModel> showProducts = RxList<ProductModel>();
 
   TextEditingController productInputController = TextEditingController();
-
-  RxList<ProductModel> showProducts = RxList<ProductModel>();
 
   RxList<UserModel> users = RxList<UserModel>();
 
   RxBool isCheck = false.obs;
+  RxBool isSubmit = false.obs;
 
   RxList<String> imagePickedUrls = RxList<String>(['icon']);
   Rx<ProductModel> product = Rx(ProductModel());
@@ -58,32 +60,35 @@ class AdminController extends GetxController {
   void getAllProductFB() async {
     final List<ProductModel> data = await productRepository.getAllProductFB();
     products = data.obs;
-    showProducts = products;
     update();
   }
 
   void updateProduct(ProductModel product) async {
     await productRepository.updateProduct(product);
-    update();
+    getAllProductFB();
   }
 
   void removeProduct(ProductModel product) async {
-    await productRepository
-        .removeProduct(product)
-        .then((value) => products.remove(product));
+    await productRepository.removeProduct(product);
+    getAllProductFB();
+    update();
+  }
+
+  void removeImage(String imageUrl) async {
+    product.value.imageUrls.remove(imageUrl);
     update();
   }
 
   void addProduct(ProductModel product) async {
-    await productRepository
-        .addProduct(product)
-        .then((value) => products.add(product));
+    await productRepository.addProduct(product);
+    getAllProductFB();
     update();
   }
 
-  void pickImage() async {
+  void pickImage(ImageSource imageSource) async {
     final PickedFile pickedFile =
-        await ImagePicker().getImage(source: ImageSource.camera);
+        await ImagePicker().getImage(source: imageSource);
+    Get.back();
     if (pickedFile != null) {
       File imageFile = File(pickedFile.path);
       String imageName = imageFile.path.substring(
@@ -95,7 +100,7 @@ class AdminController extends GetxController {
     }
   }
 
-  void searchProducts() {
+/*  void searchProducts() {
     //showProducts.clear();
     String input = productInputController.text.toLowerCase();
     products.forEach((element) {
@@ -117,6 +122,18 @@ class AdminController extends GetxController {
       });
     }
     update();
+  }*/
+
+  void submitProduct() {
+    isSubmit.value = true;
+    update();
+    if (formKey.currentState.validate() && product.value.imageUrls.length > 0) {
+      if (product.value.productNo != null) {
+        updateProduct(product.value);
+      } else
+        addProduct(product.value);
+      Get.back();
+    }
   }
 
   @override

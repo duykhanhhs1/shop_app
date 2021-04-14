@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:form_field_validator/form_field_validator.dart';
 import 'package:get/get.dart';
+
 import 'package:scrum_app/app/modules/login/controllers/login_controller.dart';
 import 'package:scrum_app/app/routes/app_pages.dart';
 import 'package:scrum_app/app/theme/color_theme.dart';
@@ -72,13 +73,16 @@ class LoginView extends GetView<LoginController> {
                       textContent: controller.isProcessing.value
                           ? 'Đăng nhập...'
                           : 'Đăng nhập',
-                      onPressed: () async {
-                        if (_formKey.currentState.validate()) {
-                         await controller.login(
-                              email: controller.emailController.text,
-                              password: controller.passwordController.text);
-                        }
-                      },
+                      onPressed: controller.isProcessing.value
+                          ? null
+                          : () async {
+                              if (_formKey.currentState.validate()) {
+                                await controller.login(
+                                    email: controller.emailController.text,
+                                    password:
+                                        controller.passwordController.text);
+                              }
+                            },
                     ),
                   ),
                   SizedBox(height: 20),

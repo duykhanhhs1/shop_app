@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+
+
 import 'package:scrum_app/app/data/models/order_model.dart';
-import 'package:scrum_app/app/data/models/product_model.dart';
 import 'package:scrum_app/app/data/repositories/product_repository.dart';
 import 'package:scrum_app/app/modules/login/controllers/login_controller.dart';
 import 'package:scrum_app/app/routes/app_pages.dart';
@@ -33,6 +34,7 @@ class CartController extends GetxController {
   RxInt total = RxInt(0);
   RxBool isCheckedAll = RxBool(false);
   RxBool isLoadingCart = RxBool(false);
+  RxBool isUpdated = RxBool(false);
 
   @override
   void onInit() {
@@ -48,22 +50,34 @@ class CartController extends GetxController {
     update();
   }
 
-  Future<void> addOrder(OrderModel order) async {
-    orders.forEach((element) async {
-      if (element.productNo == order.productNo && element.status == 'pending') {
-        element.quantity += order.quantity;
-        element.isChecked = order.isChecked;
-        await repository.updateOrder(element);
-        return;
-      } else if (element == orders.last) {
-        await repository.addOrder(order);
-        await repository
-            .getProductOverViewFB(order.productNo)
-            .then((product) => order.product = product);
-        orders.add(order);
-      }
-    });
-    update();
+  void addOrder(OrderModel order) async {
+    isUpdated.value = false;
+    if (orders.length == 0) {
+      await repository.addOrder(order);
+      await repository
+          .getProductOverViewFB(order.productNo)
+          .then((product) => order.product = product);
+      orders.add(order);
+      update();
+    } else
+      orders.forEach((element) async {
+        if (element.productNo == order.productNo &&
+            element.status == 'pending') {
+          element.quantity += order.quantity;
+          element.isChecked = order.isChecked;
+          isUpdated.value = true;
+          await repository.updateOrder(element);
+        }
+      });
+
+    if (isUpdated.value == false) {
+      await repository.addOrder(order);
+      await repository
+          .getProductOverViewFB(order.productNo)
+          .then((product) => order.product = product);
+      orders.add(order);
+      update();
+    }
   }
 
   void removeOrder(OrderModel order) async {
@@ -90,11 +104,6 @@ class CartController extends GetxController {
         total.value += element.product.price * element.quantity;
       }
     });
-    /* orders.forEach((element) {
-      if (element.isChecked == true) {
-        total.value += element.product.price * element.quantity;
-      }
-    });*/
     update();
     return total.value;
   }

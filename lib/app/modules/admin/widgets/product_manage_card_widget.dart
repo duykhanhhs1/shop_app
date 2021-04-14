@@ -27,7 +27,7 @@ class ProductManageCard extends GetView<AdminController> {
           caption: 'Sửa',
           color: Colors.blue,
           onTap: (){
-            ProductManagementView().buildFormAddCustomerDialog(productReceive: product,title: 'Cập nhật sản phẩm');
+            ProductManagementView().buildFormProduct(productReceive: product,title: 'Cập nhật sản phẩm');
           },
         ),
         IconSlideAction(

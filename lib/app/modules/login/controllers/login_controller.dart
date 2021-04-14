@@ -1,10 +1,12 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
+
+
 import 'package:scrum_app/app/data/models/user_model.dart';
 import 'package:scrum_app/app/data/repositories/user_repository.dart';
+import 'package:scrum_app/app/modules/login/bindings/login_binding.dart';
 import 'package:scrum_app/app/routes/app_pages.dart';
 import 'package:scrum_app/app/utils/keys.dart';
 
@@ -51,8 +53,11 @@ class LoginController extends GetxController {
 
   Future<void> logout() async {
     _store.remove(AppStorageKey.ACCESS_TOKEN);
+    emailController.clear();
+    passwordController.clear();
     FirebaseAuth.instance.signOut();
     Get.offAllNamed(Routes.LOGIN);
+    isProcessing.value = false;
   }
 
   //signIn
@@ -65,11 +70,9 @@ class LoginController extends GetxController {
         _store.write(AppStorageKey.ACCESS_TOKEN, token);
       });
       setUserLogged(value.user.uid);
-      isProcessing.value = false;
     }).catchError((onError) {
       Get.snackbar('Error', 'User not found',
           snackPosition: SnackPosition.BOTTOM, colorText: Colors.red);
-      isProcessing.value = false;
     });
   }
 

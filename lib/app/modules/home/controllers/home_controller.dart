@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+
+
 import 'package:scrum_app/app/data/models/product_model.dart';
 import 'package:scrum_app/app/data/repositories/product_repository.dart';
-import 'package:scrum_app/app/modules/cart/controllers/cart_controller.dart';
-import 'package:scrum_app/app/modules/login/controllers/login_controller.dart';
 
 class HomeController extends GetxController {
   final ProductRepository repository;
@@ -40,22 +40,16 @@ class HomeController extends GetxController {
     }*/
 
     getAllProductOverview();
-    CartController.to.getOrders(LoginController.to.userLogged.value.userNo);
+   // CartController.to.getOrders(LoginController.to.userLogged.value.userNo);
     super.onInit();
   }
 
-  void getAllProductOverview() async {
+  Future<void> getAllProductOverview() async {
     isLoading.value = true;
     final List<ProductOverViewModel> data =
         await repository.getAllProductOverview();
     products = data.obs;
     isLoading.value = false;
-    update();
-  }
-
-
-  void setItemTapped(int index) {
-    currentIndexBottomBar.value = index;
     update();
   }
 

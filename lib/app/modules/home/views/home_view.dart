@@ -1,6 +1,8 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+
+
 import 'package:scrum_app/app/modules/home/controllers/home_controller.dart';
 import 'package:scrum_app/app/modules/home/widgets/category_card_widget.dart';
 import 'package:scrum_app/app/modules/home/widgets/product_card_widget.dart';
@@ -32,36 +34,42 @@ class HomeView extends GetView<HomeController> {
             ),
             actions: <Widget>[
               Center(child: CartIcon()),
-              SizedBox(width: 18),
+              SizedBox(width: 12),
             ],
           ),
           bottomNavigationBar: AppBottomNavigationBar(),
           body: GetBuilder(
             builder: (HomeController controller) {
-              return SingleChildScrollView(
-                child: Container(
-                  padding: const EdgeInsets.symmetric(horizontal: 10),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: <Widget>[
-                      /*    Padding(
-                          padding: const EdgeInsets.symmetric(vertical: 10),
-                          child: Text('Danh mục', style: textTitle)),
-                      _buildCategoryGridView(),
-                      Padding(
-                          padding: const EdgeInsets.symmetric(vertical: 10),
-                          child: Text('Dành cho bạn', style: textTitle)),
-                      _buildSpecialListView(),*/
-                      Padding(
-                          padding: const EdgeInsets.symmetric(vertical: 10),
-                          child: Text('Sản phẩm nổi bật', style: textTitle)),
-                      controller.isLoading.value
-                          ? Center(child: CircularProgressIndicator())
-                          : _buildPopularGridView(controller),
-                      SizedBox(
-                        height: 15,
-                      )
-                    ],
+              return RefreshIndicator(
+                displacement: 0,
+                onRefresh: () async {
+                  controller.getAllProductOverview();
+                },
+                child: SingleChildScrollView(
+                  child: Container(
+                    padding: const EdgeInsets.symmetric(horizontal: 10),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: <Widget>[
+                        /*    Padding(
+                            padding: const EdgeInsets.symmetric(vertical: 10),
+                            child: Text('Danh mục', style: textTitle)),
+                        _buildCategoryGridView(),
+                        Padding(
+                            padding: const EdgeInsets.symmetric(vertical: 10),
+                            child: Text('Dành cho bạn', style: textTitle)),
+                        _buildSpecialListView(),*/
+                        Padding(
+                            padding: const EdgeInsets.symmetric(vertical: 10),
+                            child: Text('Sản phẩm nổi bật', style: textTitle)),
+                        controller.isLoading.value
+                            ? Center(child: CircularProgressIndicator())
+                            : _buildPopularGridView(controller),
+                        SizedBox(
+                          height: 15,
+                        )
+                      ],
+                    ),
                   ),
                 ),
               );

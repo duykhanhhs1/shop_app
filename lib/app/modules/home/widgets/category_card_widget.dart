@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+
 import 'package:scrum_app/app/theme/color_theme.dart';
 
 class CategoryCard extends StatelessWidget {

@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:get/get.dart';
+
+
 import 'package:scrum_app/app/data/models/order_model.dart';
 import 'package:scrum_app/app/data/models/product_model.dart';
 import 'package:scrum_app/app/modules/cart/controllers/cart_controller.dart';
@@ -194,7 +196,7 @@ class DetailProductView extends GetView<DetailProductController> {
           ],
         ),
         SizedBox(height: 10),
-        Text('${product.price} VNĐ',
+        Text('₫${product.price}',
             style: TextStyle(
                 color: Colors.deepOrange,
                 fontSize: 18,
