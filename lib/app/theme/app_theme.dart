@@ -3,9 +3,6 @@ import 'package:flutter/material.dart';
 import 'color_theme.dart';
 
 final ThemeData appThemeData = ThemeData(
-  appBarTheme: AppBarTheme(
-    backgroundColor: kPrimaryColor,
-  ),
   fontFamily: 'Muli',
   scaffoldBackgroundColor: Colors.white,
   primaryColor: kPrimaryColor,

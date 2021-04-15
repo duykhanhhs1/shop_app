@@ -19,6 +19,8 @@ class OrderModel {
   @JsonKey(ignore: true)
   ProductOverViewModel product;
   @JsonKey(ignore: true)
+  String customerName;
+  @JsonKey(ignore: true)
   bool isChecked;
   @JsonKey(ignore: true)
   TextEditingController quantityController = TextEditingController();
@@ -26,6 +28,8 @@ class OrderModel {
   int get getPriceOrder => this.quantity * this.product.price;
 
   String get getCreateAt => DateFormat('HH:mm dd-MM-yyyy').format(createAt);
+
+  String get getShortDate => DateFormat('HH:mm dd-MM').format(createAt);
 
   OrderModel(
       {this.orderNo,

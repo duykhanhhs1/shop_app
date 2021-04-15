@@ -10,6 +10,7 @@ class ProductProvider extends GetConnect {
     httpClient.baseUrl = 'YOUR-API-URL';
   }
 
+/*
   Future<List<ProductOverViewModel>> getProducts() async {
     return AppMock.products;
   }
@@ -18,9 +19,10 @@ class ProductProvider extends GetConnect {
     return AppMock.productDetails
         .firstWhere((element) => element.productNo == productNo);
   }
+*/
 
   ///FIRE BASE
-  Future<List<ProductModel>> getAllProductFB() async {
+  Future<List<ProductModel>> getProducts() async {
     List<ProductModel> products = [];
     await FirebaseFirestore.instance
         .collection('products')
@@ -135,6 +137,29 @@ class ProductProvider extends GetConnect {
       });
     });
     await Future.wait(futures);
+    return orders;
+  }
+
+  Future<List<OrderModel>> getPaidOrders() async {
+    List<OrderModel> orders = [];
+    List<Future> futures = <Future>[];
+
+    await FirebaseFirestore.instance
+        .collection('orders')
+        .get()
+        .then((QuerySnapshot querySnapshot) {
+      querySnapshot.docs.forEach((map) async {
+        OrderModel order = OrderModel.fromJson(map.data());
+        if(order.createAt != null){
+          futures.add(getProductOverViewFB(order.productNo).then((value) {
+            order.product = value;
+            orders.add(order);
+          }));
+        }
+      });
+    });
+    await Future.wait(futures);
+
     return orders;
   }
 

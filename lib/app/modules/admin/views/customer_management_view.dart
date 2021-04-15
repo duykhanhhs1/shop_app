@@ -46,40 +46,45 @@ class CustomerManagementView extends GetView<AdminController> {
                 if (controller.users.length > 0)
                   Divider(thickness: 1, height: 1),
                 Expanded(
-                  child: ListView.builder(
-                    shrinkWrap: true,
-                    itemCount: controller.users.length,
-                    itemBuilder: (context, index) {
-                      return Column(
-                        children: [
-                          InkWell(
-                              onTap: () {
-                                Get.dialog(
-                                  AlertDialog(
-                                    insetPadding: EdgeInsets.all(10),
-                                    title: Text(
-                                      'Thông tin khách hàng',
-                                      textAlign: TextAlign.center,
-                                    ),
-                                    content:
-                                        _buildInfoUser(controller.users[index]),
-                                    actions: [
-                                      RoundedButton(
-                                        onPressed: () {
-                                          Get.back();
-                                        },
-                                        radius: 5,
-                                        textContent: 'Đóng',
-                                      )
-                                    ],
-                                  ),
-                                );
-                              },
-                              child: UserCard(controller.users[index])),
-                          Divider(thickness: 1, height: 0),
-                        ],
-                      );
+                  child: RefreshIndicator(
+                    onRefresh: () async{
+                      controller.getUsers();
                     },
+                    child: ListView.builder(
+                      shrinkWrap: true,
+                      itemCount: controller.users.length,
+                      itemBuilder: (context, index) {
+                        return Column(
+                          children: [
+                            InkWell(
+                                onTap: () {
+                                  Get.dialog(
+                                    AlertDialog(
+                                      insetPadding: EdgeInsets.all(10),
+                                      title: Text(
+                                        'Thông tin khách hàng',
+                                        textAlign: TextAlign.center,
+                                      ),
+                                      content:
+                                          _buildInfoUser(controller.users[index]),
+                                      actions: [
+                                        RoundedButton(
+                                          onPressed: () {
+                                            Get.back();
+                                          },
+                                          radius: 5,
+                                          textContent: 'Đóng',
+                                        )
+                                      ],
+                                    ),
+                                  );
+                                },
+                                child: UserCard(controller.users[index])),
+                            Divider(thickness: 1, height: 0),
+                          ],
+                        );
+                      },
+                    ),
                   ),
                 ),
               ],

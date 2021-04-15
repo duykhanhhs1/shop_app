@@ -2,6 +2,7 @@ import 'package:get/get.dart';
 import 'package:scrum_app/app/modules/admin/bindings/admin_binding.dart';
 import 'package:scrum_app/app/modules/admin/views/customer_management_view.dart';
 import 'package:scrum_app/app/modules/admin/views/product_management_view.dart';
+import 'package:scrum_app/app/modules/admin/views/revenue_statistic_view.dart';
 import 'package:scrum_app/app/modules/cart/bindings/cart_binding.dart';
 import 'package:scrum_app/app/modules/cart/views/cart_view.dart';
 import 'package:scrum_app/app/modules/cart/views/payment_view.dart';
@@ -84,6 +85,10 @@ class AppPages {
     GetPage(
       name: _Paths.PRODUCT_MANAGEMENT,
       page: () => ProductManagementView(),
+      binding: AdminBinding(),
+    ), GetPage(
+      name: _Paths.REVENUE_STATISTIC,
+      page: () => RevenueStatisticView(),
       binding: AdminBinding(),
     ),
   ];

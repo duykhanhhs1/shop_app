@@ -64,7 +64,7 @@ class ProductManagementView extends GetView<AdminController> {
                 Expanded(
                   child: RefreshIndicator(
                     onRefresh: () async {
-                      controller.getAllProductFB();
+                      controller.getProducts();
                     },
                     child: ListView.builder(
                       shrinkWrap: true,

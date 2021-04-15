@@ -13,8 +13,7 @@ class FirebaseHelper {
         .getDownloadURL()
         .then(
           (value) => imageUrl = value,
-        )
-        .onError((error, stackTrace) => null);
+        );
     return imageUrl;
   }
 }

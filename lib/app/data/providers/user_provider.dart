@@ -36,7 +36,7 @@ class UserProvider extends GetConnect {
       //var idUser = FirebaseAuth.instance.currentUser.uid;
 //      Customer.uid = value.uid;
       CollectionReference users =
-      FirebaseFirestore.instance.collection('users');
+          FirebaseFirestore.instance.collection('users');
       users.doc(user.userNo).set(user.toJson()).then((value) {
         print("Add Customer Success!!");
       }).catchError((error) => print("Failed to add customer: $error"));
@@ -48,12 +48,22 @@ class UserProvider extends GetConnect {
   ///ADMIN
   Future<List<UserModel>> getUsers() async {
     List<UserModel> users = [];
-    await FirebaseFirestore.instance.collection('users').get().then((
-        QuerySnapshot querySnapshot) {
+    await FirebaseFirestore.instance
+        .collection('users')
+        .get()
+        .then((QuerySnapshot querySnapshot) {
       querySnapshot.docs.forEach((element) {
         users.add(UserModel.fromJson(element.data()));
       });
     });
     return users;
+  }
+
+  Future<void> removeUser(String userNo) async {
+    await FirebaseFirestore.instance
+        .collection('users')
+        .doc('$userNo')
+        .delete()
+        .then((value) => print('delete success'));
   }
 }

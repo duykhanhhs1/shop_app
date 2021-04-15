@@ -8,6 +8,7 @@ class ProductRepository {
 
   ProductRepository({@required this.apiClient}) : assert(apiClient != null);
 
+/*
   Future<List<ProductOverViewModel>> getProducts() {
     return apiClient.getProducts();
   }
@@ -15,10 +16,11 @@ class ProductRepository {
   Future<ProductDetailModel> getProductDetail(productNo) {
     return apiClient.getProductDetail(productNo);
   }
+*/
 
   ///Firebase
-  Future<List<ProductModel>> getAllProductFB() {
-    return apiClient.getAllProductFB();
+  Future<List<ProductModel>> getProducts() {
+    return apiClient.getProducts();
   }
 
   Future<void> updateProduct(ProductModel product) {
@@ -55,6 +57,10 @@ class ProductRepository {
 
   Future<OrderModel> getOrder(int orderNo, int productNo) {
     return apiClient.getOrder(orderNo, productNo);
+  }
+
+  Future<List<OrderModel>> getPaidOrders() {
+    return apiClient.getPaidOrders();
   }
 
   Future<void> removeOrder(int orderNo) {

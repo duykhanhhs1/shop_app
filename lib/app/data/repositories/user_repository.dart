@@ -19,4 +19,8 @@ class UserRepository {
   Future<List<UserModel>> getUsers() async {
     return apiClient.getUsers();
   }
+
+  Future<void> removeUser(String userNo) async {
+    return apiClient.removeUser(userNo);
+  }
 }

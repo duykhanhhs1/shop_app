@@ -20,6 +20,9 @@ class UserCard extends GetView<AdminController> {
       actionPane: SlidableDrawerActionPane(),
       secondaryActions: [
         IconSlideAction(
+          onTap: (){
+            controller.removeUser(user.userNo);
+          },
           icon: Icons.delete_outline,
           caption: 'Xóa',
           color: Colors.deepOrange,

@@ -2,6 +2,7 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:scrum_app/app/data/models/order_model.dart';
 
 import 'package:scrum_app/app/data/models/product_model.dart';
 import 'package:scrum_app/app/data/models/user_model.dart';
@@ -30,6 +31,7 @@ class AdminController extends GetxController {
   TextEditingController productInputController = TextEditingController();
 
   RxList<UserModel> users = RxList<UserModel>();
+  RxList<OrderModel> orders = RxList<OrderModel>();
 
   RxBool isCheck = false.obs;
   RxBool isSubmit = false.obs;
@@ -38,9 +40,9 @@ class AdminController extends GetxController {
   Rx<ProductModel> product = Rx(ProductModel());
 
   @override
-  void onInit() {
-    getAllProductFB();
-    getUsers();
+  void onInit() async {
+    getProducts();
+    await getUsers().whenComplete(() => getPaidOrders());
     super.onInit();
   }
 
@@ -50,27 +52,44 @@ class AdminController extends GetxController {
   }
 
   ///USER
-  void getUsers() async {
+  Future<void> getUsers() async {
     final List<UserModel> data = await userRepository.getUsers();
     users = data.obs;
     update();
   }
 
+  Future<void> getPaidOrders() async {
+    final List<OrderModel> data = await productRepository.getPaidOrders();
+    orders = data.obs;
+    orders.forEach((order) {
+      users.forEach((user) {
+        if (user.userNo == order.userNo) order.customerName = user.fullName;
+      });
+    });
+    orders.sort((a, b) => b.createAt.compareTo(a.createAt));
+    update();
+  }
+
+  void removeUser(String userNo) async {
+    await userRepository.removeUser(userNo);
+    getUsers();
+  }
+
   ///PRODUCT
-  void getAllProductFB() async {
-    final List<ProductModel> data = await productRepository.getAllProductFB();
+  Future<void> getProducts() async {
+    final List<ProductModel> data = await productRepository.getProducts();
     products = data.obs;
     update();
   }
 
   void updateProduct(ProductModel product) async {
     await productRepository.updateProduct(product);
-    getAllProductFB();
+    getProducts();
   }
 
   void removeProduct(ProductModel product) async {
     await productRepository.removeProduct(product);
-    getAllProductFB();
+    getProducts();
     update();
   }
 
@@ -81,7 +100,7 @@ class AdminController extends GetxController {
 
   void addProduct(ProductModel product) async {
     await productRepository.addProduct(product);
-    getAllProductFB();
+    getProducts();
     update();
   }
 
@@ -98,6 +117,27 @@ class AdminController extends GetxController {
       product.value.imageUrl = product.value.imageUrls[0];
       update();
     }
+  }
+
+  ///Statistic
+  int getSoldProductQuantity() {
+    int quantity = 0;
+    orders.forEach((element) {
+      quantity += element.quantity;
+    });
+    return quantity;
+  }
+
+  int getUserQuantity() {
+    return users.length;
+  }
+
+  int getInventoryProductQuantity() {
+    int quantity = 0;
+    products.forEach((element) {
+      quantity += element.amount;
+    });
+    return quantity;
   }
 
 /*  void searchProducts() {
