@@ -46,14 +46,19 @@ class ProfileView extends GetView<ProfileController> {
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
                                   Text(
-                                    controller.currentUser.fullName,
+                                    controller.currentUser.fullName??"Thông tin",
+                                    // "a",
                                     style: TextStyle(
                                         fontWeight: FontWeight.bold,
                                         fontSize: 20),
+
                                   ),
                                   if (controller.currentUser.description !=
                                       null)
-                                    Text(controller.currentUser.description),
+                                    Text(
+                                        // controller.currentUser.description??"DES"
+                                      "ava"
+                                    ),
                                 ],
                               )
                             ],
@@ -175,7 +180,9 @@ class ProfileView extends GetView<ProfileController> {
                                     child: DropdownButton(
                                   value: controller.userCreate.value.gender ??
                                       null,
-                                  onChanged: (value) {},
+                                  onChanged: (value) {
+                                    controller.setGender(value);
+                                  },
                                   items: <String>[
                                     'Nam',
                                     'Nữ',
@@ -184,6 +191,7 @@ class ProfileView extends GetView<ProfileController> {
                                     return DropdownMenuItem<String>(
                                       value: value,
                                       child: Text(value),
+                                      // child: Text("value"),
                                     );
                                   }).toList(),
                                 )),
@@ -226,6 +234,10 @@ class ProfileView extends GetView<ProfileController> {
                 textContent: 'Lưu',
                 onPressed: () {
                   controller.setOpenEditForm(false);
+                  var data = controller.userCreate.value;
+                  // controller.updateUserProfile( userNo :data.userNo,name: "A" ,gender:controller.userCreate.value.gender ,phone: data.phone,des:data.description);
+                  controller.updateUserProfile( userNo :data.userNo,name: "A111" ,gender: "Nam" ,phone: "0123333",des:"des123333");
+
                   //Get.back();
                 },
               ),
@@ -244,6 +256,7 @@ class ProfileView extends GetView<ProfileController> {
   }
 
   Widget _buildInfoUser() {
+    print(controller.currentUser.fullName);
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [

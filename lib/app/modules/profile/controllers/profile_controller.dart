@@ -41,6 +41,16 @@ class ProfileController extends GetxController {
     update();
   }
 
+  void setGender (String gender ){
+      currentUser.gender = gender;
+      update();
+  }
+
+  Future<void> updateUserProfile({String userNo,String name, String gender , String phone , String des}) async {
+    await repository.updateUserProfile(userNo,name,gender,phone,des);
+    update();
+  }
+
   // void getProfile(String userNo) async{
   //   isLoading.value = true;
   //   final UserModel data = _login.userLogged.value;

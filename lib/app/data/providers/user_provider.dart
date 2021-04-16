@@ -1,5 +1,8 @@
+import 'dart:collection';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
 import 'package:scrum_app/app/data/models/user_model.dart';
 
@@ -65,5 +68,23 @@ class UserProvider extends GetConnect {
         .doc('$userNo')
         .delete()
         .then((value) => print('delete success'));
+  }
+
+  Future<void> updateUserProfile(String userNo,String name, String gender, String phone, String des) async {
+    Map<String,String> mapData = new HashMap<String,String>();
+    mapData.putIfAbsent("userNo", () => userNo);
+    mapData.putIfAbsent("name", () => name);
+    mapData.putIfAbsent("gender", () => gender);
+    mapData.putIfAbsent("phone", () => phone);
+    mapData.putIfAbsent("description", () => des);
+    mapData.forEach((key, value) {print("map");print(key+ "   "+value);});
+
+    await FirebaseFirestore.instance
+        .collection('users')
+        .doc('$userNo')
+        // .delete()
+        // .then((value) => print('delete success'));
+        .update(mapData)
+        .then((value)=>print("Update Successfully"));
   }
 }
