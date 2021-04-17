@@ -77,7 +77,7 @@ class UserProvider extends GetConnect {
     mapData.putIfAbsent("gender", () => gender);
     mapData.putIfAbsent("phone", () => phone);
     mapData.putIfAbsent("description", () => des);
-    mapData.forEach((key, value) {print("map");print(key+ "   "+value);});
+    // mapData.forEach((key, value) {print("map");print(key+ "   "+value);});
 
     await FirebaseFirestore.instance
         .collection('users')

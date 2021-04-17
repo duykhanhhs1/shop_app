@@ -165,6 +165,9 @@ class ProfileView extends GetView<ProfileController> {
                             child: FormRoundedInputField(
                               initialValue:
                                   controller.userCreate.value.fullName,
+                              onChanged: (value)=>{
+                                controller.userCreate.value.fullName = value
+                              },
                               borderRadius: BorderRadius.circular(5),
                             ),
                           ),
@@ -182,6 +185,7 @@ class ProfileView extends GetView<ProfileController> {
                                       null,
                                   onChanged: (value) {
                                     controller.setGender(value);
+                                    controller.userCreate.value.gender = value;
                                   },
                                   items: <String>[
                                     'Nam',
@@ -201,6 +205,9 @@ class ProfileView extends GetView<ProfileController> {
                             title: 'Số điện thoại',
                             child: FormRoundedInputField(
                               initialValue: controller.userCreate.value.phone,
+                              onChanged: (value)=>{
+                                controller.userCreate.value.phone = value
+                              },
                               borderRadius: BorderRadius.circular(5),
                             ),
                           ),
@@ -214,10 +221,14 @@ class ProfileView extends GetView<ProfileController> {
                           ),
                           SizedBox(height: 15),
                           FormInputField(
+
                             title: 'Mô tả',
                             child: FormRoundedInputField(
                               initialValue:
                                   controller.userCreate.value.description ?? '',
+                              onChanged: (value)=>{
+                                controller.userCreate.value.description = value
+                              },
                               borderRadius: BorderRadius.circular(5),
                             ),
                           ),
@@ -234,9 +245,14 @@ class ProfileView extends GetView<ProfileController> {
                 textContent: 'Lưu',
                 onPressed: () {
                   controller.setOpenEditForm(false);
-                  var data = controller.userCreate.value;
+                  var data1 = controller.userCreate.value;
+                  print("XXX:"+controller.userCreate.value.phone);
                   // controller.updateUserProfile( userNo :data.userNo,name: "A" ,gender:controller.userCreate.value.gender ,phone: data.phone,des:data.description);
-                  controller.updateUserProfile( userNo :data.userNo,name: "A111" ,gender: "Nam" ,phone: "0123333",des:"des123333");
+                  controller.updateUserProfile( userNo :data1.userNo,
+                      name: data1.fullName,
+                      gender:data1.gender ,
+                      phone: data1.phone,
+                      des:data1.description);
 
                   //Get.back();
                 },
@@ -297,14 +313,18 @@ class ProfileField extends StatelessWidget {
 
   final String title;
   final String content;
-
+  String getContent(){
+    return this.content;
+  }
   @override
   Widget build(BuildContext context) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(title, style: TextStyle(fontWeight: FontWeight.bold)),
-        Text(content),
+        Text(content!=null ? content : ""
+        ,
+        ),
       ],
     );
   }
