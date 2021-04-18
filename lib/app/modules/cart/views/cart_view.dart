@@ -12,7 +12,7 @@ class CartView extends GetView<CartController> {
   @override
   Widget build(BuildContext context) {
     return GetBuilder(
-      init: Get.find<CartController>(),
+      init: CartController.to,
       builder: (CartController controller) {
         return Scaffold(
           appBar: AppBar(

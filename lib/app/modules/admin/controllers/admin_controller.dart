@@ -2,8 +2,8 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:scrum_app/app/data/models/order_model.dart';
 
+import 'package:scrum_app/app/data/models/order_model.dart';
 import 'package:scrum_app/app/data/models/product_model.dart';
 import 'package:scrum_app/app/data/models/user_model.dart';
 import 'package:scrum_app/app/data/repositories/product_repository.dart';
@@ -105,6 +105,18 @@ class AdminController extends GetxController {
   }
 
   void pickImage(ImageSource imageSource) async {
+    // final PickedFile pickedFile =
+    //     await ImagePicker().getImage(source: imageSource);
+    // Get.back();
+    // if (pickedFile != null) {
+    //   File imageFile = File(pickedFile.path);
+    //   String imageName = imageFile.path.substring(
+    //       imageFile.path.lastIndexOf('/'), imageFile.path.length - 1);
+    //   product.value.imageUrls
+    //       .add(await FirebaseHelper.uploadImage(imageFile, imageName));
+    //   product.value.imageUrl = product.value.imageUrls[0];
+    //   update();
+    // }
     final PickedFile pickedFile =
         await ImagePicker().getImage(source: imageSource);
     Get.back();
@@ -112,8 +124,8 @@ class AdminController extends GetxController {
       File imageFile = File(pickedFile.path);
       String imageName = imageFile.path.substring(
           imageFile.path.lastIndexOf('/'), imageFile.path.length - 1);
-      product.value.imageUrls
-          .add(await FirebaseHelper.uploadImage(imageFile, imageName));
+      product.value.imageUrls.add(
+          await FirebaseHelper.uploadImageTest(await pickedFile.readAsBytes()));
       product.value.imageUrl = product.value.imageUrls[0];
       update();
     }

@@ -17,8 +17,8 @@ class CartIcon extends StatelessWidget {
           children: <Widget>[
             IconButton(
               tooltip: 'Giỏ hàng',
-                onPressed: () {
-                  Get.toNamed(Routes.CART);
+                onPressed: () async {
+                  await Get.toNamed(Routes.CART);
                 },
                 icon: Icon(
                   Icons.shopping_cart,

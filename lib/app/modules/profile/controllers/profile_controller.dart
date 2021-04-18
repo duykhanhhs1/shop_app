@@ -41,15 +41,21 @@ class ProfileController extends GetxController {
     update();
   }
 
-  void setGender (String gender ){
-      currentUser.gender = gender;
-      update();
-  }
-
-  Future<void> updateUserProfile({String userNo,String name, String gender , String phone , String des}) async {
-    await repository.updateUserProfile(userNo,name,gender,phone,des);
+  void setGender(String gender) {
+    currentUser.gender = gender;
     update();
   }
+
+  Future<void> updateUser() async {
+    await repository.updateUser(currentUser);
+    setOpenEditForm(false);
+    update();
+  }
+
+  // void setGender(String value) {
+  //   userCreate.value.gender = value;
+  //   update();
+  // }
 
   // void getProfile(String userNo) async{
   //   isLoading.value = true;

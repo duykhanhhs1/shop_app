@@ -24,7 +24,7 @@ class UserRepository {
     return apiClient.removeUser(userNo);
   }
 
-  Future<void> updateUserProfile(String userNo,String name, String gender, String phone, String des) {
-    return apiClient.updateUserProfile(userNo,name,gender,phone,des);
+  Future<void> updateUser(UserModel user) {
+    return apiClient.updateUser(user);
   }
 }

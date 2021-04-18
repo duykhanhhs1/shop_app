@@ -22,97 +22,98 @@ class ProfileView extends GetView<ProfileController> {
         builder: (ProfileController controller) {
           return controller.isLoading.value
               ? Center(child: CircularProgressIndicator())
-              : Column(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: <Widget>[
-                    Column(
-                      children: [
-                        Padding(
-                          padding: const EdgeInsets.all(16),
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              ClipRRect(
-                                borderRadius: BorderRadius.circular(100),
-                                child: Image.asset(
-                                  'assets/images/Profile Image.png',
-                                  height: 70,
-                                  width: 70,
-                                  fit: BoxFit.cover,
-                                ),
-                              ),
-                              SizedBox(width: 10),
-                              Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Text(
-                                    controller.currentUser.fullName??"Thông tin",
-                                    // "a",
-                                    style: TextStyle(
-                                        fontWeight: FontWeight.bold,
-                                        fontSize: 20),
-
+              : SingleChildScrollView(
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: <Widget>[
+                      Column(
+                        children: [
+                          Padding(
+                            padding: const EdgeInsets.all(16),
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                ClipRRect(
+                                  borderRadius: BorderRadius.circular(100),
+                                  child: Image.asset(
+                                    'assets/images/Profile Image.png',
+                                    height: 70,
+                                    width: 70,
+                                    fit: BoxFit.cover,
                                   ),
-                                  if (controller.currentUser.description !=
-                                      null)
+                                ),
+                                SizedBox(width: 10),
+                                Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
                                     Text(
-                                        // controller.currentUser.description??"DES"
-                                      "ava"
+                                      controller.currentUser.fullName ??
+                                          "Thông tin",
+                                      // "a",
+                                      style: TextStyle(
+                                          fontWeight: FontWeight.bold,
+                                          fontSize: 20),
                                     ),
-                                ],
-                              )
-                            ],
+                                    if (controller.currentUser.description !=
+                                        null)
+                                      Text(
+                                          // controller.currentUser.description??"DES"
+                                          "ava"),
+                                  ],
+                                )
+                              ],
+                            ),
                           ),
-                        ),
-                        Divider(thickness: 5, height: 0),
-                        InkWell(
-                          onTap: () {
-                            Get.toNamed(Routes.ORDER_MANAGEMENT);
-                          },
-                          child: CustomListTile(
-                              iconData: Icons.article_outlined,
-                              title: 'Đơn mua',
-                              color: kPrimaryColor,
-                              secondText: 'Xem lịch sử mua hàng'),
-                        ),
-                        Divider(height: 0),
-                        CustomListTile(
-                            iconData: Icons.favorite_border,
-                            color: Colors.deepOrange,
-                            title: 'Yêu thích'),
-                        Divider(height: 0),
-                        InkWell(
-                          onTap: () {
-                            _showFormEditDialog();
-                          },
-                          child: CustomListTile(
-                              iconData: Icons.account_box_outlined,
-                              color: Colors.blue,
-                              title: 'Tài khoản'),
-                        ),
-                        Divider(height: 0),
-                        CustomListTile(
-                            color: Colors.yellowAccent.shade700,
-                            iconData: Icons.help_outline,
-                            title: 'Trung tâm trợ giúp'),
-                        Divider(height: 0),
-                        CustomListTile(
-                            color: Colors.red,
-                            iconData: Icons.account_balance_wallet_outlined,
-                            title: 'Ví voucher'),
-                        Divider(height: 0),
-                      ],
-                    ),
-                    Padding(
-                        padding: const EdgeInsets.only(bottom: 10),
-                        child: RoundedButton(
-                            color: Colors.deepOrange,
-                            textContent: 'Đăng xuất',
-                            width: Get.width * 0.9,
-                            onPressed: () {
-                              LoginController.to.logout();
-                            }))
-                  ],
+                          Divider(thickness: 5, height: 0),
+                          InkWell(
+                            onTap: () {
+                              Get.toNamed(Routes.ORDER_MANAGEMENT);
+                            },
+                            child: CustomListTile(
+                                iconData: Icons.article_outlined,
+                                title: 'Đơn mua',
+                                color: kPrimaryColor,
+                                secondText: 'Xem lịch sử mua hàng'),
+                          ),
+                          Divider(height: 0),
+                          CustomListTile(
+                              iconData: Icons.favorite_border,
+                              color: Colors.deepOrange,
+                              title: 'Yêu thích'),
+                          Divider(height: 0),
+                          InkWell(
+                            onTap: () {
+                              _showFormEditDialog();
+                            },
+                            child: CustomListTile(
+                                iconData: Icons.account_box_outlined,
+                                color: Colors.blue,
+                                title: 'Tài khoản'),
+                          ),
+                          Divider(height: 0),
+                          CustomListTile(
+                              color: Colors.yellowAccent.shade700,
+                              iconData: Icons.help_outline,
+                              title: 'Trung tâm trợ giúp'),
+                          Divider(height: 0),
+                          CustomListTile(
+                              color: Colors.red,
+                              iconData: Icons.account_balance_wallet_outlined,
+                              title: 'Ví voucher'),
+                          Divider(height: 0),
+                        ],
+                      ),
+                      Padding(
+                          padding: const EdgeInsets.only(bottom: 10),
+                          child: RoundedButton(
+                              color: Colors.deepOrange,
+                              textContent: 'Đăng xuất',
+                              width: Get.width * 0.9,
+                              onPressed: () {
+                                LoginController.to.logout();
+                              }))
+                    ],
+                  ),
                 );
         },
       ),
@@ -185,7 +186,6 @@ class ProfileView extends GetView<ProfileController> {
                                       null,
                                   onChanged: (value) {
                                     controller.setGender(value);
-                                    controller.userCreate.value.gender = value;
                                   },
                                   items: <String>[
                                     'Nam',
@@ -244,17 +244,7 @@ class ProfileView extends GetView<ProfileController> {
                 height: 40,
                 textContent: 'Lưu',
                 onPressed: () {
-                  controller.setOpenEditForm(false);
-                  var data1 = controller.userCreate.value;
-                  print("XXX:"+controller.userCreate.value.phone);
-                  // controller.updateUserProfile( userNo :data.userNo,name: "A" ,gender:controller.userCreate.value.gender ,phone: data.phone,des:data.description);
-                  controller.updateUserProfile( userNo :data1.userNo,
-                      name: data1.fullName,
-                      gender:data1.gender ,
-                      phone: data1.phone,
-                      des:data1.description);
-
-                  //Get.back();
+                  controller.updateUser();
                 },
               ),
             RoundedButton(

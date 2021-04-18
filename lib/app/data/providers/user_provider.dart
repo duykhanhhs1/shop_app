@@ -70,21 +70,11 @@ class UserProvider extends GetConnect {
         .then((value) => print('delete success'));
   }
 
-  Future<void> updateUserProfile(String userNo,String name, String gender, String phone, String des) async {
-    Map<String,String> mapData = new HashMap<String,String>();
-    mapData.putIfAbsent("userNo", () => userNo);
-    mapData.putIfAbsent("name", () => name);
-    mapData.putIfAbsent("gender", () => gender);
-    mapData.putIfAbsent("phone", () => phone);
-    mapData.putIfAbsent("description", () => des);
-    // mapData.forEach((key, value) {print("map");print(key+ "   "+value);});
-
+  Future<void> updateUser(UserModel user) async {
     await FirebaseFirestore.instance
         .collection('users')
-        .doc('$userNo')
-        // .delete()
-        // .then((value) => print('delete success'));
-        .update(mapData)
-        .then((value)=>print("Update Successfully"));
+        .doc('${user.userNo}')
+        .update(user.toJson())
+        .then((value) => print("Update Successfully"));
   }
 }

@@ -78,11 +78,6 @@ class LoginController extends GetxController {
 
   //Edit User Profile
 
-  Future<void> updateUserProfile({String userNo,String name, String gender , String phone , String des}) async {
-      await repository.updateUserProfile(userNo,name,gender,phone,des);
-      update();
-  }
-
   void setUserLogged(String uid) async {
     await getUserLogged(uid);
     if (userLogged.value.role == 'admin') {
