@@ -3,6 +3,8 @@ import 'package:flutter/material.dart';
 
 
 import 'package:scrum_app/app/data/models/order_model.dart';
+import 'package:scrum_app/app/theme/color_theme.dart';
+import 'package:scrum_app/app/utils/helpers.dart';
 
 class OrderPaymentItem extends StatelessWidget {
   const OrderPaymentItem({
@@ -37,10 +39,10 @@ class OrderPaymentItem extends StatelessWidget {
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: <Widget>[
-                          Text('₫${order.product.price}',
+                          Text('₫${NumberHelper.currencyFormat(order.product.price)}',
                               style: TextStyle(
                                   color: Colors.black.withOpacity(.6))),
-                          Text('x${order.quantity}',
+                          Text('x${NumberHelper.currencyFormat(order.quantity)}',
                               style: TextStyle(
                                   color: Colors.black.withOpacity(.6)))
                         ],
@@ -58,9 +60,9 @@ class OrderPaymentItem extends StatelessWidget {
           child:
               Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
             Text('Tổng số tiền (${order.quantity} sản phẩm)'),
-            Text('₫${order.getPriceOrder}',
+            Text('₫${NumberHelper.currencyFormat(order.getPriceOrder)}',
                 style: TextStyle(
-                    color: Colors.deepOrange, fontWeight: FontWeight.bold))
+                    color: kSecondaryColor, fontWeight: FontWeight.bold))
           ]),
         ),
       ],

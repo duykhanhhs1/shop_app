@@ -29,7 +29,7 @@ class ProductManagementView extends GetView<AdminController> {
                     controller.setCheck();
                   },
                   child: Center(
-                      child: Text(controller.isCheck.value ? 'Xong' : 'Sửa'))),
+                      child: Text(controller.isCheck.value ? 'Xong' : 'Chọn'))),
               title: Text('Quản lý sản phẩm'),
               centerTitle: true,
               actions: [
@@ -43,8 +43,8 @@ class ProductManagementView extends GetView<AdminController> {
                 SizedBox(width: 10)
               ],
             ),
-            bottomNavigationBar: controller.isCheck.value
-                ? BottomCheckRemove()
+            bottomNavigationBar:controller.isCheck.value
+                ? BottomCheckRemove(controller: controller)
                 : AppBottomNavigationBarAdmin(1),
             body: Column(
               children: <Widget>[
@@ -96,143 +96,157 @@ class ProductManagementView extends GetView<AdminController> {
 
   Future<dynamic> buildFormProduct(
       {ProductModel productReceive, String title}) {
-    controller.isSubmit.value = false;
     controller.product.value = ProductModel.fromJson(productReceive.toJson());
-    return Get.dialog(GetBuilder(
-      init: AdminController.to,
-      builder: (AdminController controller) {
-        return AlertDialog(
-          insetPadding: const EdgeInsets.symmetric(horizontal: 14),
-          contentPadding: const EdgeInsets.all(14),
-          titlePadding: const EdgeInsets.all(10),
-          actionsPadding: const EdgeInsets.all(5),
-          title: Column(
-            children: [
-              Text(
-                title,
-                style: TextStyle(fontWeight: FontWeight.bold),
-              ),
-            ],
-          ),
-          content: Container(
-            width: Get.width,
-            child: SingleChildScrollView(
-                child: Form(
-              key: controller.formKey,
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
+    return Get.dialog(
+        GetBuilder(
+          init: AdminController.to,
+          builder: (AdminController controller) {
+            return AlertDialog(
+              insetPadding: const EdgeInsets.symmetric(horizontal: 14),
+              contentPadding: const EdgeInsets.all(14),
+              titlePadding: const EdgeInsets.all(10),
+              actionsPadding: const EdgeInsets.all(5),
+              title: Column(
                 children: [
-                  FormInputField(
-                    title: 'Tên',
-                    require: true,
-                    child: FormRoundedInputField(
-                      validator: MultiValidator([
-                        RequiredValidator(
-                            errorText: 'Vui lòng nhập tên sản phẩm')
-                      ]),
-                      initialValue: controller.product.value.name == null
-                          ? ''
-                          : controller.product.value.name,
-                      onChanged: (value) {
-                        controller.product.value.name = value;
-                      },
-                      borderRadius: BorderRadius.circular(5),
-                    ),
+                  Text(
+                    title,
+                    style: TextStyle(fontWeight: FontWeight.bold),
                   ),
-                  SizedBox(height: 15),
-                  FormInputField(
-                    title: 'Giá',
-                    require: true,
-                    child: FormRoundedInputField(
-                      validator: MultiValidator([
-                        RequiredValidator(
-                            errorText: 'Vui lòng nhập giá sản phẩm')
-                      ]),
-                      initialValue: controller.product.value.price == null
-                          ? ''
-                          : controller.product.value.price.toString(),
-                      onChanged: (value) {
-                        controller.product.value.price = int.tryParse(value);
-                      },
-                      borderRadius: BorderRadius.circular(5),
-                      keyboardType: TextInputType.number,
-                    ),
-                  ),
-                  SizedBox(height: 15),
-                  FormInputField(
-                    title: 'Số lượng',
-                    require: true,
-                    child: FormRoundedInputField(
-                      validator: MultiValidator([
-                        RequiredValidator(
-                            errorText: 'Vui lòng nhập số lượng sản phẩm')
-                      ]),
-                      initialValue: controller.product.value.amount == null
-                          ? ''
-                          : controller.product.value.amount.toString(),
-                      onChanged: (value) {
-                        controller.product.value.amount = int.tryParse(value);
-                      },
-                      keyboardType: TextInputType.number,
-                      borderRadius: BorderRadius.circular(5),
-                    ),
-                  ),
-                  SizedBox(height: 15),
-                  FormInputField(
-                    title: 'Giảm giá (%)',
-                    child: FormRoundedInputField(
-                      initialValue: controller.product.value.discount == null
-                          ? ''
-                          : controller.product.value.discount.toString(),
-                      onChanged: (value) {
-                        controller.product.value.discount = int.tryParse(value);
-                      },
-                      keyboardType: TextInputType.number,
-                      borderRadius: BorderRadius.circular(5),
-                    ),
-                  ),
-                  SizedBox(height: 15),
-                  FormInputField(
-                    title: 'Mô tả',
-                    child: FormRoundedInputField(
-                      initialValue: controller.product.value.desc == null
-                          ? ''
-                          : controller.product.value.desc,
-                      onChanged: (value) {
-                        controller.product.value.desc = value;
-                      },
-                      maxLines: 3,
-                      borderRadius: BorderRadius.circular(5),
-                    ),
-                  ),
-                  SizedBox(height: 15),
-                  buildFormUploadImage(controller),
-                  SizedBox(height: 15),
                 ],
               ),
-            )),
-          ),
-          actions: [
-            RoundedButton(
-              radius: 5,
-              height: 40,
-              textContent: 'Lưu',
-              onPressed: () {
-                controller.submitProduct();
-              },
-            ),
-            RoundedButton(
-              radius: 5,
-              height: 40,
-              textContent: 'Đóng',
-              onPressed: () {
-                Get.back();
-              },
-            ),
-          ],
-        );
-      },
-    ));
+              content: Container(
+                width: Get.width,
+                child: SingleChildScrollView(
+                    child: Form(
+                  key: controller.formKey,
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      FormInputField(
+                        title: 'Tên',
+                        require: true,
+                        child: FormRoundedInputField(
+                          validator: MultiValidator([
+                            RequiredValidator(
+                                errorText: 'Vui lòng nhập tên sản phẩm')
+                          ]),
+                          initialValue: controller.product.value.name == null
+                              ? ''
+                              : controller.product.value.name,
+                          onChanged: (value) {
+                            controller.product.value.name = value;
+                          },
+                          borderRadius: BorderRadius.circular(5),
+                        ),
+                      ),
+                      SizedBox(height: 15),
+                      FormInputField(
+                        title: 'Giá',
+                        require: true,
+                        child: FormRoundedInputField(
+                          validator: MultiValidator([
+                            RequiredValidator(
+                                errorText: 'Vui lòng nhập giá sản phẩm')
+                          ]),
+                          initialValue: controller.product.value.price == null
+                              ? ''
+                              : controller.product.value.price.toString(),
+                          onChanged: (value) {
+                            controller.product.value.price =
+                                int.tryParse(value);
+                          },
+                          borderRadius: BorderRadius.circular(5),
+                          keyboardType: TextInputType.number,
+                        ),
+                      ),
+                      SizedBox(height: 15),
+                      FormInputField(
+                        title: 'Số lượng',
+                        require: true,
+                        child: FormRoundedInputField(
+                          validator: MultiValidator([
+                            RequiredValidator(
+                                errorText: 'Vui lòng nhập số lượng sản phẩm')
+                          ]),
+                          initialValue: controller.product.value.amount == null
+                              ? ''
+                              : controller.product.value.amount.toString(),
+                          onChanged: (value) {
+                            controller.product.value.amount =
+                                int.tryParse(value);
+                          },
+                          keyboardType: TextInputType.number,
+                          borderRadius: BorderRadius.circular(5),
+                        ),
+                      ),
+                      SizedBox(height: 15),
+                      FormInputField(
+                        title: 'Giảm giá (%)',
+                        child: FormRoundedInputField(
+                          initialValue: controller.product.value.discount ==
+                                  null
+                              ? ''
+                              : controller.product.value.discount.toString(),
+                          onChanged: (value) {
+                            controller.product.value.discount =
+                                int.tryParse(value);
+                          },
+                          keyboardType: TextInputType.number,
+                          borderRadius: BorderRadius.circular(5),
+                        ),
+                      ),
+                      SizedBox(height: 15),
+                      FormInputField(
+                        title: 'Mô tả',
+                        child: FormRoundedInputField(
+                          initialValue: controller.product.value.desc == null
+                              ? ''
+                              : controller.product.value.desc,
+                          onChanged: (value) {
+                            controller.product.value.desc = value;
+                          },
+                          maxLines: 3,
+                          borderRadius: BorderRadius.circular(5),
+                        ),
+                      ),
+                      SizedBox(height: 15),
+                      buildFormUploadImage(controller),
+                      SizedBox(height: 15),
+                    ],
+                  ),
+                )),
+              ),
+              actions: [
+                RoundedButton(
+                  hasWidget: controller.isLoading.value,
+                  content: SizedBox(
+                      height: 15,
+                      width: 15,
+                      child: CircularProgressIndicator(
+                        color: Colors.white,
+                        strokeWidth: 2,
+                      )),
+                  radius: 5,
+                  height: 40,
+                  textContent: 'Lưu',
+                  onPressed: () {
+                    controller.submitProduct();
+                  },
+                ),
+                RoundedButton(
+                  radius: 5,
+                  height: 40,
+                  textContent: 'Đóng',
+                  onPressed: () {
+                    controller.isSubmit.value = false;
+                    Get.back();
+                  },
+                ),
+              ],
+            );
+          },
+        ),
+        barrierDismissible: false);
   }
 
   Widget buildFormUploadImage(AdminController controller) {

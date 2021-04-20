@@ -13,12 +13,16 @@ class ProductOverViewModel {
   int discount;
   String imageUrl;
 
+  @JsonKey(ignore: true)
+  bool isFavorite;
+
   ProductOverViewModel(
       {this.productNo,
       this.amount,
       this.discount,
       this.name,
       this.price,
+      this.isFavorite = false,
       this.imageUrl});
 
   factory ProductOverViewModel.fromJson(Map<String, dynamic> json) =>
@@ -119,7 +123,6 @@ class ProductModel {
   int amount;
   double rating;
   String imageUrl;
-  @JsonKey(defaultValue: [])
   List<String> imageUrls;
   int shippingCost;
   int discount;
@@ -129,8 +132,12 @@ class ProductModel {
   List<ProductPropertyModel> productProperties;
   List<ProductReviewModel> productReviews;
 
+  @JsonKey(ignore: true)
+  bool isChecked;
+
   ProductModel(
       {this.discount,
+      this.isChecked = false,
       this.amount,
       this.desc,
       this.imageUrl,
@@ -151,4 +158,18 @@ class ProductModel {
       _$ProductModelFromJson(json);
 
   Map<String, dynamic> toJson() => _$ProductModelToJson(this);
+}
+
+@JsonSerializable()
+class FavoriteModel {
+  int favoriteNo;
+  int productNo;
+  String userNo;
+
+  FavoriteModel({this.userNo,this.favoriteNo, this.productNo});
+
+  factory FavoriteModel.fromJson(Map<String, dynamic> json) =>
+      _$FavoriteModelFromJson(json);
+
+  Map<String, dynamic> toJson() => _$FavoriteModelToJson(this);
 }

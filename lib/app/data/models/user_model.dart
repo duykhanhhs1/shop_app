@@ -14,12 +14,14 @@ class UserModel {
   String role;
   String token;
   String refreshToken;
+  DateTime createdAt;
 
   @JsonKey(ignore: true)
   bool isChecked;
 
   UserModel(
       {this.userNo,
+      this.createdAt,
       this.gender,
       this.isChecked = false,
       this.description,

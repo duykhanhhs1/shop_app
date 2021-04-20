@@ -1,12 +1,15 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:scrum_app/app/data/models/product_model.dart';
 import 'package:scrum_app/app/data/models/user_model.dart';
+import 'package:scrum_app/app/data/repositories/product_repository.dart';
 import 'package:scrum_app/app/data/repositories/user_repository.dart';
 import 'package:scrum_app/app/modules/login/controllers/login_controller.dart';
 
 class ProfileController extends GetxController {
-  final UserRepository repository;
+  final UserRepository userRepository;
+  final ProductRepository productRepository;
 
   //TODO: Implement ProfileController
 
@@ -15,15 +18,15 @@ class ProfileController extends GetxController {
   RxBool isEditProfile = RxBool(false);
   RxBool isLoading = RxBool(false);
 
-  ProfileController({@required this.repository}) : assert(repository != null);
+  ProfileController({@required this.productRepository, @required this.userRepository}) : assert(userRepository != null && productRepository != null);
 
   Rx<UserModel> userModel = LoginController.to.userLogged;
   Rx<UserModel> userCreate = Rx(UserModel());
   UserModel get currentUser=> userModel.value;
 
-  static ProfileController get to => Get.find<ProfileController>();
+  RxList<ProductOverViewModel> favoriteProducts = RxList<ProductOverViewModel>();
 
- // static LoginController get _login => Get.find<LoginController>();
+  static ProfileController get to => Get.find<ProfileController>();
 
   @override
   void onInit()  {
@@ -47,7 +50,7 @@ class ProfileController extends GetxController {
   }
 
   Future<void> updateUser() async {
-    await repository.updateUser(currentUser);
+    await userRepository.updateUser(currentUser);
     setOpenEditForm(false);
     update();
   }
@@ -64,6 +67,13 @@ class ProfileController extends GetxController {
   //   isLoading.value = false;
   //   update();
   // }
+
+  void getFavoriteProducts() async{
+    final List<ProductOverViewModel> data = await productRepository
+        .getFavoriteProducts(LoginController.to.userLogged.value.userNo);
+    favoriteProducts = data.obs;
+    update();
+  }
 
   @override
   void onClose() {}

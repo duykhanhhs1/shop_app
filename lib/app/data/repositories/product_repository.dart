@@ -35,6 +35,10 @@ class ProductRepository {
     return apiClient.getAllProductOverview();
   }
 
+  Future<List<ProductOverViewModel>> getFavoriteProducts(String userNo) {
+    return apiClient.getFavoriteProducts(userNo);
+  }
+
   Future<List<OrderModel>> getAllOrderFB(String userNo) async {
     return await apiClient.getAllOrderFB(userNo);
   }
@@ -69,5 +73,13 @@ class ProductRepository {
 
   Future<void> addProduct(ProductModel product) {
     return apiClient.addProduct(product);
+  }
+
+  Future<void> addFavoriteProduct(FavoriteModel favorite) {
+    return apiClient.addFavoriteProduct(favorite);
+  }
+
+  Future<void> removeFavoriteProduct(FavoriteModel favorite) {
+    return apiClient.removeFavoriteProduct(favorite);
   }
 }

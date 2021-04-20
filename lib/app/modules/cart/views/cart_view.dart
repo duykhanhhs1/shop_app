@@ -4,6 +4,9 @@ import 'package:get/get.dart';
 
 import 'package:scrum_app/app/modules/cart/widgets/order_cart_item.dart';
 import 'package:scrum_app/app/routes/app_pages.dart';
+import 'package:scrum_app/app/theme/color_theme.dart';
+import 'package:scrum_app/app/theme/color_theme.dart';
+import 'package:scrum_app/app/theme/color_theme.dart';
 import 'package:scrum_app/app/widgets/rounded_button.widget.dart';
 
 import '../controllers/cart_controller.dart';
@@ -81,7 +84,7 @@ class CartView extends GetView<CartController> {
                       ? Icons.check_box_outlined
                       : Icons.check_box_outline_blank,
                   color: controller.isCheckedAll.value
-                      ? Colors.deepOrange
+                      ? kSecondaryColor
                       : Colors.black54,
                 ),
                 SizedBox(width: 5),
@@ -101,7 +104,7 @@ class CartView extends GetView<CartController> {
                 Text('Tổng tiền: '),
                 Text('₫${controller.getTotalPrice()}',
                     style: TextStyle(
-                        color: Colors.deepOrange, fontWeight: FontWeight.bold)),
+                        color: kSecondaryColor, fontWeight: FontWeight.bold)),
                 SizedBox(width: 5),
                 RoundedButton(
                   height: 40,
@@ -110,7 +113,7 @@ class CartView extends GetView<CartController> {
                           Get.toNamed(Routes.PAYMENT);
                         }
                       : null,
-                  color: Colors.deepOrange,
+                  color: kSecondaryColor,
                   textContent: 'Mua hàng',
                   radius: 0,
                 )

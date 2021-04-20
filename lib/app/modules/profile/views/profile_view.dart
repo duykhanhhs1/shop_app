@@ -65,31 +65,31 @@ class ProfileView extends GetView<ProfileController> {
                             ),
                           ),
                           Divider(thickness: 5, height: 0),
-                          InkWell(
+                          CustomListTile(
                             onTap: () {
                               Get.toNamed(Routes.ORDER_MANAGEMENT);
                             },
-                            child: CustomListTile(
-                                iconData: Icons.article_outlined,
-                                title: 'Đơn mua',
-                                color: kPrimaryColor,
-                                secondText: 'Xem lịch sử mua hàng'),
-                          ),
+                              iconData: Icons.article_outlined,
+                              title: 'Đơn mua',
+                              color: kPrimaryColor,
+                              secondText: 'Xem lịch sử mua hàng'),
                           Divider(height: 0),
                           CustomListTile(
+                            onTap: () {
+                              controller.getFavoriteProducts();
+                              Get.toNamed(Routes.FAVORITE);
+                            },
                               iconData: Icons.favorite_border,
                               color: Colors.deepOrange,
                               title: 'Yêu thích'),
                           Divider(height: 0),
-                          InkWell(
-                            onTap: () {
-                              _showFormEditDialog();
-                            },
-                            child: CustomListTile(
-                                iconData: Icons.account_box_outlined,
-                                color: Colors.blue,
-                                title: 'Tài khoản'),
-                          ),
+                          CustomListTile(
+                              onTap: () {
+                                _showFormEditDialog();
+                              },
+                              iconData: Icons.account_box_outlined,
+                              color: Colors.blue,
+                              title: 'Tài khoản'),
                           Divider(height: 0),
                           CustomListTile(
                               color: Colors.yellowAccent.shade700,

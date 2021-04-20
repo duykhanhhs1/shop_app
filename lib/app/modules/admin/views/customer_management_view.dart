@@ -20,18 +20,17 @@ class CustomerManagementView extends GetView<AdminController> {
       builder: (AdminController controller) {
         return Scaffold(
             appBar: AppBar(
-              leading: InkWell(
+              /*leading: InkWell(
                   onTap: () {
                     controller.setCheck();
                   },
                   child: Center(
-                      child: Text(controller.isCheck.value ? 'Xong' : 'Sửa'))),
+                      child: Text(controller.isCheck.value ? 'Xong' : 'Sửa'))),*/
+              leading: SizedBox(),
               title: Text('Quản lý khách hàng'),
               centerTitle: true,
             ),
-            bottomNavigationBar: controller.isCheck.value
-                ? BottomCheckRemove()
-                : AppBottomNavigationBarAdmin(0),
+            bottomNavigationBar:  AppBottomNavigationBarAdmin(0),
             body: Column(
               children: <Widget>[
                 Container(

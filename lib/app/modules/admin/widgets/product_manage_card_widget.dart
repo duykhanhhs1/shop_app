@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:get/get.dart';
@@ -7,12 +8,14 @@ import 'package:image_picker/image_picker.dart';
 import 'package:scrum_app/app/data/models/product_model.dart';
 import 'package:scrum_app/app/modules/admin/controllers/admin_controller.dart';
 import 'package:scrum_app/app/modules/admin/views/product_management_view.dart';
+import 'package:scrum_app/app/theme/color_theme.dart';
+import 'package:scrum_app/app/utils/helpers.dart';
 
 class ProductManageCard extends GetView<AdminController> {
   const ProductManageCard(
-      this.product, {
-        Key key,
-      }) : super(key: key);
+    this.product, {
+    Key key,
+  }) : super(key: key);
 
   final ProductModel product;
 
@@ -24,17 +27,20 @@ class ProductManageCard extends GetView<AdminController> {
       secondaryActions: [
         IconSlideAction(
           icon: Icons.edit_outlined,
-          caption: 'Sửa',
+          caption: 'Cập nhật',
           color: Colors.blue,
-          onTap: (){
-            ProductManagementView().buildFormProduct(productReceive: product,title: 'Cập nhật sản phẩm');
+          onTap: () {
+            ProductManagementView().buildFormProduct(
+                productReceive: product, title: 'Cập nhật sản phẩm');
           },
         ),
         IconSlideAction(
           icon: Icons.delete_outline,
           caption: 'Xóa',
-          color: Colors.deepOrange,
-          onTap: (){controller.removeProduct(product);},
+          color: kSecondaryColor,
+          onTap: () {
+            controller.removeProduct(product);
+          },
         ),
       ],
       child: Padding(
@@ -45,10 +51,16 @@ class ProductManageCard extends GetView<AdminController> {
               Row(
                 children: [
                   InkWell(
-                      onTap: () {},
+                      onTap: () {
+                        controller.setCheckedProduct(product);
+                      },
                       child: Icon(
-                        Icons.check_box_outline_blank,
-                        color: Colors.black.withOpacity(.6),
+                        product.isChecked
+                            ? Icons.check_box_outlined
+                            : Icons.check_box_outline_blank,
+                        color: product.isChecked
+                            ? kSecondaryColor
+                            : kLightTextColor,
                       )),
                   SizedBox(width: 14),
                 ],
@@ -59,16 +71,23 @@ class ProductManageCard extends GetView<AdminController> {
                 children: [
                   Text(
                     product.name,
-                    style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),maxLines: 2,overflow: TextOverflow.ellipsis,
+                    style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
+                    maxLines: 2,
+                    overflow: TextOverflow.ellipsis,
                   ),
-                  Text('₫${product.price}',style: TextStyle(color: Colors.deepOrange,fontWeight: FontWeight.bold),),
-                  Text('Kho: ${product.amount}')
+                  Text(
+                    '₫${NumberHelper.currencyFormat(product.price)}',
+                    style: TextStyle(
+                        color: kSecondaryColor, fontWeight: FontWeight.bold),
+                  ),
+                  Text('Kho: ${NumberHelper.currencyFormat(product.amount)}')
                 ],
               ),
             ),
             SizedBox(width: 14),
             Image.network(
-              product.imageUrls[0],fit: BoxFit.cover,
+              product.imageUrls[0],
+              fit: BoxFit.cover,
               width: 75,
               height: 75,
             ),
