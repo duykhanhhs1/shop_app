@@ -36,7 +36,7 @@ class DetailProductView extends GetView<DetailProductController> {
                 ),
                 floatingActionButton: FloatingActionButton(
                   onPressed: () {
-                    _buildBottomAddCart(product);
+                    _buildBottomAddCart();
                   },
                   backgroundColor: kPrimaryColor,
                   child: Icon(
@@ -200,7 +200,7 @@ class DetailProductView extends GetView<DetailProductController> {
                 color: kSecondaryColor,
                 fontSize: 18,
                 fontWeight: FontWeight.bold)),
-        if(product.oldPrice != null)
+        if (product.oldPrice != null)
           Text('${NumberHelper.currencyFormat(product.oldPrice)}\$',
               style: TextStyle(
                   color: Colors.black.withOpacity(.6),
@@ -319,89 +319,101 @@ class DetailProductView extends GetView<DetailProductController> {
     );
   }
 
-  Future<dynamic> _buildBottomAddCart(ProductDetailModel product) {
+  Future<dynamic> _buildBottomAddCart() {
     controller.quantityController.text = '1';
-    return Get.bottomSheet(Container(
-      padding: const EdgeInsets.all(15),
-      decoration: BoxDecoration(
-          color: Colors.white,
-          borderRadius: BorderRadius.vertical(top: Radius.circular(15))),
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: <Widget>[
-          Column(
-            children: [
-              Row(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: <Widget>[
+    controller.productDetail.value.quantity = 1;
+    return Get.bottomSheet(GetBuilder<DetailProductController>(
+      init: Get.find(),
+      builder: (controller) {
+        return Container(
+          padding: const EdgeInsets.all(15),
+          decoration: BoxDecoration(
+              color: Colors.white,
+              borderRadius: BorderRadius.vertical(top: Radius.circular(15))),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: <Widget>[
+              Column(
+                children: [
                   Row(
-                    crossAxisAlignment: CrossAxisAlignment.end,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: <Widget>[
-                      Image.network(
-                        product.imageUrls[0],
-                        height: 80,
-                        width: 80,
-                        fit: BoxFit.cover,
-                      ),
-                      SizedBox(width: 10),
-                      Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        mainAxisAlignment: MainAxisAlignment.end,
+                      Row(
+                        crossAxisAlignment: CrossAxisAlignment.end,
                         children: <Widget>[
-                          Text('${product.price} VNĐ',
-                              style: TextStyle(
-                                  color: kSecondaryColor,
-                                  fontWeight: FontWeight.bold)),
-                          Text('Inventory: ${product.amount}',
-                              style: TextStyle(
-                                  color: Colors.black.withOpacity(.6),
-                                  fontWeight: FontWeight.bold)),
+                          Image.network(
+                            controller.productDetail.value.imageUrls[0],
+                            height: 80,
+                            width: 80,
+                            fit: BoxFit.cover,
+                          ),
+                          SizedBox(width: 10),
+                          Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            mainAxisAlignment: MainAxisAlignment.end,
+                            children: <Widget>[
+                              Text(
+                                  '${NumberHelper.currencyFormat(controller.getPrice())} VNĐ',
+                                  style: TextStyle(
+                                      color: kSecondaryColor,
+                                      fontWeight: FontWeight.bold)),
+                              Text(
+                                  'Kho: ${NumberHelper.currencyFormat(controller.productDetail.value.amount)}',
+                                  style: TextStyle(
+                                      color: Colors.black.withOpacity(.6),
+                                      fontWeight: FontWeight.bold)),
+                            ],
+                          ),
                         ],
+                      ),
+                      GestureDetector(
+                          child: Icon(Icons.clear),
+                          onTap: () {
+                            Get.back();
+                          })
+                    ],
+                  ),
+                  Divider(),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: <Widget>[
+                      Text('Số lượng'),
+                      NumberInputIncDec(
+                        setValue: () {
+                          controller.productDetail.value.quantity =
+                              int.tryParse(controller.quantityController.text);
+                          controller.update();
+                        },
+                        textController: controller.quantityController,
                       ),
                     ],
                   ),
-                  GestureDetector(
-                      child: Icon(Icons.clear),
-                      onTap: () {
-                        Get.back();
-                      })
+                  Divider(),
                 ],
               ),
-              Divider(),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: <Widget>[
-                  Text('Quantity'),
-                  NumberInputIncDec(
-                    setValue: () {},
-                    textController: controller.quantityController,
-                  ),
-                ],
-              ),
-              Divider(),
+              GetBuilder(
+                init: Get.find<CartController>(),
+                builder: (CartController cartController) {
+                  return RoundedButton(
+                    width: Get.width,
+                    onPressed: () {
+                      cartController.addOrder(OrderModel(
+                          status: 'pending',
+                          userNo: LoginController.to.userLogged.value.userNo,
+                          productNo: controller.productDetail.value.productNo,
+                          quantity: int.tryParse(
+                              controller.quantityController.text)));
+                      Get.back();
+                    },
+                    textContent: 'Thêm vào giỏ hàng',
+                  );
+                },
+              )
             ],
           ),
-          GetBuilder(
-            init: Get.find<CartController>(),
-            builder: (CartController cartController) {
-              return RoundedButton(
-                width: Get.width,
-                onPressed: () {
-                  cartController.addOrder(OrderModel(
-                      status: 'pending',
-                      userNo: LoginController.to.userLogged.value.userNo,
-                      productNo: product.productNo,
-                      quantity:
-                          int.tryParse(controller.quantityController.text)));
-                  Get.back();
-                },
-                textContent: 'Add to cart',
-              );
-            },
-          )
-        ],
-      ),
+        );
+      },
     ));
   }
 

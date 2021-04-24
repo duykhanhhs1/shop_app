@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:form_field_validator/form_field_validator.dart';
 import 'package:get/get.dart';
-
-
 import 'package:scrum_app/app/data/models/user_model.dart';
 import 'package:scrum_app/app/modules/login/controllers/login_controller.dart';
 import 'package:scrum_app/app/routes/app_pages.dart';
@@ -138,11 +136,13 @@ class RegisterView extends GetView<LoginController> {
                           : 'Đăng ký',
                       onPressed: () async {
                         if (_formKey.currentState.validate()) {
-                          await controller.register(
+                          controller.register(
                             email: controller.emailController.text,
                             password: controller.passwordController.text,
                             user: UserModel(
-                              email: controller.emailController.text,
+                                imageUrl:
+                                    'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQwQnaX0HIMtehoJnZsojyjD2P0u0YNl9IYyM3TJAaM4_QMgHqMpmYp_RfId466ou30Vs4&usqp=CAU',
+                                email: controller.emailController.text,
                                 fullName: controller.fullNameController.text,
                                 phone: controller.phoneNumberController.text,
                                 address: controller.addressController.text,

@@ -1,12 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:scrum_app/app/data/models/user_model.dart';
 import 'package:scrum_app/app/modules/cart/controllers/cart_controller.dart';
 import 'package:scrum_app/app/modules/cart/widgets/order_payment_item_widget.dart';
+import 'package:scrum_app/app/modules/login/controllers/login_controller.dart';
 import 'package:scrum_app/app/routes/app_pages.dart';
 import 'package:scrum_app/app/theme/color_theme.dart';
+import 'package:scrum_app/app/utils/helpers.dart';
 import 'package:scrum_app/app/widgets/rounded_button.widget.dart';
 
 class PaymentView extends GetView<CartController> {
+  final UserModel user = LoginController.to.userLogged.value;
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -20,7 +25,8 @@ class PaymentView extends GetView<CartController> {
             mainAxisAlignment: MainAxisAlignment.end,
             children: <Widget>[
               Text('Tổng thanh toán: '),
-              Text('₫${controller.getTotalPrice()}',
+              Text(
+                  '₫${NumberHelper.currencyFormat(controller.getTotalPrice())}',
                   style: TextStyle(
                       color: kSecondaryColor, fontWeight: FontWeight.bold)),
               SizedBox(width: 5),
@@ -79,7 +85,7 @@ class PaymentView extends GetView<CartController> {
                         Text('Địa chỉ nhận hàng'),
                         SizedBox(height: 5),
                         Text(
-                            'Trần Duy Khánh | 0328264648 \nĐH Kinh Tế, Đà Nẵng'),
+                            '${user.fullName} | ${user.phone} \n${user.address}'),
                       ],
                     ),
                   ],

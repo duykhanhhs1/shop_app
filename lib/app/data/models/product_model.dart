@@ -46,12 +46,16 @@ class ProductDetailModel {
   List<ProductPropertyModel> productProperties;
   List<ProductReviewModel> productReviews;
 
+  @JsonKey(ignore: true)
+  int quantity;
+
   ProductDetailModel(
       {this.discount,
       this.amount,
       shopImage,
       this.oldPrice,
       this.rating,
+      this.quantity = 1,
       this.productNo,
       this.name,
       this.price,

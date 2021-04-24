@@ -39,9 +39,7 @@ class ProfileView extends GetView<ProfileController> {
                                   ClipRRect(
                                     borderRadius: BorderRadius.circular(100),
                                     child: Image.network(
-                                      controller.currentUser.imageUrl == null
-                                          ? 'https://i.stack.imgur.com/l60Hf.png'
-                                          : controller.currentUser.imageUrl,
+                                      controller.currentUser.imageUrl,
                                       height: 70,
                                       width: 70,
                                       fit: BoxFit.cover,
@@ -325,6 +323,8 @@ class ProfileView extends GetView<ProfileController> {
               SizedBox(height: 15),
             ],
           ),
+        ProfileField(title: 'Địa chỉ', content: controller.currentUser.address),
+        SizedBox(height: 15),
         ProfileField(
             title: 'Số điện thoại', content: controller.currentUser.phone),
         SizedBox(height: 15),
