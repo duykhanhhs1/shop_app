@@ -6,6 +6,7 @@ part 'user_model.g.dart';
 class UserModel {
   String userNo;
   String fullName;
+  String imageUrl;
   String description;
   String address;
   String gender;
@@ -14,13 +15,16 @@ class UserModel {
   String role;
   String token;
   String refreshToken;
+  DateTime createdAt;
 
   @JsonKey(ignore: true)
   bool isChecked;
 
   UserModel(
       {this.userNo,
+      this.createdAt,
       this.gender,
+      this.imageUrl,
       this.isChecked = false,
       this.description,
       this.role,

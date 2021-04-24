@@ -1,13 +1,10 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-
-
 import 'package:scrum_app/app/modules/home/controllers/home_controller.dart';
 import 'package:scrum_app/app/modules/home/widgets/category_card_widget.dart';
 import 'package:scrum_app/app/modules/home/widgets/product_card_widget.dart';
 import 'package:scrum_app/app/modules/home/widgets/special_card_widget.dart';
-import 'package:scrum_app/app/routes/app_pages.dart';
 import 'package:scrum_app/app/theme/text_theme.dart';
 import 'package:scrum_app/app/widgets/app_bottom_navigation_bar_widget.dart';
 import 'package:scrum_app/app/widgets/cart_icon_widget.dart';
@@ -134,10 +131,6 @@ class HomeView extends GetView<HomeController> {
             childAspectRatio: 1 / 1.23),
         itemBuilder: (BuildContext context, int index) {
           return ProductCard(
-            onTap: () {
-              Get.toNamed(Routes.DETAIL_PRODUCT,
-                  arguments: controller.products[index].productNo);
-            },
             product: controller.products[index],
           );
         });

@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-
-
 import 'package:scrum_app/app/data/models/order_model.dart';
 import 'package:scrum_app/app/data/repositories/product_repository.dart';
 import 'package:scrum_app/app/modules/login/controllers/login_controller.dart';
@@ -58,6 +56,7 @@ class CartController extends GetxController {
           .getProductOverViewFB(order.productNo)
           .then((product) => order.product = product);
       orders.add(order);
+      isUpdated.value = true;
       update();
     } else
       orders.forEach((element) async {
@@ -70,7 +69,7 @@ class CartController extends GetxController {
         }
       });
 
-    if (isUpdated.value == false) {
+    if (!isUpdated.value) {
       await repository.addOrder(order);
       await repository
           .getProductOverViewFB(order.productNo)
@@ -92,8 +91,16 @@ class CartController extends GetxController {
       await repository
           .removeOrder(order.orderNo)
           .then((value) => orders.remove(order));
+      update();
     });
     isCheckedAll.value = false;
+    update();
+  }
+
+  void reCheckOrders() async {
+    checkedOrders.forEach((element) {
+      element.isChecked = false;
+    });
     update();
   }
 
@@ -104,7 +111,6 @@ class CartController extends GetxController {
         total.value += element.product.price * element.quantity;
       }
     });
-    update();
     return total.value;
   }
 

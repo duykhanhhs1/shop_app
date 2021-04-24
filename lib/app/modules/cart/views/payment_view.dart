@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-
-
 import 'package:scrum_app/app/modules/cart/controllers/cart_controller.dart';
 import 'package:scrum_app/app/modules/cart/widgets/order_payment_item_widget.dart';
 import 'package:scrum_app/app/routes/app_pages.dart';
@@ -24,7 +22,7 @@ class PaymentView extends GetView<CartController> {
               Text('Tổng thanh toán: '),
               Text('₫${controller.getTotalPrice()}',
                   style: TextStyle(
-                      color: Colors.deepOrange, fontWeight: FontWeight.bold)),
+                      color: kSecondaryColor, fontWeight: FontWeight.bold)),
               SizedBox(width: 5),
               RoundedButton(
                 height: 40,
@@ -58,7 +56,7 @@ class PaymentView extends GetView<CartController> {
                       ),
                       barrierDismissible: true);
                 },
-                color: Colors.deepOrange,
+                color: kSecondaryColor,
                 textContent: 'Đặt hàng',
                 radius: 0,
               )
@@ -73,7 +71,7 @@ class PaymentView extends GetView<CartController> {
                 child: Row(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Icon(Icons.location_on_outlined, color: Colors.deepOrange),
+                    Icon(Icons.location_on_outlined, color: kSecondaryColor),
                     SizedBox(width: 10),
                     Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
@@ -112,7 +110,7 @@ class PaymentView extends GetView<CartController> {
                     Row(children: [
                       Icon(
                         Icons.attach_money_rounded,
-                        color: Colors.deepOrange,
+                        color: kSecondaryColor,
                       ),
                       SizedBox(width: 10),
                       Text('Phương thức thanh toán')

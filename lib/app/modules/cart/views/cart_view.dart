@@ -1,9 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-
-
 import 'package:scrum_app/app/modules/cart/widgets/order_cart_item.dart';
 import 'package:scrum_app/app/routes/app_pages.dart';
+import 'package:scrum_app/app/utils/helpers.dart';
 import 'package:scrum_app/app/widgets/rounded_button.widget.dart';
 
 import '../controllers/cart_controller.dart';
@@ -11,58 +10,53 @@ import '../controllers/cart_controller.dart';
 class CartView extends GetView<CartController> {
   @override
   Widget build(BuildContext context) {
-    return GetBuilder(
-      init: CartController.to,
-      builder: (CartController controller) {
+    return GetBuilder<CartController>(
+      init: Get.find(),
+      builder: (controller) {
         return Scaffold(
-          appBar: AppBar(
-            title: Text('Giỏ hàng'),
-            centerTitle: true,
-            actions: [
-              if (controller.checkedOrders.length > 0)
-                IconButton(
-                    onPressed: () {
-                      controller.removeCheckedOrders();
-                    },
-                    icon: Icon(Icons.delete_outline))
-            ],
-          ),
-          bottomNavigationBar: _buildBottomNavigationBar(controller),
-          body: controller.isLoadingCart.value
-              ? Center(child: CircularProgressIndicator())
-              : GetBuilder(
-                  builder: (CartController controller) {
-                    return Column(
-                      children: [
-                        if (controller.pendingOrders.length > 0)
-                          Divider(
-                            thickness: 5,
-                            height: 5,
-                          ),
-                        Expanded(
-                          child: ListView.builder(
-                            itemCount: controller.pendingOrders.length,
-                            itemBuilder: (context, index) {
-                              return Column(
-                                children: <Widget>[
-                                  OrderCartItem(
-                                    controller: controller,
-                                    order: controller.pendingOrders[index],
-                                  ),
-                                  Divider(
-                                    thickness: 5,
-                                    height: 5,
-                                  ),
-                                ],
-                              );
-                            },
-                          ),
-                        )
-                      ],
-                    );
-                  },
-                ),
-        );
+            appBar: AppBar(
+              title: Text('Giỏ hàng'),
+              centerTitle: true,
+              actions: [
+                if (controller.checkedOrders.length > 0)
+                  IconButton(
+                      onPressed: () {
+                        controller.removeCheckedOrders();
+                      },
+                      icon: Icon(Icons.delete_outline))
+              ],
+            ),
+            bottomNavigationBar: _buildBottomNavigationBar(controller),
+            body: controller.isLoadingCart.value
+                ? Center(child: CircularProgressIndicator())
+                : Column(
+                    children: [
+                      if (controller.pendingOrders.length > 0)
+                        Divider(
+                          thickness: 5,
+                          height: 5,
+                        ),
+                      Expanded(
+                        child: ListView.builder(
+                          itemCount: controller.pendingOrders.length,
+                          itemBuilder: (context, index) {
+                            return Column(
+                              children: <Widget>[
+                                OrderCartItem(
+                                  controller: controller,
+                                  order: controller.pendingOrders[index],
+                                ),
+                                Divider(
+                                  thickness: 5,
+                                  height: 5,
+                                ),
+                              ],
+                            );
+                          },
+                        ),
+                      )
+                    ],
+                  ));
       },
     );
   }
@@ -99,7 +93,8 @@ class CartView extends GetView<CartController> {
               mainAxisAlignment: MainAxisAlignment.end,
               children: <Widget>[
                 Text('Tổng tiền: '),
-                Text('₫${controller.getTotalPrice()}',
+                Text(
+                    '₫${NumberHelper.currencyFormat(controller.getTotalPrice())}',
                     style: TextStyle(
                         color: Colors.deepOrange, fontWeight: FontWeight.bold)),
                 SizedBox(width: 5),

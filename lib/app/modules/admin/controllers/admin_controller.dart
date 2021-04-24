@@ -1,8 +1,9 @@
 import 'dart:io';
+
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
-
 import 'package:scrum_app/app/data/models/order_model.dart';
 import 'package:scrum_app/app/data/models/product_model.dart';
 import 'package:scrum_app/app/data/models/user_model.dart';
@@ -25,8 +26,11 @@ class AdminController extends GetxController {
 
   RxList<ProductModel> products = RxList<ProductModel>();
 
+  List<ProductModel> get checkedProducts =>
+      products.where((_) => _.isChecked).toList();
+
   //RxList<ProductModel> lowerProducts = RxList<ProductModel>();
-  // RxList<ProductModel> showProducts = RxList<ProductModel>();
+  RxList<ProductModel> showProducts = RxList<ProductModel>();
 
   TextEditingController productInputController = TextEditingController();
 
@@ -34,15 +38,17 @@ class AdminController extends GetxController {
   RxList<OrderModel> orders = RxList<OrderModel>();
 
   RxBool isCheck = false.obs;
+  RxBool isCheckedAll = false.obs;
   RxBool isSubmit = false.obs;
+  RxBool isLoading = false.obs;
 
   RxList<String> imagePickedUrls = RxList<String>(['icon']);
   Rx<ProductModel> product = Rx(ProductModel());
 
   @override
-  void onInit() async {
+  void onInit() {
     getProducts();
-    await getUsers().whenComplete(() => getPaidOrders());
+    getUsers().whenComplete(() => getPaidOrders());
     super.onInit();
   }
 
@@ -82,12 +88,12 @@ class AdminController extends GetxController {
     update();
   }
 
-  void updateProduct(ProductModel product) async {
+  Future<void> updateProduct(ProductModel product) async {
     await productRepository.updateProduct(product);
     getProducts();
   }
 
-  void removeProduct(ProductModel product) async {
+  Future<void> removeProduct(ProductModel product) async {
     await productRepository.removeProduct(product);
     getProducts();
     update();
@@ -98,37 +104,65 @@ class AdminController extends GetxController {
     update();
   }
 
-  void addProduct(ProductModel product) async {
+  Future<void> addProduct(ProductModel product) async {
     await productRepository.addProduct(product);
     getProducts();
     update();
   }
 
   void pickImage(ImageSource imageSource) async {
-    // final PickedFile pickedFile =
-    //     await ImagePicker().getImage(source: imageSource);
-    // Get.back();
-    // if (pickedFile != null) {
-    //   File imageFile = File(pickedFile.path);
-    //   String imageName = imageFile.path.substring(
-    //       imageFile.path.lastIndexOf('/'), imageFile.path.length - 1);
-    //   product.value.imageUrls
-    //       .add(await FirebaseHelper.uploadImage(imageFile, imageName));
-    //   product.value.imageUrl = product.value.imageUrls[0];
-    //   update();
-    // }
     final PickedFile pickedFile =
         await ImagePicker().getImage(source: imageSource);
     Get.back();
     if (pickedFile != null) {
-      File imageFile = File(pickedFile.path);
-      String imageName = imageFile.path.substring(
-          imageFile.path.lastIndexOf('/'), imageFile.path.length - 1);
-      product.value.imageUrls.add(
-          await FirebaseHelper.uploadImageTest(await pickedFile.readAsBytes()));
+      String imageName;
+      if (kIsWeb) {
+        imageName = pickedFile.path.substring(
+            pickedFile.path.lastIndexOf('/'), pickedFile.path.length - 1);
+        product.value.imageUrls.add(await FirebaseHelper.uploadImageWeb(
+            'product images', pickedFile, imageName));
+      } else {
+        File imageFile = File(pickedFile.path);
+        imageName = imageFile.path.substring(
+            imageFile.path.lastIndexOf('/'), imageFile.path.length - 1);
+        product.value.imageUrls.add(await FirebaseHelper.uploadImage(
+            'product images', imageFile, imageName));
+      }
+
       product.value.imageUrl = product.value.imageUrls[0];
       update();
     }
+  }
+
+  void setCheckedProduct(ProductModel product) {
+    product.isChecked = !product.isChecked;
+    if (checkedProducts.length == products.length) {
+      isCheckedAll.value = true;
+    } else
+      isCheckedAll.value = false;
+    update();
+  }
+
+  void setCheckedAll() {
+    if (isCheckedAll.value == false) {
+      products.forEach((element) {
+        element.isChecked = true;
+      });
+      isCheckedAll.value = true;
+    } else {
+      products.forEach((element) {
+        element.isChecked = false;
+      });
+      isCheckedAll.value = false;
+    }
+    update();
+  }
+
+  void removeChecked() async {
+    checkedProducts.forEach((element) async {
+      await removeProduct(element);
+    });
+    update();
   }
 
   ///Statistic
@@ -152,40 +186,27 @@ class AdminController extends GetxController {
     return quantity;
   }
 
-/*  void searchProducts() {
-    //showProducts.clear();
-    String input = productInputController.text.toLowerCase();
-    products.forEach((element) {
-      lowerProducts.add(ProductModel.fromJson(element.toJson()));
-    });
-    lowerProducts.forEach((element) {
-      element.name = element.name.toLowerCase();
-    });
-    if (input == '')
-      showProducts = products;
-    else {
-      showProducts =
-          lowerProducts.where((_) => _.name.contains(input)).toList().obs;
-      print(showProducts.length);
-      showProducts.forEach((sp) {
-        products.forEach((p) {
-          if (p.productNo == sp.productNo) sp.name = p.name;
-        });
-      });
-    }
+  void searchProducts() {
+    showProducts = products
+        .where((_) => _.name.contains(productInputController.text))
+        .toList()
+        .obs;
     update();
-  }*/
+  }
 
-  void submitProduct() {
+  void saveProduct() async {
     isSubmit.value = true;
-    update();
     if (formKey.currentState.validate() && product.value.imageUrls.length > 0) {
+      isLoading.value = true;
       if (product.value.productNo != null) {
-        updateProduct(product.value);
+        await updateProduct(product.value);
       } else
-        addProduct(product.value);
+        await addProduct(product.value);
+      isLoading.value = false;
+      isSubmit.value = false;
       Get.back();
     }
+    update();
   }
 
   @override

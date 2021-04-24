@@ -9,7 +9,11 @@ part of 'user_model.dart';
 UserModel _$UserModelFromJson(Map<String, dynamic> json) {
   return UserModel(
     userNo: json['userNo'] as String,
+    createdAt: json['createdAt'] == null
+        ? null
+        : DateTime.parse(json['createdAt'] as String),
     gender: json['gender'] as String,
+    imageUrl: json['imageUrl'] as String,
     description: json['description'] as String,
     role: json['role'] as String,
     email: json['email'] as String,
@@ -21,9 +25,11 @@ UserModel _$UserModelFromJson(Map<String, dynamic> json) {
   );
 }
 
-Map<String, dynamic> _$UserModelToJson(UserModel instance) => <String, dynamic>{
+Map<String, dynamic> _$UserModelToJson(UserModel instance) =>
+    <String, dynamic>{
       'userNo': instance.userNo,
       'fullName': instance.fullName,
+      'imageUrl': instance.imageUrl,
       'description': instance.description,
       'address': instance.address,
       'gender': instance.gender,
@@ -32,4 +38,5 @@ Map<String, dynamic> _$UserModelToJson(UserModel instance) => <String, dynamic>{
       'role': instance.role,
       'token': instance.token,
       'refreshToken': instance.refreshToken,
+      'createdAt': instance.createdAt?.toIso8601String(),
     };

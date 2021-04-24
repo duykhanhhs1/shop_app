@@ -1,5 +1,3 @@
-import 'package:flutter/material.dart';
-import 'package:intl/intl.dart';
 import 'package:json_annotation/json_annotation.dart';
 
 part 'product_model.g.dart';
@@ -13,12 +11,16 @@ class ProductOverViewModel {
   int discount;
   String imageUrl;
 
+  @JsonKey(ignore: true)
+  bool isFavorite;
+
   ProductOverViewModel(
       {this.productNo,
       this.amount,
       this.discount,
       this.name,
       this.price,
+      this.isFavorite = false,
       this.imageUrl});
 
   factory ProductOverViewModel.fromJson(Map<String, dynamic> json) =>
@@ -129,8 +131,12 @@ class ProductModel {
   List<ProductPropertyModel> productProperties;
   List<ProductReviewModel> productReviews;
 
+  @JsonKey(ignore: true)
+  bool isChecked;
+
   ProductModel(
       {this.discount,
+      this.isChecked = false,
       this.amount,
       this.desc,
       this.imageUrl,
@@ -139,16 +145,29 @@ class ProductModel {
       this.productNo,
       this.name,
       this.price,
-      imageUrls,
+      this.imageUrls,
       this.shippingCost,
       this.shopLocation,
       this.shopName,
       this.productProperties,
-      this.productReviews})
-      : imageUrls = imageUrls ?? [];
+      this.productReviews});
 
   factory ProductModel.fromJson(Map<String, dynamic> json) =>
       _$ProductModelFromJson(json);
 
   Map<String, dynamic> toJson() => _$ProductModelToJson(this);
+}
+
+@JsonSerializable()
+class FavoriteModel {
+  int favoriteNo;
+  int productNo;
+  String userNo;
+
+  FavoriteModel({this.userNo, this.favoriteNo, this.productNo});
+
+  factory FavoriteModel.fromJson(Map<String, dynamic> json) =>
+      _$FavoriteModelFromJson(json);
+
+  Map<String, dynamic> toJson() => _$FavoriteModelToJson(this);
 }

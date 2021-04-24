@@ -14,6 +14,7 @@ abstract class Routes {
   static const PROFILE = _Paths.PROFILE;
   static const PRODUCT_MANAGEMENT = _Paths.PRODUCT_MANAGEMENT;
   static const REVENUE_STATISTIC = _Paths.REVENUE_STATISTIC;
+  static const FAVORITE = _Paths.FAVORITE;
 }
 
 abstract class _Paths {
@@ -29,4 +30,5 @@ abstract class _Paths {
   static const PROFILE = '/profile';
   static const PRODUCT_MANAGEMENT = '/product-management';
   static const REVENUE_STATISTIC = '/revenue-statistic';
+  static const FAVORITE = '/favorite';
 }

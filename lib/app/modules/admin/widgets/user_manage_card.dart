@@ -1,10 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:get/get.dart';
-
-
 import 'package:scrum_app/app/data/models/user_model.dart';
 import 'package:scrum_app/app/modules/admin/controllers/admin_controller.dart';
+import 'package:scrum_app/app/theme/color_theme.dart';
 
 class UserCard extends GetView<AdminController> {
   const UserCard(this.user, {
@@ -20,12 +19,12 @@ class UserCard extends GetView<AdminController> {
       actionPane: SlidableDrawerActionPane(),
       secondaryActions: [
         IconSlideAction(
-          onTap: (){
+          onTap: () {
             controller.removeUser(user.userNo);
           },
           icon: Icons.delete_outline,
           caption: 'Xóa',
-          color: Colors.deepOrange,
+          color: kSecondaryColor,
         ),
       ],
       child: Padding(

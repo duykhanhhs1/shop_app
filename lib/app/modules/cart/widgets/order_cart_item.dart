@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
-
-
 import 'package:scrum_app/app/data/models/order_model.dart';
 import 'package:scrum_app/app/modules/cart/controllers/cart_controller.dart';
+import 'package:scrum_app/app/theme/color_theme.dart';
+import 'package:scrum_app/app/utils/helpers.dart';
 import 'package:scrum_app/app/widgets/number_input_field_widget.dart';
 
 class OrderCartItem extends StatelessWidget {
@@ -25,7 +25,7 @@ class OrderCartItem extends StatelessWidget {
       secondaryActions: [
         IconSlideAction(
           icon: Icons.delete,
-          color: Colors.deepOrange,
+          color: kSecondaryColor,
           caption: 'Xóa',
           onTap: () {
             controller.removeOrder(order);
@@ -47,9 +47,7 @@ class OrderCartItem extends StatelessWidget {
                         order.isChecked
                             ? Icons.check_box_outlined
                             : Icons.check_box_outline_blank,
-                        color: order.isChecked
-                            ? Colors.deepOrange
-                            : Colors.black54),
+                        color: order.isChecked ? kSecondaryColor : Colors.black54),
                   ),
                   Image.network(order.product.imageUrl,
                       height: 70, width: 70, fit: BoxFit.cover),
@@ -68,9 +66,10 @@ class OrderCartItem extends StatelessWidget {
                             Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
-                                Text('₫${order.getPriceOrder}',
+                                Text(
+                                    '₫${NumberHelper.currencyFormat(order.getPriceOrder)}',
                                     style: TextStyle(
-                                        color: Colors.deepOrange,
+                                        color: kSecondaryColor,
                                         fontSize: 16,
                                         fontWeight: FontWeight.bold)),
                               ],
@@ -80,6 +79,7 @@ class OrderCartItem extends StatelessWidget {
                               setValue: () {
                                 order.quantity =
                                     int.tryParse(order.quantityController.text);
+                                controller.update();
                               },
                             )
                           ],

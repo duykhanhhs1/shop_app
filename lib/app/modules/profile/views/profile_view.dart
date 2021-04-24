@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:scrum_app/app/modules/login/controllers/login_controller.dart';
 import 'package:scrum_app/app/routes/app_pages.dart';
 import 'package:scrum_app/app/theme/color_theme.dart';
 import 'package:scrum_app/app/widgets/custom_list_tile_widget.dart';
+import 'package:scrum_app/app/widgets/form_add_image_widget.dart';
 import 'package:scrum_app/app/widgets/form_input_field.dart';
 import 'package:scrum_app/app/widgets/rounded_button.widget.dart';
 import 'package:scrum_app/app/widgets/rounded_input_field.widget.dart';
@@ -22,98 +24,129 @@ class ProfileView extends GetView<ProfileController> {
         builder: (ProfileController controller) {
           return controller.isLoading.value
               ? Center(child: CircularProgressIndicator())
-              : SingleChildScrollView(
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: <Widget>[
-                      Column(
-                        children: [
-                          Padding(
-                            padding: const EdgeInsets.all(16),
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                ClipRRect(
-                                  borderRadius: BorderRadius.circular(100),
-                                  child: Image.asset(
-                                    'assets/images/Profile Image.png',
-                                    height: 70,
-                                    width: 70,
-                                    fit: BoxFit.cover,
-                                  ),
-                                ),
-                                SizedBox(width: 10),
-                                Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    Text(
-                                      controller.currentUser.fullName ??
-                                          "Thông tin",
-                                      // "a",
-                                      style: TextStyle(
-                                          fontWeight: FontWeight.bold,
-                                          fontSize: 20),
+              : Column(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: <Widget>[
+                    Column(
+                      children: [
+                        Padding(
+                          padding: const EdgeInsets.all(16),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Stack(
+                                children: [
+                                  ClipRRect(
+                                    borderRadius: BorderRadius.circular(100),
+                                    child: Image.network(
+                                      controller.currentUser.imageUrl == null
+                                          ? 'https://i.stack.imgur.com/l60Hf.png'
+                                          : controller.currentUser.imageUrl,
+                                      height: 70,
+                                      width: 70,
+                                      fit: BoxFit.cover,
                                     ),
-                                    if (controller.currentUser.description !=
-                                        null)
-                                      Text(
-                                          // controller.currentUser.description??"DES"
-                                          "ava"),
-                                  ],
-                                )
-                              ],
-                            ),
+                                  ),
+                                  Positioned(
+                                    child: InkWell(
+                                      onTap: () {
+                                        Get.bottomSheet(FormAddImage(
+                                          onTapGallery: () {
+                                            controller.pickAvatarProfile(
+                                                ImageSource.gallery);
+                                          },
+                                          onTapCamera: () {
+                                            controller.pickAvatarProfile(
+                                                ImageSource.camera);
+                                          },
+                                        ));
+                                      },
+                                      child: Container(
+                                          padding: const EdgeInsets.all(3),
+                                          decoration: BoxDecoration(
+                                              border: Border.all(
+                                                  color: Colors.white),
+                                              shape: BoxShape.circle,
+                                              color: Colors.grey.shade300),
+                                          child: Icon(
+                                            Icons.camera_alt_rounded,
+                                            size: 17,
+                                          )),
+                                    ),
+                                    bottom: 0,
+                                    right: 0,
+                                  )
+                                ],
+                              ),
+                              SizedBox(width: 10),
+                              Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text(
+                                    controller.currentUser.fullName,
+                                    style: TextStyle(
+                                        fontWeight: FontWeight.bold,
+                                        fontSize: 20),
+                                  ),
+                                  SizedBox(height: 5),
+                                  Text(
+                                    controller.currentUser.phone,
+                                    style: TextStyle(color: kLightTextColor),
+                                  ),
+                                ],
+                              )
+                            ],
                           ),
-                          Divider(thickness: 5, height: 0),
-                          InkWell(
+                        ),
+                        Divider(thickness: 5, height: 0),
+                        CustomListTile(
                             onTap: () {
                               Get.toNamed(Routes.ORDER_MANAGEMENT);
                             },
-                            child: CustomListTile(
-                                iconData: Icons.article_outlined,
-                                title: 'Đơn mua',
-                                color: kPrimaryColor,
-                                secondText: 'Xem lịch sử mua hàng'),
-                          ),
-                          Divider(height: 0),
-                          CustomListTile(
-                              iconData: Icons.favorite_border,
-                              color: Colors.deepOrange,
-                              title: 'Yêu thích'),
-                          Divider(height: 0),
-                          InkWell(
+                            iconData: Icons.article_outlined,
+                            title: 'Đơn mua',
+                            color: kPrimaryColor,
+                            secondText: 'Xem lịch sử mua hàng'),
+                        Divider(height: 0),
+                        CustomListTile(
+                            onTap: () {
+                              controller.getFavoriteProducts();
+                              Get.toNamed(Routes.FAVORITE);
+                            },
+                            iconData: Icons.favorite_border,
+                            color: Colors.deepOrange,
+                            title: 'Yêu thích'),
+                        Divider(height: 0),
+                        CustomListTile(
                             onTap: () {
                               _showFormEditDialog();
                             },
-                            child: CustomListTile(
-                                iconData: Icons.account_box_outlined,
-                                color: Colors.blue,
-                                title: 'Tài khoản'),
-                          ),
-                          Divider(height: 0),
-                          CustomListTile(
-                              color: Colors.yellowAccent.shade700,
-                              iconData: Icons.help_outline,
-                              title: 'Trung tâm trợ giúp'),
-                          Divider(height: 0),
-                          CustomListTile(
-                              color: Colors.red,
-                              iconData: Icons.account_balance_wallet_outlined,
-                              title: 'Ví voucher'),
-                          Divider(height: 0),
-                        ],
-                      ),
-                      Padding(
-                          padding: const EdgeInsets.only(bottom: 10),
-                          child: RoundedButton(
-                              color: Colors.deepOrange,
-                              textContent: 'Đăng xuất',
-                              width: Get.width * 0.9,
-                              onPressed: () {
-                                LoginController.to.logout();
-                              }))
-                    ],
-                  ),
+                            iconData: Icons.account_box_outlined,
+                            color: Colors.blue,
+                            title: 'Tài khoản'),
+                        Divider(height: 0),
+                        CustomListTile(
+                            color: Colors.yellowAccent.shade700,
+                            iconData: Icons.help_outline,
+                            title: 'Trung tâm trợ giúp'),
+                        Divider(height: 0),
+                        CustomListTile(
+                            color: Colors.red,
+                            iconData: Icons.account_balance_wallet_outlined,
+                            title: 'Ví voucher'),
+                        Divider(height: 0),
+                      ],
+                    ),
+                    Padding(
+                        padding: const EdgeInsets.only(bottom: 10),
+                        child: RoundedButton(
+                            color: Colors.deepOrange,
+                            textContent: 'Đăng xuất',
+                            width: Get.width * 0.9,
+                            onPressed: () {
+                              LoginController.to.logout();
+                            }))
+                  ],
                 );
         },
       ),
@@ -166,7 +199,7 @@ class ProfileView extends GetView<ProfileController> {
                             child: FormRoundedInputField(
                               initialValue:
                                   controller.userCreate.value.fullName,
-                              onChanged: (value)=>{
+                              onChanged: (value) => {
                                 controller.userCreate.value.fullName = value
                               },
                               borderRadius: BorderRadius.circular(5),
@@ -194,7 +227,11 @@ class ProfileView extends GetView<ProfileController> {
                                       (String value) {
                                     return DropdownMenuItem<String>(
                                       value: value,
-                                      child: Text(value),
+                                      child: Padding(
+                                        padding: const EdgeInsets.symmetric(
+                                            horizontal: 10.0),
+                                        child: Text(value),
+                                      ),
                                       // child: Text("value"),
                                     );
                                   }).toList(),
@@ -202,12 +239,22 @@ class ProfileView extends GetView<ProfileController> {
                               )),
                           SizedBox(height: 15),
                           FormInputField(
+                            title: 'Địa chỉ',
+                            child: FormRoundedInputField(
+                              initialValue: controller.userCreate.value.address,
+                              onChanged: (value) =>
+                                  {controller.userCreate.value.address = value},
+                              borderRadius: BorderRadius.circular(5),
+                            ),
+                          ),
+                          SizedBox(height: 15),
+                          FormInputField(
                             title: 'Số điện thoại',
                             child: FormRoundedInputField(
+                              keyboardType: TextInputType.phone,
                               initialValue: controller.userCreate.value.phone,
-                              onChanged: (value)=>{
-                                controller.userCreate.value.phone = value
-                              },
+                              onChanged: (value) =>
+                                  {controller.userCreate.value.phone = value},
                               borderRadius: BorderRadius.circular(5),
                             ),
                           ),
@@ -215,18 +262,20 @@ class ProfileView extends GetView<ProfileController> {
                           FormInputField(
                             title: 'Email',
                             child: FormRoundedInputField(
+                              keyboardType: TextInputType.emailAddress,
                               initialValue: controller.userCreate.value.email,
                               borderRadius: BorderRadius.circular(5),
                             ),
                           ),
                           SizedBox(height: 15),
                           FormInputField(
-
                             title: 'Mô tả',
                             child: FormRoundedInputField(
+                              contentPadding: const EdgeInsets.symmetric(
+                                  vertical: 10, horizontal: 10),
                               initialValue:
                                   controller.userCreate.value.description ?? '',
-                              onChanged: (value)=>{
+                              onChanged: (value) => {
                                 controller.userCreate.value.description = value
                               },
                               borderRadius: BorderRadius.circular(5),
@@ -303,17 +352,19 @@ class ProfileField extends StatelessWidget {
 
   final String title;
   final String content;
-  String getContent(){
+
+  String getContent() {
     return this.content;
   }
+
   @override
   Widget build(BuildContext context) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(title, style: TextStyle(fontWeight: FontWeight.bold)),
-        Text(content!=null ? content : ""
-        ,
+        Text(
+          content != null ? content : "",
         ),
       ],
     );

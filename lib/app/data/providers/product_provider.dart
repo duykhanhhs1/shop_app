@@ -1,6 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:get/get.dart';
-import 'package:scrum_app/app/data/mock/app_mock.dart';
 import 'package:scrum_app/app/data/models/order_model.dart';
 import 'package:scrum_app/app/data/models/product_model.dart';
 
@@ -32,7 +31,6 @@ class ProductProvider extends GetConnect {
         var map = element.data();
         products.add(ProductModel.fromJson(map));
       });
-      return products;
     });
     return products;
   }
@@ -52,10 +50,30 @@ class ProductProvider extends GetConnect {
     return products;
   }
 
+  Future<List<ProductOverViewModel>> getFavoriteProducts(userNo) async {
+    List<ProductOverViewModel> products = [];
+    List<Future> futures = <Future>[];
+
+    await FirebaseFirestore.instance
+        .collection('favorites')
+        .where('$userNo')
+        .get()
+        .then((QuerySnapshot querySnapshot) {
+      querySnapshot.docs.forEach((element) async {
+        int productNo = FavoriteModel.fromJson(element.data()).productNo;
+        futures.add(getProductOverViewFB(productNo).then((value) {
+          products.add(value);
+        }));
+      });
+    });
+    await Future.wait(futures);
+    return products;
+  }
+
   Future<void> addProduct(ProductModel product) async {
     product.productNo = DateTime.now().millisecondsSinceEpoch;
     CollectionReference products =
-    FirebaseFirestore.instance.collection('products');
+        FirebaseFirestore.instance.collection('products');
     await products
         .doc('${product.productNo}')
         .set(product.toJson())
@@ -65,7 +83,7 @@ class ProductProvider extends GetConnect {
 
   Future<void> removeProduct(ProductModel product) async {
     CollectionReference products =
-    FirebaseFirestore.instance.collection('products');
+        FirebaseFirestore.instance.collection('products');
     await products
         .doc('${product.productNo}')
         .delete()
@@ -75,7 +93,7 @@ class ProductProvider extends GetConnect {
 
   Future<void> updateProduct(ProductModel product) async {
     CollectionReference products =
-    FirebaseFirestore.instance.collection('products');
+        FirebaseFirestore.instance.collection('products');
     await products
         .doc('${product.productNo}')
         .update(product.toJson())
@@ -140,6 +158,50 @@ class ProductProvider extends GetConnect {
     return orders;
   }
 
+  Future<void> addFavoriteProduct(FavoriteModel favorite) async {
+    favorite.favoriteNo = DateTime.now().millisecondsSinceEpoch;
+    CollectionReference products =
+        FirebaseFirestore.instance.collection('favorites');
+    await products
+        .doc('${favorite.favoriteNo}')
+        .set(favorite.toJson())
+        .then((value) => print("Add favorite product Success!!"))
+        .catchError((error) => print("Failed to add favorite product: $error"));
+  }
+
+  Future<void> removeFavoriteProduct(FavoriteModel favorite) async {
+    CollectionReference products =
+        FirebaseFirestore.instance.collection('favorites');
+    await products
+        .doc('${favorite.favoriteNo}')
+        .delete()
+        .then((value) => print("Remove favorite product Success!!"))
+        .catchError(
+            (error) => print("Failed to Remove favorite product: $error"));
+  }
+
+  Future<FavoriteModel> getFavorite(String userNo, int productNo) async {
+    List<FavoriteModel> favorites = [];
+    FavoriteModel favorite = FavoriteModel();
+
+    await FirebaseFirestore.instance
+        .collection('favorites')
+        .where('$userNo')
+        .get()
+        .then((QuerySnapshot querySnapshot) {
+      querySnapshot.docs.forEach((element) async {
+        favorites.add(FavoriteModel.fromJson(element.data()));
+      });
+    });
+    favorites.forEach((element) {
+      if (element.userNo == userNo && element.productNo == productNo) {
+        favorite = element;
+      }
+    });
+    return favorite;
+  }
+
+  ///Order
   Future<List<OrderModel>> getPaidOrders() async {
     List<OrderModel> orders = [];
     List<Future> futures = <Future>[];
@@ -150,7 +212,7 @@ class ProductProvider extends GetConnect {
         .then((QuerySnapshot querySnapshot) {
       querySnapshot.docs.forEach((map) async {
         OrderModel order = OrderModel.fromJson(map.data());
-        if(order.createAt != null){
+        if (order.createAt != null) {
           futures.add(getProductOverViewFB(order.productNo).then((value) {
             order.product = value;
             orders.add(order);
@@ -162,8 +224,6 @@ class ProductProvider extends GetConnect {
 
     return orders;
   }
-
-  ///Order
 
   Future<void> addOrder(OrderModel order) async {
     order.orderNo = DateTime.now().millisecondsSinceEpoch;

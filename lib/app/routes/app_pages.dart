@@ -15,6 +15,7 @@ import 'package:scrum_app/app/modules/login/views/login_view.dart';
 import 'package:scrum_app/app/modules/login/views/register_view.dart';
 import 'package:scrum_app/app/modules/login/views/splash_view.dart';
 import 'package:scrum_app/app/modules/profile/bindings/profile_binding.dart';
+import 'package:scrum_app/app/modules/profile/views/favorite_view.dart';
 import 'package:scrum_app/app/modules/profile/views/order_management_view.dart';
 import 'package:scrum_app/app/modules/profile/views/profile_view.dart';
 
@@ -61,6 +62,11 @@ class AppPages {
     GetPage(
       name: _Paths.ORDER_MANAGEMENT,
       page: () => OrderManagementView(),
+      binding: ProfileBinding(),
+    ),
+    GetPage(
+      name: _Paths.FAVORITE,
+      page: () => FavoriteView(),
       binding: ProfileBinding(),
     ),
 

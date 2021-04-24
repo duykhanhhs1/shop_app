@@ -1,9 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-
-
 import 'package:scrum_app/app/data/models/product_model.dart';
 import 'package:scrum_app/app/data/repositories/product_repository.dart';
+import 'package:scrum_app/app/modules/login/controllers/login_controller.dart';
 
 class HomeController extends GetxController {
   final ProductRepository repository;
@@ -17,39 +16,43 @@ class HomeController extends GetxController {
   RxInt currentIndexBottomBar = RxInt(0);
   RxList<ProductOverViewModel> products = RxList<ProductOverViewModel>();
 
+  List<ProductOverViewModel> get favoriteProducts =>
+      products.where((_) => _.isFavorite).toList();
+
   @override
   void onInit() async {
-    /*for(int i=0; i<5; i ++ ){
-       ManageProduct.addProduct(ProductModel(
-      name: 'Samsung 12',
-      price: 1200,
-      imageUrl:
-          'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTJ0pjgqxKJIOkbM7xMnLer4j8MWJUUEP3PJw&usqp=CAU',
-      rating: 4.5,
-      shippingCost: 2000,
-      shopLocation: 'Vinh',
-      shopName: 'thegioibanve',
-      shopImage:
-          'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTJ0pjgqxKJIOkbM7xMnLer4j8MWJUUEP3PJw&usqp=CAU',
-      imageUrls: [
-        'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTJ0pjgqxKJIOkbM7xMnLer4j8MWJUUEP3PJw&usqp=CAU',
-        'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTJ0pjgqxKJIOkbM7xMnLer4j8MWJUUEP3PJw&usqp=CAU',
-        'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTJ0pjgqxKJIOkbM7xMnLer4j8MWJUUEP3PJw&usqp=CAU',
-      ],
-    ));
-    }*/
-
     getAllProductOverview();
-   // CartController.to.getOrders(LoginController.to.userLogged.value.userNo);
     super.onInit();
   }
 
   Future<void> getAllProductOverview() async {
     isLoading.value = true;
-    final List<ProductOverViewModel> data =
+    final List<ProductOverViewModel> dataProducts =
         await repository.getAllProductOverview();
-    products = data.obs;
+    final List<ProductOverViewModel> dataFavoriteProducts = await repository
+        .getFavoriteProducts(LoginController.to.userLogged.value.userNo);
+    products = dataProducts.obs;
+    dataFavoriteProducts.forEach((_) {
+      products.forEach((__) {
+        if (_.productNo == __.productNo) __.isFavorite = true;
+      });
+    });
     isLoading.value = false;
+    update();
+  }
+
+  Future<void> setProductFavorite(ProductOverViewModel product) async {
+    product.isFavorite = !product.isFavorite;
+    if (product.isFavorite) {
+      FavoriteModel favorite = FavoriteModel(
+          productNo: product.productNo,
+          userNo: LoginController.to.userLogged.value.userNo);
+      await repository.addFavoriteProduct(favorite);
+    } else {
+      FavoriteModel favorite = await repository.getFavorite(
+          LoginController.to.userLogged.value.userNo, product.productNo);
+      await repository.removeFavoriteProduct(favorite);
+    }
     update();
   }
 

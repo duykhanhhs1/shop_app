@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:get/get.dart';
-
-
 import 'package:scrum_app/app/data/models/order_model.dart';
 import 'package:scrum_app/app/data/models/product_model.dart';
 import 'package:scrum_app/app/modules/cart/controllers/cart_controller.dart';
@@ -10,6 +8,7 @@ import 'package:scrum_app/app/modules/detail_product/controllers/detail_product_
 import 'package:scrum_app/app/modules/detail_product/widgets/review_card_widget.dart';
 import 'package:scrum_app/app/modules/login/controllers/login_controller.dart';
 import 'package:scrum_app/app/theme/color_theme.dart';
+import 'package:scrum_app/app/utils/helpers.dart';
 import 'package:scrum_app/app/widgets/number_input_field_widget.dart';
 import 'package:scrum_app/app/widgets/rounded_button.widget.dart';
 import 'package:scrum_app/app/widgets/rounded_input_field.widget.dart';
@@ -196,17 +195,17 @@ class DetailProductView extends GetView<DetailProductController> {
           ],
         ),
         SizedBox(height: 10),
-        Text('₫${product.price}',
+        Text('₫${NumberHelper.currencyFormat(product.price)}',
             style: TextStyle(
-                color: Colors.deepOrange,
+                color: kSecondaryColor,
                 fontSize: 18,
                 fontWeight: FontWeight.bold)),
         if(product.oldPrice != null)
-        Text('${product.oldPrice}\$',
-            style: TextStyle(
-                color: Colors.black.withOpacity(.6),
-                fontSize: 12,
-                decoration: TextDecoration.lineThrough)),
+          Text('${NumberHelper.currencyFormat(product.oldPrice)}\$',
+              style: TextStyle(
+                  color: Colors.black.withOpacity(.6),
+                  fontSize: 12,
+                  decoration: TextDecoration.lineThrough)),
         SizedBox(height: 10),
         Row(
           children: <Widget>[
@@ -222,7 +221,7 @@ class DetailProductView extends GetView<DetailProductController> {
             Text(
                 product.shippingCost == null
                     ? '₫0'
-                    : '₫${product.shippingCost}',
+                    : '₫${NumberHelper.currencyFormat(product.shippingCost)}',
                 style: TextStyle(
                   color: Colors.black87,
                 )),
@@ -352,7 +351,7 @@ class DetailProductView extends GetView<DetailProductController> {
                         children: <Widget>[
                           Text('${product.price} VNĐ',
                               style: TextStyle(
-                                  color: Colors.deepOrange,
+                                  color: kSecondaryColor,
                                   fontWeight: FontWeight.bold)),
                           Text('Inventory: ${product.amount}',
                               style: TextStyle(

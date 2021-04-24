@@ -11,6 +11,8 @@ class RoundedButton extends StatelessWidget {
     this.textContent,
     this.onPressed,
     this.radius = 50,
+    this.hasWidget = false,
+    this.content,
   });
 
   final double width;
@@ -20,6 +22,8 @@ class RoundedButton extends StatelessWidget {
   final String textContent;
   final Function onPressed;
   final double radius;
+  final bool hasWidget;
+  final Widget content;
 
   @override
   Widget build(BuildContext context) {
@@ -28,10 +32,12 @@ class RoundedButton extends StatelessWidget {
       height: height,
       child: RaisedButton(
         onPressed: onPressed,
-        child: Text(
-          textContent,
-          style: TextStyle(fontWeight: FontWeight.bold),
-        ),
+        child: hasWidget
+            ? content
+            : Text(
+                textContent,
+                style: TextStyle(fontWeight: FontWeight.bold),
+              ),
         color: color,
         textColor: textColor,
         shape: RoundedRectangleBorder(

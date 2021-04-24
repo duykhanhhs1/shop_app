@@ -1,9 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-
 import 'package:scrum_app/app/data/models/user_model.dart';
-import 'package:scrum_app/app/modules/admin/widgets/bottom_check_remove_widget.dart';
 import 'package:scrum_app/app/modules/admin/widgets/user_manage_card.dart';
 import 'package:scrum_app/app/modules/profile/views/profile_view.dart';
 import 'package:scrum_app/app/widgets/app_bottom_bar_admin_widget.dart';
@@ -20,18 +18,17 @@ class CustomerManagementView extends GetView<AdminController> {
       builder: (AdminController controller) {
         return Scaffold(
             appBar: AppBar(
-              leading: InkWell(
+              /*leading: InkWell(
                   onTap: () {
                     controller.setCheck();
                   },
                   child: Center(
-                      child: Text(controller.isCheck.value ? 'Xong' : 'Sửa'))),
+                      child: Text(controller.isCheck.value ? 'Xong' : 'Sửa'))),*/
+              leading: SizedBox(),
               title: Text('Quản lý khách hàng'),
               centerTitle: true,
             ),
-            bottomNavigationBar: controller.isCheck.value
-                ? BottomCheckRemove()
-                : AppBottomNavigationBarAdmin(0),
+            bottomNavigationBar: AppBottomNavigationBarAdmin(0),
             body: Column(
               children: <Widget>[
                 Container(
