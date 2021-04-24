@@ -115,8 +115,7 @@ class ProductManagementView extends GetView<AdminController> {
               ),
               content: Container(
                 width: Get.width,
-                child: SingleChildScrollView(
-                    child: Form(
+                child: Form(
                   key: controller.formKey,
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
@@ -215,7 +214,7 @@ class ProductManagementView extends GetView<AdminController> {
                       SizedBox(height: 15),
                     ],
                   ),
-                )),
+                ),
               ),
               actions: [
                 RoundedButton(

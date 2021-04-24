@@ -19,163 +19,160 @@ class RegisterView extends GetView<LoginController> {
         child: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 24.0),
           child: Center(
-            child: SingleChildScrollView(
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: <Widget>[
-                  InkWell(
-                      onTap: () {
-                        Get.back();
-                      },
-                      child: Icon(
-                        Icons.arrow_back_outlined,
-                        color: Colors.black.withOpacity(.6),
-                      )),
-                  Text(
-                    'Đăng ký',
-                    style: TextStyle(
-                        fontWeight: FontWeight.bold,
-                        fontSize: 25,
-                        color: kPrimaryColor),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: <Widget>[
+                InkWell(
+                    onTap: () {
+                      Get.back();
+                    },
+                    child: Icon(
+                      Icons.arrow_back_outlined,
+                      color: Colors.black.withOpacity(.6),
+                    )),
+                Text(
+                  'Đăng ký',
+                  style: TextStyle(
+                      fontWeight: FontWeight.bold,
+                      fontSize: 25,
+                      color: kPrimaryColor),
+                ),
+                SizedBox(height: 60.0),
+                FormRoundedInputField(
+                  controller: controller.fullNameController,
+                  style: TextStyle(
+                    color: Colors.black,
                   ),
-                  SizedBox(height: 60.0),
-                  FormRoundedInputField(
-                    controller: controller.fullNameController,
-                    style: TextStyle(
-                      color: Colors.black,
-                    ),
-                    fillColor: Colors.white.withOpacity(0.75),
-                    prefixIcon: Icons.person,
-                    hintText: 'Họ và tên',
-                    validator: MultiValidator([
-                      RequiredValidator(errorText: 'Vui lòng nhập tên'),
-                    ]),
-                    keyboardType: TextInputType.text,
-                    onChanged: (value) => null,
-                    onSaved: (value) => controller.emailController.text = value,
+                  fillColor: Colors.white.withOpacity(0.75),
+                  prefixIcon: Icons.person,
+                  hintText: 'Họ và tên',
+                  validator: MultiValidator([
+                    RequiredValidator(errorText: 'Vui lòng nhập tên'),
+                  ]),
+                  keyboardType: TextInputType.text,
+                  onChanged: (value) => null,
+                  onSaved: (value) => controller.emailController.text = value,
+                ),
+                SizedBox(height: 20),
+                FormRoundedInputField(
+                  controller: controller.emailController,
+                  style: TextStyle(
+                    color: Colors.black,
                   ),
-                  SizedBox(height: 20),
-                  FormRoundedInputField(
-                    controller: controller.emailController,
-                    style: TextStyle(
-                      color: Colors.black,
-                    ),
-                    fillColor: Colors.white.withOpacity(0.75),
-                    prefixIcon: Icons.email,
-                    hintText: 'Email',
-                    validator: MultiValidator([
-                      RequiredValidator(errorText: 'Vui lòng nhập email'),
-                      EmailValidator(errorText: 'Email không hợp lệ'),
-                    ]),
-                    keyboardType: TextInputType.emailAddress,
-                    onChanged: (value) => null,
-                    onSaved: (value) => controller.emailController.text = value,
+                  fillColor: Colors.white.withOpacity(0.75),
+                  prefixIcon: Icons.email,
+                  hintText: 'Email',
+                  validator: MultiValidator([
+                    RequiredValidator(errorText: 'Vui lòng nhập email'),
+                    EmailValidator(errorText: 'Email không hợp lệ'),
+                  ]),
+                  keyboardType: TextInputType.emailAddress,
+                  onChanged: (value) => null,
+                  onSaved: (value) => controller.emailController.text = value,
+                ),
+                SizedBox(height: 20),
+                FormRoundedInputField(
+                  controller: controller.phoneNumberController,
+                  style: TextStyle(
+                    color: Colors.black,
                   ),
-                  SizedBox(height: 20),
-                  FormRoundedInputField(
-                    controller: controller.phoneNumberController,
-                    style: TextStyle(
-                      color: Colors.black,
-                    ),
-                    fillColor: Colors.white.withOpacity(0.75),
-                    prefixIcon: Icons.phone,
-                    hintText: 'Số điện thoại',
-                    validator: MultiValidator([
-                      RequiredValidator(
-                          errorText: 'Vui lòng nhập số điện thoại'),
-                    ]),
-                    keyboardType: TextInputType.phone,
-                    onChanged: (value) => null,
-                    onSaved: (value) => controller.emailController.text = value,
+                  fillColor: Colors.white.withOpacity(0.75),
+                  prefixIcon: Icons.phone,
+                  hintText: 'Số điện thoại',
+                  validator: MultiValidator([
+                    RequiredValidator(errorText: 'Vui lòng nhập số điện thoại'),
+                  ]),
+                  keyboardType: TextInputType.phone,
+                  onChanged: (value) => null,
+                  onSaved: (value) => controller.emailController.text = value,
+                ),
+                SizedBox(height: 20),
+                FormRoundedInputField(
+                  controller: controller.addressController,
+                  style: TextStyle(
+                    color: Colors.black,
                   ),
-                  SizedBox(height: 20),
-                  FormRoundedInputField(
-                    controller: controller.addressController,
-                    style: TextStyle(
-                      color: Colors.black,
-                    ),
-                    fillColor: Colors.white.withOpacity(0.75),
-                    prefixIcon: Icons.location_on_outlined,
-                    hintText: 'Địa chỉ',
-                    validator: MultiValidator([
-                      RequiredValidator(errorText: 'Vui lòng nhập địa chỉ'),
-                    ]),
-                    keyboardType: TextInputType.text,
-                    onChanged: (value) => null,
-                    onSaved: (value) => controller.emailController.text = value,
+                  fillColor: Colors.white.withOpacity(0.75),
+                  prefixIcon: Icons.location_on_outlined,
+                  hintText: 'Địa chỉ',
+                  validator: MultiValidator([
+                    RequiredValidator(errorText: 'Vui lòng nhập địa chỉ'),
+                  ]),
+                  keyboardType: TextInputType.text,
+                  onChanged: (value) => null,
+                  onSaved: (value) => controller.emailController.text = value,
+                ),
+                SizedBox(height: 20),
+                FormRoundedInputField(
+                  controller: controller.passwordController,
+                  style: TextStyle(
+                    color: Colors.black,
                   ),
-                  SizedBox(height: 20),
-                  FormRoundedInputField(
-                    controller: controller.passwordController,
-                    style: TextStyle(
-                      color: Colors.black,
-                    ),
-                    fillColor: Colors.white.withOpacity(0.75),
-                    prefixIcon: Icons.lock,
-                    hintText: 'Mật khẩu',
-                    validator: MultiValidator(
-                      [
-                        RequiredValidator(errorText: 'Vui lòng nhập mật khẩu'),
-                        MinLengthValidator(6,
-                            errorText: 'Mật khẩu ít nhất 6 kí tự')
-                      ],
-                    ),
-                    obscureText: true,
-                    onChanged: (value) => null,
-                    onSaved: (value) =>
-                        controller.passwordController.text = value,
-                    maxLines: 1,
-                  ),
-                  SizedBox(height: 20),
-                  Obx(
-                    () => RoundedButton(
-                      width: Get.width,
-                      textContent: controller.isProcessing.value
-                          ? 'Đăng ký...'
-                          : 'Đăng ký',
-                      onPressed: controller.isProcessing.value
-                          ? null
-                          : () async {
-                              if (_formKey.currentState.validate()) {
-                                controller.register(
-                                  email: controller.emailController.text,
-                                  password: controller.passwordController.text,
-                                  user: UserModel(
-                                      imageUrl:
-                                          'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQwQnaX0HIMtehoJnZsojyjD2P0u0YNl9IYyM3TJAaM4_QMgHqMpmYp_RfId466ou30Vs4&usqp=CAU',
-                                      email: controller.emailController.text,
-                                      fullName:
-                                          controller.fullNameController.text,
-                                      phone:
-                                          controller.phoneNumberController.text,
-                                      address: controller.addressController.text,
-                                role: 'user'),
-                          );
-                        }
-                      },
-                    ),
-                  ),
-                  SizedBox(height: 20),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Text('Bạn đã có tài khoản?'),
-                      InkWell(
-                          onTap: () {
-                            Get.toNamed(Routes.LOGIN);
-                          },
-                          child: Text(
-                            ' Đăng nhập',
-                            style: TextStyle(
-                                fontWeight: FontWeight.bold,
-                                color: kPrimaryColor),
-                          ))
+                  fillColor: Colors.white.withOpacity(0.75),
+                  prefixIcon: Icons.lock,
+                  hintText: 'Mật khẩu',
+                  validator: MultiValidator(
+                    [
+                      RequiredValidator(errorText: 'Vui lòng nhập mật khẩu'),
+                      MinLengthValidator(6,
+                          errorText: 'Mật khẩu ít nhất 6 kí tự')
                     ],
                   ),
-                  SizedBox(height: 40),
-                ],
-              ),
+                  obscureText: true,
+                  onChanged: (value) => null,
+                  onSaved: (value) =>
+                      controller.passwordController.text = value,
+                  maxLines: 1,
+                ),
+                SizedBox(height: 20),
+                Obx(
+                  () => RoundedButton(
+                    width: Get.width,
+                    textContent: controller.isProcessing.value
+                        ? 'Đăng ký...'
+                        : 'Đăng ký',
+                    onPressed: controller.isProcessing.value
+                        ? null
+                        : () async {
+                            if (_formKey.currentState.validate()) {
+                              controller.register(
+                                email: controller.emailController.text,
+                                password: controller.passwordController.text,
+                                user: UserModel(
+                                    imageUrl:
+                                        'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQwQnaX0HIMtehoJnZsojyjD2P0u0YNl9IYyM3TJAaM4_QMgHqMpmYp_RfId466ou30Vs4&usqp=CAU',
+                                    email: controller.emailController.text,
+                                    fullName:
+                                        controller.fullNameController.text,
+                                    phone:
+                                        controller.phoneNumberController.text,
+                                    address: controller.addressController.text,
+                                    role: 'user'),
+                              );
+                            }
+                          },
+                  ),
+                ),
+                SizedBox(height: 20),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Text('Bạn đã có tài khoản?'),
+                    InkWell(
+                        onTap: () {
+                          Get.toNamed(Routes.LOGIN);
+                        },
+                        child: Text(
+                          ' Đăng nhập',
+                          style: TextStyle(
+                              fontWeight: FontWeight.bold,
+                              color: kPrimaryColor),
+                        ))
+                  ],
+                ),
+                SizedBox(height: 40),
+              ],
             ),
           ),
         ),
