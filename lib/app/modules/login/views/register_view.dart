@@ -24,12 +24,12 @@ class RegisterView extends GetView<LoginController> {
                 mainAxisAlignment: MainAxisAlignment.center,
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: <Widget>[
-                  GestureDetector(
+                  InkWell(
                       onTap: () {
                         Get.back();
                       },
                       child: Icon(
-                        Icons.arrow_back,
+                        Icons.arrow_back_outlined,
                         color: Colors.black.withOpacity(.6),
                       )),
                   Text(
@@ -134,18 +134,22 @@ class RegisterView extends GetView<LoginController> {
                       textContent: controller.isProcessing.value
                           ? 'Đăng ký...'
                           : 'Đăng ký',
-                      onPressed: () async {
-                        if (_formKey.currentState.validate()) {
-                          controller.register(
-                            email: controller.emailController.text,
-                            password: controller.passwordController.text,
-                            user: UserModel(
-                                imageUrl:
-                                    'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQwQnaX0HIMtehoJnZsojyjD2P0u0YNl9IYyM3TJAaM4_QMgHqMpmYp_RfId466ou30Vs4&usqp=CAU',
-                                email: controller.emailController.text,
-                                fullName: controller.fullNameController.text,
-                                phone: controller.phoneNumberController.text,
-                                address: controller.addressController.text,
+                      onPressed: controller.isProcessing.value
+                          ? null
+                          : () async {
+                              if (_formKey.currentState.validate()) {
+                                controller.register(
+                                  email: controller.emailController.text,
+                                  password: controller.passwordController.text,
+                                  user: UserModel(
+                                      imageUrl:
+                                          'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQwQnaX0HIMtehoJnZsojyjD2P0u0YNl9IYyM3TJAaM4_QMgHqMpmYp_RfId466ou30Vs4&usqp=CAU',
+                                      email: controller.emailController.text,
+                                      fullName:
+                                          controller.fullNameController.text,
+                                      phone:
+                                          controller.phoneNumberController.text,
+                                      address: controller.addressController.text,
                                 role: 'user'),
                           );
                         }

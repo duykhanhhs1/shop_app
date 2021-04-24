@@ -2,11 +2,8 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
-
-
 import 'package:scrum_app/app/data/models/user_model.dart';
 import 'package:scrum_app/app/data/repositories/user_repository.dart';
-import 'package:scrum_app/app/modules/login/bindings/login_binding.dart';
 import 'package:scrum_app/app/routes/app_pages.dart';
 import 'package:scrum_app/app/utils/keys.dart';
 
@@ -46,7 +43,7 @@ class LoginController extends GetxController {
   Future<void> verifyUser() async {
     final String storedToken = await _store.read(AppStorageKey.ACCESS_TOKEN);
     if (storedToken != null) {
-      setUserLogged(FirebaseAuth.instance.currentUser.uid);
+      navigateUser(FirebaseAuth.instance.currentUser.uid);
     } else
       Get.offAllNamed(Routes.LOGIN);
   }
@@ -66,19 +63,20 @@ class LoginController extends GetxController {
     await FirebaseAuth.instance
         .signInWithEmailAndPassword(email: email, password: password)
         .then((value) async {
-      await FirebaseAuth.instance.currentUser.getIdToken(true).then((token) {
+      await FirebaseAuth.instance.currentUser.getIdToken().then((token) {
         _store.write(AppStorageKey.ACCESS_TOKEN, token);
       });
-      setUserLogged(value.user.uid);
+      navigateUser(value.user.uid);
     }).catchError((onError) {
       Get.snackbar('Error', 'User not found',
           snackPosition: SnackPosition.BOTTOM, colorText: Colors.red);
+      isProcessing.value = false;
     });
   }
 
   //Edit User Profile
 
-  void setUserLogged(String uid) async {
+  void navigateUser(String uid) async {
     await getUserLogged(uid);
     if (userLogged.value.role == 'admin') {
       Get.offAllNamed(Routes.ADMIN);

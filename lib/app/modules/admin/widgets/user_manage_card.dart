@@ -59,9 +59,10 @@ class UserCard extends GetView<AdminController> {
             SizedBox(width: 14),
             ClipRRect(
               child: Image.network(
-                'https://kenh14cdn.com/2018/10/30/photo-1-15409085973371237270098.jpg',
+                user.imageUrl,
                 width: 60,
                 height: 60,
+                fit: BoxFit.cover,
               ),
               borderRadius: BorderRadius.circular(100),
             ),
