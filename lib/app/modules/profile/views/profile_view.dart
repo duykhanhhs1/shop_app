@@ -156,145 +156,151 @@ class ProfileView extends GetView<ProfileController> {
     // UserModel user = controller.currentUser;
     return Get.dialog(GetBuilder(
       builder: (ProfileController controller) {
-        return AlertDialog(
-          insetPadding: const EdgeInsets.symmetric(horizontal: 14),
-          contentPadding: const EdgeInsets.all(14),
-          titlePadding: const EdgeInsets.all(14),
-          actionsPadding: const EdgeInsets.all(14),
-          title: Column(
-            children: [
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        return Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            AlertDialog(
+              insetPadding: const EdgeInsets.symmetric(horizontal: 14),
+              contentPadding: const EdgeInsets.all(14),
+              titlePadding: const EdgeInsets.all(14),
+              actionsPadding: const EdgeInsets.all(14),
+              title: Column(
                 children: [
-                  Text(
-                    'Thông tin cá nhân',
-                    style: TextStyle(fontWeight: FontWeight.bold),
-                  ),
-                  if (!controller.isEditProfile.value)
-                    InkWell(
-                      child: Icon(
-                        Icons.edit_outlined,
-                        color: kPrimaryColor,
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Text(
+                        'Thông tin cá nhân',
+                        style: TextStyle(fontWeight: FontWeight.bold),
                       ),
-                      onTap: () {
-                        controller.setOpenEditForm(true);
-                      },
-                    )
+                      if (!controller.isEditProfile.value)
+                        InkWell(
+                          child: Icon(
+                            Icons.edit_outlined,
+                            color: kPrimaryColor,
+                          ),
+                          onTap: () {
+                            controller.setOpenEditForm(true);
+                          },
+                        )
+                    ],
+                  ),
+                  Divider()
                 ],
               ),
-              Divider()
-            ],
-          ),
-          content: Container(
-            width: Get.width,
-            child: controller.isEditProfile.value
-                ? Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      FormInputField(
-                        title: 'Tên',
-                        child: FormRoundedInputField(
-                          initialValue: controller.userCreate.value.fullName,
-                          onChanged: (value) =>
-                              {controller.userCreate.value.fullName = value},
-                          borderRadius: BorderRadius.circular(5),
-                        ),
-                      ),
-                      SizedBox(height: 15),
-                      FormInputField(
-                          title: 'Giới tính',
-                          child: Container(
-                            decoration: BoxDecoration(
-                                border: Border.all(color: kPrimaryColor),
-                                borderRadius: BorderRadius.circular(5)),
-                            width: Get.width,
-                            child: DropdownButtonHideUnderline(
-                                child: DropdownButton(
-                              value: controller.userCreate.value.gender ?? null,
-                              onChanged: (value) {
-                                controller.setGender(value);
-                              },
-                              items: <String>[
-                                'Nam',
-                                'Nữ',
-                              ].map<DropdownMenuItem<String>>((String value) {
-                                return DropdownMenuItem<String>(
-                                  value: value,
-                                  child: Padding(
-                                    padding: const EdgeInsets.symmetric(
-                                        horizontal: 10.0),
-                                    child: Text(value),
-                                  ),
-                                  // child: Text("value"),
-                                );
-                              }).toList(),
-                            )),
-                          )),
-                      SizedBox(height: 15),
-                      FormInputField(
-                        title: 'Địa chỉ',
-                        child: FormRoundedInputField(
-                          initialValue: controller.userCreate.value.address,
-                          onChanged: (value) =>
-                              {controller.userCreate.value.address = value},
-                          borderRadius: BorderRadius.circular(5),
-                        ),
-                      ),
-                      SizedBox(height: 15),
-                      FormInputField(
-                        title: 'Số điện thoại',
-                        child: FormRoundedInputField(
-                          keyboardType: TextInputType.phone,
-                          initialValue: controller.userCreate.value.phone,
-                          onChanged: (value) =>
-                              {controller.userCreate.value.phone = value},
-                          borderRadius: BorderRadius.circular(5),
-                        ),
-                      ),
-                      SizedBox(height: 15),
-                      FormInputField(
-                        title: 'Email',
-                        child: FormRoundedInputField(
-                          keyboardType: TextInputType.emailAddress,
-                          initialValue: controller.userCreate.value.email,
-                          borderRadius: BorderRadius.circular(5),
-                        ),
-                      ),
-                      SizedBox(height: 15),
-                      FormInputField(
-                        title: 'Mô tả',
-                        child: FormRoundedInputField(
-                          contentPadding: const EdgeInsets.symmetric(
-                              vertical: 10, horizontal: 10),
-                          initialValue:
-                              controller.userCreate.value.description ?? '',
-                          onChanged: (value) =>
-                              {controller.userCreate.value.description = value},
-                          borderRadius: BorderRadius.circular(5),
-                        ),
-                      ),
-                      SizedBox(height: 15),
-                    ],
-                  )
-                : _buildInfoUser(),
-          ),
-          actions: [
-            if (controller.isEditProfile.value)
-              RoundedButton(
-                radius: 5,
-                height: 40,
-                textContent: 'Lưu',
-                onPressed: () {
-                  controller.updateUser();
-                },
+              content: Container(
+                width: Get.width,
+                child: controller.isEditProfile.value
+                    ? Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          FormInputField(
+                            title: 'Tên',
+                            child: FormRoundedInputField(
+                              initialValue: controller.userCreate.value.fullName,
+                              onChanged: (value) =>
+                                  {controller.userCreate.value.fullName = value},
+                              borderRadius: BorderRadius.circular(5),
+                            ),
+                          ),
+                          SizedBox(height: 15),
+                          FormInputField(
+                              title: 'Giới tính',
+                              child: Container(
+                                decoration: BoxDecoration(
+                                    border: Border.all(color: kPrimaryColor),
+                                    borderRadius: BorderRadius.circular(5)),
+                                width: Get.width,
+                                child: DropdownButtonHideUnderline(
+                                    child: DropdownButton(
+                                  value: controller.userCreate.value.gender ?? null,
+                                  onChanged: (value) {
+                                    controller.setGender(value);
+                                  },
+                                  items: <String>[
+                                    'Nam',
+                                    'Nữ',
+                                  ].map<DropdownMenuItem<String>>((String value) {
+                                    return DropdownMenuItem<String>(
+                                      value: value,
+                                      child: Padding(
+                                        padding: const EdgeInsets.symmetric(
+                                            horizontal: 10.0),
+                                        child: Text(value),
+                                      ),
+                                      // child: Text("value"),
+                                    );
+                                  }).toList(),
+                                )),
+                              )),
+                          SizedBox(height: 15),
+                          FormInputField(
+                            title: 'Địa chỉ',
+                            child: FormRoundedInputField(
+                              initialValue: controller.userCreate.value.address,
+                              onChanged: (value) =>
+                                  {controller.userCreate.value.address = value},
+                              borderRadius: BorderRadius.circular(5),
+                            ),
+                          ),
+                          SizedBox(height: 15),
+                          FormInputField(
+                            title: 'Số điện thoại',
+                            child: FormRoundedInputField(
+                              keyboardType: TextInputType.phone,
+                              initialValue: controller.userCreate.value.phone,
+                              onChanged: (value) =>
+                                  {controller.userCreate.value.phone = value},
+                              borderRadius: BorderRadius.circular(5),
+                            ),
+                          ),
+                          SizedBox(height: 15),
+                          FormInputField(
+                            title: 'Email',
+                            child: FormRoundedInputField(
+                              keyboardType: TextInputType.emailAddress,
+                              initialValue: controller.userCreate.value.email,
+                              borderRadius: BorderRadius.circular(5),
+                            ),
+                          ),
+                          SizedBox(height: 15),
+                          FormInputField(
+                            title: 'Mô tả',
+                            child: FormRoundedInputField(
+                              contentPadding: const EdgeInsets.symmetric(
+                                  vertical: 10, horizontal: 10),
+                              initialValue:
+                                  controller.userCreate.value.description ?? '',
+                              onChanged: (value) =>
+                                  {controller.userCreate.value.description = value},
+                              borderRadius: BorderRadius.circular(5),
+                            ),
+                          ),
+                          SizedBox(height: 15),
+                        ],
+                      )
+                    : _buildInfoUser(),
               ),
-            RoundedButton(
-              radius: 5,
-              height: 40,
-              textContent: 'Đóng',
-              onPressed: () {
-                Get.back();
-              },
+              actions: [
+                if (controller.isEditProfile.value)
+                  RoundedButton(
+                    radius: 5,
+                    height: 40,
+                    textContent: 'Lưu',
+                    onPressed: () {
+                      controller.updateUser();
+                    },
+                  ),
+                RoundedButton(
+                  radius: 5,
+                  height: 40,
+                  textContent: 'Đóng',
+                  onPressed: () {
+                    Get.back();
+                  },
+                ),
+              ],
             ),
           ],
         );

@@ -45,7 +45,6 @@ class ProductProvider extends GetConnect {
         var map = element.data();
         products.add(ProductOverViewModel.fromJson(map));
       });
-      return products;
     });
     return products;
   }
@@ -127,10 +126,8 @@ class ProductProvider extends GetConnect {
         .then((DocumentSnapshot documentSnapshot) {
       if (documentSnapshot.exists) {
         product = ProductDetailModel.fromJson(documentSnapshot.data());
-        return product;
       } else {
         print('product detail not exists');
-        return product;
       }
     });
     return product;

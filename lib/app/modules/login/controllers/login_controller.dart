@@ -43,7 +43,12 @@ class LoginController extends GetxController {
   Future<void> verifyUser() async {
     final String storedToken = await _store.read(AppStorageKey.ACCESS_TOKEN);
     if (storedToken != null) {
-      navigateUser(FirebaseAuth.instance.currentUser.uid);
+      final List<UserModel> users = await repository.getUsers();
+      users.forEach((element) {
+        if (element.token == storedToken) {
+          navigateUser(element.userNo);
+        }
+      });
     } else
       Get.offAllNamed(Routes.LOGIN);
   }
@@ -63,7 +68,10 @@ class LoginController extends GetxController {
     await FirebaseAuth.instance
         .signInWithEmailAndPassword(email: email, password: password)
         .then((value) async {
-      await FirebaseAuth.instance.currentUser.getIdToken().then((token) {
+      await FirebaseAuth.instance.currentUser.getIdToken().then((token) async {
+        await getUserLogged(FirebaseAuth.instance.currentUser.uid);
+        userLogged.value.token = token;
+        await repository.updateUser(userLogged.value);
         _store.write(AppStorageKey.ACCESS_TOKEN, token);
       });
       navigateUser(value.user.uid);
@@ -91,9 +99,9 @@ class LoginController extends GetxController {
     update();
   }
 
-  void register({String email, String password, UserModel user}) async{
+  void register({String email, String password, UserModel user}) async {
     isProcessing.value = true;
-    await repository.register(email:email,password:password,user:user);
+    await repository.register(email: email, password: password, user: user);
     isProcessing.value = false;
     Get.offAllNamed(Routes.LOGIN);
     Get.snackbar('Success', 'Register success',

@@ -24,7 +24,7 @@ class _AppBottomNavigationBarState extends State<AppBottomNavigationBar> {
           icon: Icon(
             Icons.person,
           ),
-          label: 'Trang cá nhân',
+          label: 'Cá nhân',
         ),
       ],
       unselectedFontSize: 12,

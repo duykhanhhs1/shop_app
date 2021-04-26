@@ -74,6 +74,7 @@ class ProfileController extends GetxController {
             pickedFile.path.lastIndexOf('/'), pickedFile.path.length - 1);
         currentUser.imageUrl = await FirebaseHelper.uploadImageWeb(
             'avatar images', pickedFile, imageName);
+        await userRepository.updateUser(currentUser);
       } else {
         File imageFile = File(pickedFile.path);
         imageName = imageFile.path.substring(
