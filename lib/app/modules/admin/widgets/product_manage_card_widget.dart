@@ -36,7 +36,7 @@ class ProductManageCard extends GetView<AdminController> {
           caption: 'Xóa',
           color: kSecondaryColor,
           onTap: () {
-            controller.removeProduct(product);
+            controller.removeProduct(product.productNo);
           },
         ),
       ],

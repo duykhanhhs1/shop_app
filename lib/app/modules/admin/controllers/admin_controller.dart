@@ -93,8 +93,8 @@ class AdminController extends GetxController {
     getProducts();
   }
 
-  Future<void> removeProduct(ProductModel product) async {
-    await productRepository.removeProduct(product);
+  Future<void> removeProduct(int productNo) async {
+    await productRepository.removeProduct(productNo);
     getProducts();
     update();
   }
@@ -160,7 +160,7 @@ class AdminController extends GetxController {
 
   void removeChecked() async {
     checkedProducts.forEach((element) async {
-      await removeProduct(element);
+      await removeProduct(element.productNo);
     });
     update();
   }

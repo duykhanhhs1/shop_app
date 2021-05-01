@@ -22,6 +22,7 @@ class LoginController extends GetxController {
   TextEditingController phoneNumberController = TextEditingController();
   TextEditingController addressController = TextEditingController();
   RxBool isProcessing = RxBool(false);
+  RxBool isLoginByToken = RxBool(false);
   Rx<UserModel> userLogged = Rx(UserModel());
 
   final GetStorage _store = GetStorage();
@@ -46,9 +47,11 @@ class LoginController extends GetxController {
       final List<UserModel> users = await repository.getUsers();
       users.forEach((element) {
         if (element.token == storedToken) {
+          isLoginByToken.value = true;
           navigateUser(element.userNo);
         }
       });
+      if (!isLoginByToken.value) Get.offAllNamed(Routes.LOGIN);
     } else
       Get.offAllNamed(Routes.LOGIN);
   }

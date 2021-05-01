@@ -27,8 +27,8 @@ class ProductRepository {
     return apiClient.updateProduct(product);
   }
 
-  Future<void> removeProduct(ProductModel product) {
-    return apiClient.removeProduct(product);
+  Future<void> removeProduct(int productNo) {
+    return apiClient.removeProduct(productNo);
   }
 
   Future<List<ProductOverViewModel>> getAllProductOverview() {

@@ -49,13 +49,13 @@ class ProductProvider extends GetConnect {
     return products;
   }
 
-  Future<List<ProductOverViewModel>> getFavoriteProducts(userNo) async {
+  Future<List<ProductOverViewModel>> getFavoriteProducts(String userNo) async {
     List<ProductOverViewModel> products = [];
     List<Future> futures = <Future>[];
 
     await FirebaseFirestore.instance
         .collection('favorites')
-        .where('$userNo')
+        .where('userNo', isEqualTo: userNo)
         .get()
         .then((QuerySnapshot querySnapshot) {
       querySnapshot.docs.forEach((element) async {
@@ -80,14 +80,48 @@ class ProductProvider extends GetConnect {
         .catchError((error) => print("Failed to add product: $error"));
   }
 
-  Future<void> removeProduct(ProductModel product) async {
+  Future<void> removeProduct(int productNo) async {
     CollectionReference products =
         FirebaseFirestore.instance.collection('products');
+
+    List<OrderModel> orders = [];
+    List<FavoriteModel> favorites = [];
+
     await products
-        .doc('${product.productNo}')
+        .doc('$productNo')
         .delete()
         .then((value) => print("Delete product Success!!"))
         .catchError((error) => print("Failed to Delete product: $error"));
+
+    await FirebaseFirestore.instance
+        .collection('orders')
+        .get()
+        .then((QuerySnapshot querySnapshot) {
+      querySnapshot.docs.forEach((map) async {
+        OrderModel order = OrderModel.fromJson(map.data());
+        if (order.productNo == productNo) {
+          orders.add(order);
+        }
+      });
+    });
+    orders.forEach((element) async {
+      await removeOrder(element.orderNo);
+    });
+
+    await FirebaseFirestore.instance
+        .collection('favorites')
+        .get()
+        .then((QuerySnapshot querySnapshot) {
+      querySnapshot.docs.forEach((map) async {
+        FavoriteModel favorite = FavoriteModel.fromJson(map.data());
+        if (favorite.productNo == productNo) {
+          favorites.add(favorite);
+        }
+      });
+    });
+    favorites.forEach((element) async {
+      await removeFavoriteProduct(element);
+    });
   }
 
   Future<void> updateProduct(ProductModel product) async {

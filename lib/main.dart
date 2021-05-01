@@ -1,11 +1,7 @@
 import 'package:firebase_core/firebase_core.dart';
-import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
-
-
 import 'package:scrum_app/app/theme/app_theme.dart';
 
 import 'app/routes/app_pages.dart';
@@ -71,7 +67,7 @@ void main() async {
   runApp(
     GetMaterialApp(
       debugShowCheckedModeBanner: false,
-      title: "Application",
+      title: "Shop Online 24H",
       initialRoute: AppPages.INITIAL,
       getPages: AppPages.routes,
       theme: appThemeData,
