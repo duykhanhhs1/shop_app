@@ -140,6 +140,9 @@ class RegisterView extends GetView<LoginController> {
                                 email: controller.emailController.text,
                                 password: controller.passwordController.text,
                                 user: UserModel(
+                                  email: controller.emailController.text,
+                                ),
+                                /*  user: UserModel(
                                     imageUrl:
                                         'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQwQnaX0HIMtehoJnZsojyjD2P0u0YNl9IYyM3TJAaM4_QMgHqMpmYp_RfId466ou30Vs4&usqp=CAU',
                                     email: controller.emailController.text,
@@ -148,7 +151,7 @@ class RegisterView extends GetView<LoginController> {
                                     phone:
                                         controller.phoneNumberController.text,
                                     address: controller.addressController.text,
-                                    role: 'user'),
+                                    role: 'user'),*/
                               );
                             }
                           },

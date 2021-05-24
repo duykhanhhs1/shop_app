@@ -8,35 +8,41 @@ part of 'product_model.dart';
 
 ProductOverViewModel _$ProductOverViewModelFromJson(Map<String, dynamic> json) {
   return ProductOverViewModel(
-    productNo: json['productNo'] as int,
-    amount: json['amount'] as int,
+    id: json['id'] as int,
+    count: json['count'] as int,
+    count_purchased: json['count_purchased'] as int,
+    rating: (json['rating'] as num)?.toDouble(),
     discount: json['discount'] as int,
     name: json['name'] as String,
     price: json['price'] as int,
-    imageUrl: json['imageUrl'] as String,
+    link_image: json['link_image'] as String,
   );
 }
 
 Map<String, dynamic> _$ProductOverViewModelToJson(
         ProductOverViewModel instance) =>
     <String, dynamic>{
-      'productNo': instance.productNo,
+      'id': instance.id,
       'name': instance.name,
       'price': instance.price,
-      'amount': instance.amount,
+      'count': instance.count,
+      'count_purchased': instance.count_purchased,
+      'rating': instance.rating,
       'discount': instance.discount,
-      'imageUrl': instance.imageUrl,
+      'link_image': instance.link_image,
     };
 
 ProductDetailModel _$ProductDetailModelFromJson(Map<String, dynamic> json) {
   return ProductDetailModel(
     discount: json['discount'] as int,
-    amount: json['amount'] as int,
+    count: json['count'] as int,
     shopImage: json['shopImage'],
     oldPrice: json['oldPrice'] as int,
     rating: (json['rating'] as num)?.toDouble(),
-    productNo: json['productNo'] as int,
+    id: json['id'] as int,
     name: json['name'] as String,
+    description: json['description'] as String,
+    link_image: json['link_image'] as String,
     price: json['price'] as int,
     imageUrls: (json['imageUrls'] as List)?.map((e) => e as String)?.toList(),
     shippingCost: json['shippingCost'] as int,
@@ -52,17 +58,20 @@ ProductDetailModel _$ProductDetailModelFromJson(Map<String, dynamic> json) {
             ? null
             : ProductReviewModel.fromJson(e as Map<String, dynamic>))
         ?.toList(),
-  );
+  )..count_purchased = json['count_purchased'] as int;
 }
 
 Map<String, dynamic> _$ProductDetailModelToJson(ProductDetailModel instance) =>
     <String, dynamic>{
-      'productNo': instance.productNo,
+      'id': instance.id,
       'name': instance.name,
+      'description': instance.description,
+      'link_image': instance.link_image,
       'price': instance.price,
-      'oldPrice': instance.oldPrice,
-      'amount': instance.amount,
+      'count': instance.count,
+      'count_purchased': instance.count_purchased,
       'rating': instance.rating,
+      'oldPrice': instance.oldPrice,
       'imageUrls': instance.imageUrls,
       'shippingCost': instance.shippingCost,
       'discount': instance.discount,
@@ -91,23 +100,23 @@ Map<String, dynamic> _$ProductPropertyModelToJson(
 
 ProductReviewModel _$ProductReviewModelFromJson(Map<String, dynamic> json) {
   return ProductReviewModel(
-    productNo: json['productNo'] as int,
-    reviewNo: json['reviewNo'] as int,
-    username: json['username'] as String,
-    rating: json['rating'] as int,
+    id: json['id'] as int,
+    product_id: json['product_id'] as int,
+    reviewer: json['reviewer'] as String,
+    rating: (json['rating'] as num)?.toDouble(),
     comment: json['comment'] as String,
-    imageUrls: (json['imageUrls'] as List)?.map((e) => e as String)?.toList(),
+    photo_urls: json['photo_urls'] ?? [],
   );
 }
 
 Map<String, dynamic> _$ProductReviewModelToJson(ProductReviewModel instance) =>
     <String, dynamic>{
-      'productNo': instance.productNo,
-      'reviewNo': instance.reviewNo,
-      'username': instance.username,
+      'id': instance.id,
+      'product_id': instance.product_id,
+      'reviewer': instance.reviewer,
       'rating': instance.rating,
       'comment': instance.comment,
-      'imageUrls': instance.imageUrls,
+      'photo_urls': instance.photo_urls,
     };
 
 ProductModel _$ProductModelFromJson(Map<String, dynamic> json) {

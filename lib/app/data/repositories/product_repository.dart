@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:scrum_app/app/data/models/category_model.dart';
 import 'package:scrum_app/app/data/models/order_model.dart';
 import 'package:scrum_app/app/data/models/product_model.dart';
 import 'package:scrum_app/app/data/providers/product_provider.dart';
@@ -8,20 +9,31 @@ class ProductRepository {
 
   ProductRepository({@required this.apiClient}) : assert(apiClient != null);
 
-/*
-  Future<List<ProductOverViewModel>> getProducts() {
-    return apiClient.getProducts();
+  Future<List<CategoryModel>> getCategories() {
+    return apiClient.getCategories();
   }
 
-  Future<ProductDetailModel> getProductDetail(productNo) {
-    return apiClient.getProductDetail(productNo);
+  Future<List<ProductReviewModel>> getReviews(int productId) {
+    return apiClient.getReviews(productId);
   }
-*/
+
+  Future<void> addReview(ProductReviewModel review) {
+    return apiClient.addReview(review);
+  }
+
+  Future<void> addProductToCart(int productId, int count) async {
+    return apiClient.addProductToCart(productId, count);
+  }
+
+  Future<void> updateProductToCart(int productId, int count) async {
+    return apiClient.updateProductToCart(productId, count);
+  }
+
+  Future<void> removeProductsCart(List<int> productIds) async {
+    return apiClient.removeProductsCart(productIds);
+  }
 
   ///Firebase
-  Future<List<ProductModel>> getProducts() {
-    return apiClient.getProducts();
-  }
 
   Future<void> updateProduct(ProductModel product) {
     return apiClient.updateProduct(product);
@@ -31,16 +43,16 @@ class ProductRepository {
     return apiClient.removeProduct(productNo);
   }
 
-  Future<List<ProductOverViewModel>> getAllProductOverview() {
-    return apiClient.getAllProductOverview();
+  Future<List<ProductOverViewModel>> getProducts(int pageIndex) {
+    return apiClient.getProducts(pageIndex);
   }
 
   Future<List<ProductOverViewModel>> getFavoriteProducts(String userNo) {
     return apiClient.getFavoriteProducts(userNo);
   }
 
-  Future<List<OrderModel>> getAllOrderFB(String userNo) async {
-    return await apiClient.getAllOrderFB(userNo);
+  Future<List<ProductOverViewModel>> getProductsCart() async {
+    return apiClient.getProductsCart();
   }
 
   Future<ProductOverViewModel> getProductOverViewFB(int productNo) {
@@ -51,20 +63,16 @@ class ProductRepository {
     return apiClient.getProductDetailFB(productNo);
   }
 
-  Future<void> addOrder(OrderModel order) {
+  Future<void> addOrder(OrderCreateModel order) {
     return apiClient.addOrder(order);
   }
 
-  Future<void> updateOrder(OrderModel order) {
+  Future<void> updateOrder(OrderCreateModel order) {
     return apiClient.updateOrder(order);
   }
 
-  Future<OrderModel> getOrder(int orderNo, int productNo) {
+  Future<OrderCreateModel> getOrder(int orderNo, int productNo) {
     return apiClient.getOrder(orderNo, productNo);
-  }
-
-  Future<List<OrderModel>> getPaidOrders() {
-    return apiClient.getPaidOrders();
   }
 
   Future<void> removeOrder(int orderNo) {

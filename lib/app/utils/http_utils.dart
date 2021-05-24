@@ -1,4 +1,5 @@
 import 'dart:io';
+
 import 'package:dio/dio.dart';
 import 'package:flutter/foundation.dart';
 import 'package:path/path.dart';
@@ -17,7 +18,7 @@ class HttpResponse {
 class HttpHelper {
   static getDio() {
     Dio _dio = Dio();
-    // _dio.interceptors.add(DioInterceptors(_dio));
+    _dio.interceptors.add(DioInterceptors(_dio));
     return _dio;
   }
 

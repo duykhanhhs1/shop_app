@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:scrum_app/app/data/models/order_model.dart';
+import 'package:scrum_app/app/data/models/product_model.dart';
+import 'package:scrum_app/app/data/models/user_model.dart';
 import 'package:scrum_app/app/data/repositories/product_repository.dart';
 import 'package:scrum_app/app/modules/login/controllers/login_controller.dart';
-import 'package:scrum_app/app/routes/app_pages.dart';
 
 class CartController extends GetxController {
   //TODO: Implement CartController
@@ -14,20 +15,12 @@ class CartController extends GetxController {
 
   static CartController get to => Get.find<CartController>();
 
-  RxList<OrderModel> orders = RxList<OrderModel>();
+  LoginController _loginController = LoginController.to;
 
-  List<OrderModel> get checkedOrders =>
-      orders.where((_) => _.isChecked).toList();
+  RxList<ProductOverViewModel> products = RxList<ProductOverViewModel>();
 
-  List<OrderModel> get paidOrders {
-    List<OrderModel> paidOrders =
-        orders.where((_) => _.status == 'paid').toList();
-    paidOrders.sort((a, b) => a.createAt.compareTo(b.createAt));
-    return paidOrders;
-  }
-
-  List<OrderModel> get pendingOrders =>
-      orders.where((_) => _.status == 'pending').toList();
+  List<ProductOverViewModel> get checkedProducts =>
+      products.where((_) => _.isChecked).toList();
 
   RxInt total = RxInt(0);
   RxBool isCheckedAll = RxBool(false);
@@ -36,69 +29,48 @@ class CartController extends GetxController {
 
   @override
   void onInit() {
-    getOrders(LoginController.to.userLogged.value.userNo);
+    getProducts();
     super.onInit();
   }
 
-  Future<void> getOrders(String userNo) async {
+  Future<void> addProduct(int productId, int count) async {
+    if (products.indexWhere((element) => element.id == productId) != null) {
+      isLoadingCart.value = true;
+      await repository.addProductToCart(productId, count);
+      products.length++;
+      isLoadingCart.value = false;
+    } else {
+      isLoadingCart.value = true;
+      await repository.updateProductToCart(productId, count);
+      isLoadingCart.value = false;
+    }
+
+    update();
+  }
+
+  ///
+
+  Future<void> getProducts() async {
     isLoadingCart.value = true;
-    final List<OrderModel> data = await repository.getAllOrderFB(userNo);
-    orders = data.obs;
+    final List<ProductOverViewModel> data = await repository.getProductsCart();
+    products = data.obs;
     isLoadingCart.value = false;
     update();
   }
 
-  void addOrder(OrderModel order) async {
-    isUpdated.value = false;
-    if (orders.length == 0) {
-      await repository.addOrder(order);
-      await repository
-          .getProductOverViewFB(order.productNo)
-          .then((product) => order.product = product);
-      orders.add(order);
-      isUpdated.value = true;
-      update();
-    } else
-      orders.forEach((element) async {
-        if (element.productNo == order.productNo &&
-            element.status == 'pending') {
-          element.quantity += order.quantity;
-          element.isChecked = order.isChecked;
-          isUpdated.value = true;
-          await repository.updateOrder(element);
-        }
-      });
-
-    if (!isUpdated.value) {
-      await repository.addOrder(order);
-      await repository
-          .getProductOverViewFB(order.productNo)
-          .then((product) => order.product = product);
-      orders.add(order);
-      update();
-    }
-  }
-
-  void removeOrder(OrderModel order) async {
-    await repository.removeOrder(order.orderNo);
-    orders.remove(order);
-    if (pendingOrders.length == 0) isCheckedAll.value = false;
-    update();
-  }
-
-  void removeCheckedOrders() async {
-    checkedOrders.forEach((order) async {
-      await repository
-          .removeOrder(order.orderNo)
-          .then((value) => orders.remove(order));
-      update();
+  void removeCheckedProducts() async {
+    List<int> productIds;
+    checkedProducts.forEach((product) {
+      productIds.add(product.id);
+      products.remove(product);
     });
+    await repository.removeProductsCart(productIds);
     isCheckedAll.value = false;
     update();
   }
 
-  void reCheckOrders() async {
-    checkedOrders.forEach((element) {
+  void reCheckProducts() async {
+    products.forEach((element) {
       element.isChecked = false;
     });
     update();
@@ -106,40 +78,42 @@ class CartController extends GetxController {
 
   int getTotalPrice() {
     total.value = 0;
-    checkedOrders.forEach((element) {
+    checkedProducts.forEach((element) {
       if (element.isChecked == true) {
-        total.value += element.product.price * element.quantity;
+        total.value += element.price * element.count;
       }
     });
     return total.value;
   }
 
-  void updatePaidOrder() async {
-    checkedOrders.forEach((element) async {
-      element.status = 'paid';
-      element.isChecked = false;
-      element.createAt = DateTime.now();
-      await repository.updateOrder(element);
+  void createOrder() async {
+    List<ProductCartModel> cartProducts = [];
+    checkedProducts.forEach((element) {
+      cartProducts.add(ProductCartModel(id: element.id, count: element.count));
     });
+    ProfileModel profile = _loginController.userLogged.value.profile;
+    OrderCreateModel order =
+        OrderCreateModel(address: profile.address, products: cartProducts);
+    await repository.addOrder(order);
   }
 
-  void reBuy(OrderModel order) {
-    orders.forEach((element) {
-      element.isChecked = false;
-    });
-
+  void reBuy(OrderCreateModel order) {
+    // products.forEach((element) {
+    //   element.isChecked = false;
+    // });
     //
-    OrderModel orderReBuy = OrderModel.fromJson(order.toJson());
-    orderReBuy.product = order.product;
-    orderReBuy.status = 'pending';
-    orderReBuy.isChecked = true;
-    addOrder(orderReBuy);
-    Get.toNamed(Routes.CART);
+    // //
+    // OrderModel orderReBuy = OrderModel.fromJson(order.toJson());
+    // orderReBuy.product = order.product;
+    // orderReBuy.status = 'pending';
+    // orderReBuy.isChecked = true;
+    // addOrder(orderReBuy);
+    // Get.toNamed(Routes.CART);
   }
 
-  void toggleChecked(OrderModel order) {
-    order.isChecked = !order.isChecked;
-    if (checkedOrders.length == pendingOrders.length) {
+  void toggleChecked(ProductOverViewModel product) {
+    product.isChecked = !product.isChecked;
+    if (checkedProducts.length == products.length) {
       isCheckedAll.value = true;
     } else
       isCheckedAll.value = false;
@@ -148,12 +122,12 @@ class CartController extends GetxController {
 
   void setCheckAllItem() {
     if (isCheckedAll.value) {
-      pendingOrders.forEach((element) {
+      products.forEach((element) {
         element.isChecked = false;
       });
       isCheckedAll.value = false;
     } else {
-      pendingOrders.forEach((element) {
+      products.forEach((element) {
         element.isChecked = true;
       });
       isCheckedAll.value = true;

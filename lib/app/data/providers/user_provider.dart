@@ -1,15 +1,35 @@
-import 'dart:collection';
-
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
 import 'package:scrum_app/app/data/models/user_model.dart';
+import 'package:scrum_app/app/utils/endpoints.dart';
+import 'package:scrum_app/app/utils/http_utils.dart';
 
 class UserProvider extends GetConnect {
   @override
   void onInit() {
     httpClient.baseUrl = 'YOUR-API-URL';
+  }
+
+  Future<UserModel> login(String username, String password) async {
+    try {
+      HttpResponse response = await HttpHelper.post(
+          Endpoints.LOGIN, {"username": username, "password": password});
+      UserModel user = UserModel.fromJson(response.body);
+      return user;
+    } catch (e) {
+      return null;
+    }
+  }
+
+  Future<ProfileModel> getProfile() async {
+    try {
+      HttpResponse response = await HttpHelper.get(Endpoints.USER_PROFILE);
+      ProfileModel profile = ProfileModel.fromJson(response.body);
+      return profile;
+    } catch (e) {
+      return null;
+    }
   }
 
   Future<UserModel> getUserLogged(String userNo) async {

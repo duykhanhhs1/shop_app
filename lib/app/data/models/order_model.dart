@@ -1,45 +1,64 @@
-import 'package:flutter/material.dart';
-import 'package:intl/intl.dart';
-
 import 'package:json_annotation/json_annotation.dart';
-
 import 'package:scrum_app/app/data/models/product_model.dart';
 
 part 'order_model.g.dart';
 
 @JsonSerializable()
+class OrderCreateModel {
+  int id;
+  String full_name;
+  String address;
+  String pay_method_name;
+  String phone_number;
+  List<int> voucher_ids;
+  List<ProductCartModel> products;
+
+  OrderCreateModel({
+    this.id,
+    this.address,
+    this.pay_method_name,
+    this.phone_number,
+    this.full_name,
+    this.products,
+    this.voucher_ids,
+  });
+
+  factory OrderCreateModel.fromJson(Map<String, dynamic> json) =>
+      _$OrderCreateModelFromJson(json);
+
+  Map<String, dynamic> toJson() => _$OrderCreateModelToJson(this);
+}
+
+@JsonSerializable()
+class ProductCartModel {
+  int id;
+  int count;
+
+  ProductCartModel({
+    this.id,
+    this.count,
+  });
+
+  factory ProductCartModel.fromJson(Map<String, dynamic> json) =>
+      _$ProductCartModelFromJson(json);
+
+  Map<String, dynamic> toJson() => _$ProductCartModelToJson(this);
+}
+
+@JsonSerializable()
 class OrderModel {
-  int orderNo;
-  int productNo;
-  String userNo;
-  String status;
-  DateTime createAt;
+  int id;
   int quantity;
+  int total_price;
+  @JsonKey(defaultValue: [])
+  List<ProductOverViewModel> products;
 
-  @JsonKey(ignore: true)
-  ProductOverViewModel product;
-  @JsonKey(ignore: true)
-  String customerName;
-  @JsonKey(ignore: true)
-  bool isChecked;
-  @JsonKey(ignore: true)
-  TextEditingController quantityController = TextEditingController();
-
-  int get getPriceOrder => this.quantity * this.product.price;
-
-  String get getCreateAt => DateFormat('HH:mm dd-MM-yyyy').format(createAt);
-
-  String get getShortDate => DateFormat('HH:mm dd-MM').format(createAt);
-
-  OrderModel(
-      {this.orderNo,
-        this.productNo,
-        this.status,
-        this.createAt,
-        this.userNo,
-        this.product,
-        this.quantity,
-        this.isChecked = false});
+  OrderModel({
+    this.id,
+    this.quantity,
+    this.total_price,
+    products,
+  }) : products = products ?? [];
 
   factory OrderModel.fromJson(Map<String, dynamic> json) =>
       _$OrderModelFromJson(json);

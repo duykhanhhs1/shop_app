@@ -43,17 +43,17 @@ class LoginController extends GetxController {
 
   Future<void> verifyUser() async {
     final String storedToken = await _store.read(AppStorageKey.ACCESS_TOKEN);
-    if (storedToken != null) {
-      final List<UserModel> users = await repository.getUsers();
-      users.forEach((element) {
-        if (element.token == storedToken) {
-          isLoginByToken.value = true;
-          navigateUser(element.userNo);
-        }
-      });
-      if (!isLoginByToken.value) Get.offAllNamed(Routes.LOGIN);
-    } else
-      Get.offAllNamed(Routes.LOGIN);
+    // if (storedToken != null) {
+    //   final List<UserModel> users = await repository.getUsers();
+    //   users.forEach((element) {
+    //     if (element.authentication_token == storedToken) {
+    //       isLoginByToken.value = true;
+    //       navigateUser(element.userNo);
+    //     }
+    //   });
+    //   if (!isLoginByToken.value) Get.offAllNamed(Routes.LOGIN);
+    // } else
+    Get.offAllNamed(Routes.LOGIN);
   }
 
   Future<void> logout() async {
@@ -66,34 +66,28 @@ class LoginController extends GetxController {
   }
 
   //signIn
-  Future<void> login({String email, String password}) async {
+  Future<void> login({String username, String password}) async {
     isProcessing.value = true;
-    await FirebaseAuth.instance
-        .signInWithEmailAndPassword(email: email, password: password)
-        .then((value) async {
-      await FirebaseAuth.instance.currentUser.getIdToken().then((token) async {
-        await getUserLogged(FirebaseAuth.instance.currentUser.uid);
-        userLogged.value.token = token;
-        await repository.updateUser(userLogged.value);
-        _store.write(AppStorageKey.ACCESS_TOKEN, token);
-      });
-      navigateUser(value.user.uid);
-    }).catchError((onError) {
+    UserModel data = await repository.login(username, password);
+    if (data != null) {
+      _store.write(AppStorageKey.ACCESS_TOKEN, data.authentication_token);
+      ProfileModel profile = await repository.getProfile();
+      data.profile = profile;
+      userLogged = data.obs;
+      Get.offAllNamed(Routes.HOME);
+      isProcessing.value = false;
+    } else {
       Get.snackbar('Error', 'User not found',
           snackPosition: SnackPosition.BOTTOM, colorText: Colors.red);
       isProcessing.value = false;
-    });
+    }
   }
 
   //Edit User Profile
 
   void navigateUser(String uid) async {
     await getUserLogged(uid);
-    if (userLogged.value.role == 'admin') {
-      Get.offAllNamed(Routes.ADMIN);
-    } else {
-      Get.offAllNamed(Routes.HOME);
-    }
+    Get.offAllNamed(Routes.HOME);
   }
 
   Future<void> getUserLogged(String userNo) async {

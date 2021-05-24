@@ -11,6 +11,14 @@ class UserRepository {
     return apiClient.getUserLogged(userNo);
   }
 
+  Future<UserModel> login(String username, String password) async {
+    return apiClient.login(username, password);
+  }
+
+  Future<ProfileModel> getProfile() async {
+    return apiClient.getProfile();
+  }
+
   Future<void> register({String email, String password, UserModel user}) async {
     return apiClient.register(email: email, password: password, user: user);
   }

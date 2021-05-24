@@ -1,12 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:get/get.dart';
-import 'package:scrum_app/app/data/models/order_model.dart';
 import 'package:scrum_app/app/data/models/product_model.dart';
 import 'package:scrum_app/app/modules/cart/controllers/cart_controller.dart';
 import 'package:scrum_app/app/modules/detail_product/controllers/detail_product_controller.dart';
 import 'package:scrum_app/app/modules/detail_product/widgets/review_card_widget.dart';
-import 'package:scrum_app/app/modules/login/controllers/login_controller.dart';
 import 'package:scrum_app/app/theme/color_theme.dart';
 import 'package:scrum_app/app/utils/helpers.dart';
 import 'package:scrum_app/app/widgets/number_input_field_widget.dart';
@@ -19,6 +17,7 @@ class DetailProductView extends GetView<DetailProductController> {
   @override
   Widget build(BuildContext context) {
     return GetBuilder(
+      init: DetailProductController.to,
       builder: (DetailProductController controller) {
         ProductDetailModel product = controller.productDetail.value;
         return controller.isLoadingProduct.value
@@ -30,26 +29,26 @@ class DetailProductView extends GetView<DetailProductController> {
                   actions: <Widget>[
                     Center(child: CartIcon()),
                     SizedBox(
-                      width: 20,
-                    )
-                  ],
-                ),
-                floatingActionButton: FloatingActionButton(
-                  onPressed: () {
-                    _buildBottomAddCart();
-                  },
-                  backgroundColor: kPrimaryColor,
-                  child: Icon(
-                    Icons.add_shopping_cart_rounded,
-                    color: Colors.white,
-                  ),
-                ),
-                body: SingleChildScrollView(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: <Widget>[
-                      _buildListImage(product),
-                      Divider(height: 4, thickness: 4),
+                width: 20,
+              )
+            ],
+          ),
+          floatingActionButton: FloatingActionButton(
+            onPressed: () {
+              _buildBottomAddCart();
+            },
+            backgroundColor: kPrimaryColor,
+            child: Icon(
+              Icons.add_shopping_cart_rounded,
+              color: Colors.white,
+            ),
+          ),
+          body: SingleChildScrollView(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: <Widget>[
+                _buildListImage(product),
+                Divider(height: 4, thickness: 4),
                       Padding(
                         padding: const EdgeInsets.symmetric(horizontal: 12),
                         child: _buildOverviewInfo(product),
@@ -60,20 +59,20 @@ class DetailProductView extends GetView<DetailProductController> {
                         child: _buildShopInfo(product),
                       ),
                       Divider(height: 30, thickness: 4),
-                      // Padding(
-                      //   padding: const EdgeInsets.symmetric(horizontal: 12),
-                      //   child: _buildDetailInfo(product),
-                      // ),
-                      // Divider(height: 30, thickness: 5),
-                      // Padding(
-                      //   padding: const EdgeInsets.symmetric(horizontal: 12),
-                      //   child: _buildReviews(product),
-                      // ),
+                      Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 12),
+                        child: _buildDetailInfo(product),
+                      ),
+                      Divider(height: 30, thickness: 5),
+                      Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 12),
+                        child: _buildReviews(product),
+                      ),
                       SizedBox(height: 100),
                     ],
-                  ),
-                ),
-              );
+            ),
+          ),
+        );
       },
     );
   }
@@ -90,10 +89,10 @@ class DetailProductView extends GetView<DetailProductController> {
         ListView.builder(
           physics: NeverScrollableScrollPhysics(),
           shrinkWrap: true,
-          itemCount: product.productReviews.length,
+          itemCount: controller.reviews.length,
           itemBuilder: (context, index) {
             return ReviewCard(
-              productReview: product.productReviews[index],
+              productReview: controller.reviews[index],
             );
           },
         ),
@@ -106,24 +105,20 @@ class DetailProductView extends GetView<DetailProductController> {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: <Widget>[
         Text(
-          'Chi tiết sản phẩm: ',
+          'Mô tả sản phẩm: ',
           style: TextStyle(fontWeight: FontWeight.bold),
         ),
         Divider(),
-        ListView.builder(
-          physics: NeverScrollableScrollPhysics(),
-          shrinkWrap: true,
-          itemCount: product.productProperties.length,
-          itemBuilder: (context, index) {
-            return Column(
-              children: [
-                SizedBox(height: 10),
-                _buildLineDetail(
-                    productProperty: product.productProperties[index])
-              ],
-            );
-          },
+        Text(product.description),
+        SizedBox(height: 10),
+        Divider(),
+        SizedBox(height: 10),
+        Text(
+          'Số lượng hiện tại trong kho: ${product.count}',
+          style: TextStyle(fontWeight: FontWeight.bold),
         ),
+        SizedBox(height: 10),
+        Divider(),
       ],
     );
   }
@@ -227,6 +222,20 @@ class DetailProductView extends GetView<DetailProductController> {
                 )),
           ],
         ),
+        SizedBox(height: 10),
+        Row(
+          children: [
+            Icon(
+              Icons.payments,
+              color: Colors.black.withOpacity(.7),
+            ),
+            SizedBox(width: 5),
+            Text('Đã bán: ${product.count_purchased}',
+                style: TextStyle(
+                  color: Colors.black.withOpacity(.7),
+                )),
+          ],
+        ),
       ],
     );
   }
@@ -268,18 +277,21 @@ class DetailProductView extends GetView<DetailProductController> {
   }
 
   Widget _buildReviewRating() {
+    ProductReviewModel review = controller.review.value;
     return Column(
       children: [
         FormRoundedInputField(
+          contentPadding: const EdgeInsets.all(10),
           borderRadius: BorderRadius.circular(10),
           maxLines: 3,
           hintText: 'Đánh giá của bạn',
+          onChanged: (value) => review.comment = value,
         ),
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: <Widget>[
             RatingBar.builder(
-              initialRating: 3,
+              initialRating: 0,
               minRating: 1,
               direction: Axis.horizontal,
               allowHalfRating: true,
@@ -291,15 +303,19 @@ class DetailProductView extends GetView<DetailProductController> {
                 size: 15,
               ),
               onRatingUpdate: (rating) {
-                print(rating);
+                review.rating = rating;
+                controller.update();
               },
             ),
             RoundedButton(
+              color: review.rating > 0 ? kPrimaryColor : kPrimaryGreyColor,
               textContent: 'Gửi',
               width: 100,
               radius: 10,
               height: 35,
-              onPressed: () {},
+              onPressed: () {
+                if (review.rating > 0) controller.onSubmitReview(review);
+              },
             ),
           ],
         ),
@@ -359,7 +375,7 @@ class DetailProductView extends GetView<DetailProductController> {
                                       color: kSecondaryColor,
                                       fontWeight: FontWeight.bold)),
                               Text(
-                                  'Kho: ${NumberHelper.currencyFormat(controller.productDetail.value.amount)}',
+                                  'Kho: ${NumberHelper.currencyFormat(controller.productDetail.value.count)}',
                                   style: TextStyle(
                                       color: Colors.black.withOpacity(.6),
                                       fontWeight: FontWeight.bold)),
@@ -397,16 +413,15 @@ class DetailProductView extends GetView<DetailProductController> {
                 builder: (CartController cartController) {
                   return RoundedButton(
                     width: Get.width,
-                    onPressed: () {
-                      cartController.addOrder(OrderModel(
-                          status: 'pending',
-                          userNo: LoginController.to.userLogged.value.userNo,
-                          productNo: controller.productDetail.value.productNo,
-                          quantity: int.tryParse(
-                              controller.quantityController.text)));
+                    onPressed: () async {
+                      await cartController.addProduct(
+                          controller.productDetail.value.id,
+                          controller.productDetail.value.quantity);
                       Get.back();
                     },
-                    textContent: 'Thêm vào giỏ hàng',
+                    textContent: cartController.isLoadingCart.value
+                        ? CircularProgressIndicator()
+                        : 'Thêm vào giỏ hàng',
                   );
                 },
               )

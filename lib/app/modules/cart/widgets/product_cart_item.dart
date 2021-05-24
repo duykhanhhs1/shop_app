@@ -1,24 +1,24 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
-import 'package:scrum_app/app/data/models/order_model.dart';
+import 'package:scrum_app/app/data/models/product_model.dart';
 import 'package:scrum_app/app/modules/cart/controllers/cart_controller.dart';
 import 'package:scrum_app/app/theme/color_theme.dart';
 import 'package:scrum_app/app/utils/helpers.dart';
 import 'package:scrum_app/app/widgets/number_input_field_widget.dart';
 
-class OrderCartItem extends StatelessWidget {
-  const OrderCartItem({
+class ProductCartItem extends StatelessWidget {
+  const ProductCartItem({
     Key key,
-    this.order,
+    this.product,
     this.controller,
   }) : super(key: key);
 
-  final OrderModel order;
+  final ProductOverViewModel product;
   final CartController controller;
 
   @override
   Widget build(BuildContext context) {
-    order.quantityController.text = '${order.quantity}';
+    product.quantityController.text = '${product.count}';
     return Slidable(
       actionPane: SlidableDrawerActionPane(),
       actionExtentRatio: .2,
@@ -28,7 +28,7 @@ class OrderCartItem extends StatelessWidget {
           color: kSecondaryColor,
           caption: 'Xóa',
           onTap: () {
-            controller.removeOrder(order);
+            //controller.removeOrder(product);
           },
         )
       ],
@@ -41,15 +41,17 @@ class OrderCartItem extends StatelessWidget {
                 children: <Widget>[
                   GestureDetector(
                     onTap: () {
-                      controller.toggleChecked(order);
+                      controller.toggleChecked(product);
                     },
                     child: Icon(
-                        order.isChecked
+                        product.isChecked
                             ? Icons.check_box_outlined
                             : Icons.check_box_outline_blank,
-                        color: order.isChecked ? kSecondaryColor : Colors.black54),
+                        color: product.isChecked
+                            ? kSecondaryColor
+                            : Colors.black54),
                   ),
-                  Image.network(order.product.imageUrl,
+                  Image.network(product.link_image,
                       height: 70, width: 70, fit: BoxFit.cover),
                   SizedBox(width: 10),
                   Expanded(
@@ -57,9 +59,11 @@ class OrderCartItem extends StatelessWidget {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: <Widget>[
                         Text(
-                          order.product.name,style: TextStyle(fontSize: 16),
+                          product.name,
+                          style: TextStyle(fontSize: 16),
                           maxLines: 2,
                         ),
+                        SizedBox(height: 5),
                         Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
@@ -67,7 +71,7 @@ class OrderCartItem extends StatelessWidget {
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
                                 Text(
-                                    '₫${NumberHelper.currencyFormat(order.getPriceOrder)}',
+                                    '₫${NumberHelper.currencyFormat(product.getPriceCart)}',
                                     style: TextStyle(
                                         color: kSecondaryColor,
                                         fontSize: 16,
@@ -75,10 +79,10 @@ class OrderCartItem extends StatelessWidget {
                               ],
                             ),
                             NumberInputIncDec(
-                              textController: order.quantityController,
+                              textController: product.quantityController,
                               setValue: () {
-                                order.quantity =
-                                    int.tryParse(order.quantityController.text);
+                                product.count = int.tryParse(
+                                    product.quantityController.text);
                                 controller.update();
                               },
                             )

@@ -18,7 +18,8 @@ class CartIcon extends StatelessWidget {
             IconButton(
                 tooltip: 'Giỏ hàng',
                 onPressed: () {
-                  controller.reCheckOrders();
+                  controller.reCheckProducts();
+                  controller.getProducts();
                   Get.toNamed(Routes.CART);
                 },
                 icon: Icon(
@@ -27,7 +28,7 @@ class CartIcon extends StatelessWidget {
                 )),
             Positioned(
                 right: 0,
-                child: controller.pendingOrders.length > 0
+                child: controller.products.length > 0
                     ? Container(
                         padding: const EdgeInsets.all(5),
                         decoration: BoxDecoration(
@@ -35,7 +36,7 @@ class CartIcon extends StatelessWidget {
                             color: Colors.red,
                             border: Border.all(color: Colors.white)),
                         child: Text(
-                          '${controller.pendingOrders.length}',
+                          '${controller.products.length}',
                           style: TextStyle(
                               fontSize: 12, fontWeight: FontWeight.bold),
                         ),

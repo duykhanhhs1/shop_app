@@ -1,16 +1,16 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:scrum_app/app/data/models/order_model.dart';
+import 'package:scrum_app/app/data/models/product_model.dart';
 import 'package:scrum_app/app/theme/color_theme.dart';
 import 'package:scrum_app/app/utils/helpers.dart';
 
-class OrderPaymentItem extends StatelessWidget {
-  const OrderPaymentItem({
+class ProductPaymentItem extends StatelessWidget {
+  const ProductPaymentItem({
     Key key,
-    this.order,
+    this.product,
   }) : super(key: key);
 
-  final OrderModel order;
+  final ProductOverViewModel product;
 
   @override
   Widget build(BuildContext context) {
@@ -20,7 +20,7 @@ class OrderPaymentItem extends StatelessWidget {
           padding: const EdgeInsets.all(10),
           child: Row(
             children: <Widget>[
-              Image.network(order.product.imageUrl,
+              Image.network(product.link_image,
                   height: 70, width: 70, fit: BoxFit.cover),
               SizedBox(width: 10),
               Expanded(
@@ -31,18 +31,19 @@ class OrderPaymentItem extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: <Widget>[
                       Text(
-                        order.product.name,style: TextStyle(fontSize: 16),
+                        product.name,
+                        style: TextStyle(fontSize: 16),
                         maxLines: 2,
                       ),
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: <Widget>[
                           Text(
-                              '₫${NumberHelper.currencyFormat(order.product.price)}',
+                              '₫${NumberHelper.currencyFormat(product.price)}',
                               style: TextStyle(
                                   color: Colors.black.withOpacity(.6))),
                           Text(
-                              'x${NumberHelper.currencyFormat(order.quantity)}',
+                              'x${NumberHelper.currencyFormat(product.count)}',
                               style: TextStyle(
                                   color: Colors.black.withOpacity(.6)))
                         ],
@@ -59,8 +60,8 @@ class OrderPaymentItem extends StatelessWidget {
           padding: const EdgeInsets.all(10),
           child:
               Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
-            Text('Tổng số tiền (${order.quantity} sản phẩm)'),
-                Text('₫${NumberHelper.currencyFormat(order.getPriceOrder)}',
+            Text('Tổng số tiền (${product.count} sản phẩm)'),
+            Text('₫${NumberHelper.currencyFormat(product.getPriceCart)}',
                 style: TextStyle(
                     color: kSecondaryColor, fontWeight: FontWeight.bold))
           ]),

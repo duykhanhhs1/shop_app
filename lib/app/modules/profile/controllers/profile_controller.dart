@@ -4,6 +4,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:scrum_app/app/data/models/order_model.dart';
 import 'package:scrum_app/app/data/models/product_model.dart';
 import 'package:scrum_app/app/data/models/user_model.dart';
 import 'package:scrum_app/app/data/repositories/product_repository.dart';
@@ -34,11 +35,12 @@ class ProfileController extends GetxController {
   RxList<ProductOverViewModel> favoriteProducts =
       RxList<ProductOverViewModel>();
 
+  RxList<OrderModel> orders = RxList();
+
   static ProfileController get to => Get.find<ProfileController>();
 
   @override
   void onInit() {
-    //getProfile(_login.userLogged.value.userNo);
     super.onInit();
   }
 
@@ -53,7 +55,7 @@ class ProfileController extends GetxController {
   }
 
   void setGender(String gender) {
-    currentUser.gender = gender;
+    currentUser.profile.gender = gender;
     update();
   }
 
@@ -72,14 +74,14 @@ class ProfileController extends GetxController {
       if (kIsWeb) {
         imageName = pickedFile.path.substring(
             pickedFile.path.lastIndexOf('/'), pickedFile.path.length - 1);
-        currentUser.imageUrl = await FirebaseHelper.uploadImageWeb(
+        currentUser.profile.photo_url = await FirebaseHelper.uploadImageWeb(
             'avatar images', pickedFile, imageName);
         await userRepository.updateUser(currentUser);
       } else {
         File imageFile = File(pickedFile.path);
         imageName = imageFile.path.substring(
             imageFile.path.lastIndexOf('/'), imageFile.path.length - 1);
-        currentUser.imageUrl = await FirebaseHelper.uploadImage(
+        currentUser.profile.photo_url = await FirebaseHelper.uploadImage(
             'avatar images', imageFile, imageName);
         await userRepository.updateUser(currentUser);
       }

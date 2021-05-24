@@ -34,13 +34,12 @@ class LoginView extends GetView<LoginController> {
                     color: Colors.black,
                   ),
                   fillColor: Colors.white.withOpacity(0.75),
-                  prefixIcon: Icons.email,
-                  hintText: 'Email',
+                  prefixIcon: Icons.person,
+                  hintText: 'Tài khoản',
                   validator: MultiValidator([
-                    RequiredValidator(errorText: 'Vui lòng nhập email'),
-                    EmailValidator(errorText: 'Email không hợp lệ'),
+                    RequiredValidator(errorText: 'Vui lòng nhập tài khoản'),
                   ]),
-                  keyboardType: TextInputType.emailAddress,
+                  keyboardType: TextInputType.text,
                   onChanged: (value) => null,
                   onSaved: (value) => controller.emailController.text = value,
                 ),
@@ -76,7 +75,7 @@ class LoginView extends GetView<LoginController> {
                         : () async {
                             if (_formKey.currentState.validate()) {
                               await controller.login(
-                                  email: controller.emailController.text,
+                                  username: controller.emailController.text,
                                   password: controller.passwordController.text);
                             }
                           },

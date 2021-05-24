@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:scrum_app/app/modules/cart/widgets/order_cart_item.dart';
+import 'package:scrum_app/app/modules/cart/widgets/product_cart_item.dart';
 import 'package:scrum_app/app/routes/app_pages.dart';
 import 'package:scrum_app/app/utils/helpers.dart';
 import 'package:scrum_app/app/widgets/rounded_button.widget.dart';
@@ -18,10 +18,10 @@ class CartView extends GetView<CartController> {
               title: Text('Giỏ hàng'),
               centerTitle: true,
               actions: [
-                if (controller.checkedOrders.length > 0)
+                if (controller.checkedProducts.length > 0)
                   IconButton(
                       onPressed: () {
-                        controller.removeCheckedOrders();
+                        controller.removeCheckedProducts();
                       },
                       icon: Icon(Icons.delete_outline))
               ],
@@ -31,20 +31,20 @@ class CartView extends GetView<CartController> {
                 ? Center(child: CircularProgressIndicator())
                 : Column(
                     children: [
-                      if (controller.pendingOrders.length > 0)
+                      if (controller.products.length > 0)
                         Divider(
                           thickness: 5,
                           height: 5,
                         ),
                       Expanded(
                         child: ListView.builder(
-                          itemCount: controller.pendingOrders.length,
+                          itemCount: controller.products.length,
                           itemBuilder: (context, index) {
                             return Column(
                               children: <Widget>[
-                                OrderCartItem(
+                                ProductCartItem(
                                   controller: controller,
-                                  order: controller.pendingOrders[index],
+                                  product: controller.products[index],
                                 ),
                                 Divider(
                                   thickness: 5,
@@ -83,7 +83,7 @@ class CartView extends GetView<CartController> {
               ],
             ),
             onTap: () {
-              if (controller.pendingOrders.length > 0) {
+              if (controller.products.length > 0) {
                 controller.setCheckAllItem();
               }
             },
@@ -100,7 +100,7 @@ class CartView extends GetView<CartController> {
                 SizedBox(width: 5),
                 RoundedButton(
                   height: 40,
-                  onPressed: controller.checkedOrders.length > 0
+                  onPressed: controller.checkedProducts.length > 0
                       ? () {
                           Get.toNamed(Routes.PAYMENT);
                         }

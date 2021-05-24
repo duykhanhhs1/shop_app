@@ -1,5 +1,4 @@
-import 'package:scrum_app/app/data/models/product_model.dart';
-
+/*
 class AppMock {
   static List<ProductOverViewModel> products = [
     ProductOverViewModel(
@@ -177,3 +176,4 @@ class AppMock {
         ]),
   ];
 }
+*/

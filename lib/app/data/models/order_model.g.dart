@@ -6,25 +6,59 @@ part of 'order_model.dart';
 // JsonSerializableGenerator
 // **************************************************************************
 
+OrderCreateModel _$OrderCreateModelFromJson(Map<String, dynamic> json) {
+  return OrderCreateModel(
+    id: json['id'] as int,
+    address: json['address'] as String,
+    pay_method_name: json['pay_method_name'] as String,
+    phone_number: json['phone_number'] as String,
+    full_name: json['full_name'] as String,
+    products: (json['products'] as List)
+        ?.map((e) => e == null
+            ? null
+            : ProductCartModel.fromJson(e as Map<String, dynamic>))
+        ?.toList(),
+    voucher_ids: (json['voucher_ids'] as List)?.map((e) => e as int)?.toList(),
+  );
+}
+
+Map<String, dynamic> _$OrderCreateModelToJson(OrderCreateModel instance) =>
+    <String, dynamic>{
+      'id': instance.id,
+      'full_name': instance.full_name,
+      'address': instance.address,
+      'pay_method_name': instance.pay_method_name,
+      'phone_number': instance.phone_number,
+      'voucher_ids': instance.voucher_ids,
+      'products': instance.products,
+    };
+
+ProductCartModel _$ProductCartModelFromJson(Map<String, dynamic> json) {
+  return ProductCartModel(
+    id: json['id'] as int,
+    count: json['count'] as int,
+  );
+}
+
+Map<String, dynamic> _$ProductCartModelToJson(ProductCartModel instance) =>
+    <String, dynamic>{
+      'id': instance.id,
+      'count': instance.count,
+    };
+
 OrderModel _$OrderModelFromJson(Map<String, dynamic> json) {
   return OrderModel(
-    orderNo: json['orderNo'] as int,
-    productNo: json['productNo'] as int,
-    status: json['status'] as String,
-    createAt: json['createAt'] == null
-        ? null
-        : DateTime.parse(json['createAt'] as String),
-    userNo: json['userNo'] as String,
+    id: json['id'] as int,
     quantity: json['quantity'] as int,
+    total_price: json['total_price'] as int,
+    products: json['products'] ?? [],
   );
 }
 
 Map<String, dynamic> _$OrderModelToJson(OrderModel instance) =>
     <String, dynamic>{
-      'orderNo': instance.orderNo,
-      'productNo': instance.productNo,
-      'userNo': instance.userNo,
-      'status': instance.status,
-      'createAt': instance.createAt?.toIso8601String(),
+      'id': instance.id,
       'quantity': instance.quantity,
+      'total_price': instance.total_price,
+      'products': instance.products,
     };

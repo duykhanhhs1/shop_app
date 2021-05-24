@@ -18,7 +18,7 @@ class ProductCard extends StatelessWidget {
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () {
-        Get.toNamed(Routes.DETAIL_PRODUCT, arguments: product.productNo);
+        Get.toNamed(Routes.DETAIL_PRODUCT, arguments: product.id);
       },
       child: GetBuilder<HomeController>(
         init: Get.find(),
@@ -34,7 +34,7 @@ class ProductCard extends StatelessWidget {
                 ClipRRect(
                   borderRadius: BorderRadius.vertical(top: Radius.circular(10)),
                   child: Image.network(
-                    product.imageUrl,
+                    product.link_image,
                     width: Get.width,
                     height: Get.width * 0.4,
                     fit: BoxFit.cover,

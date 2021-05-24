@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:scrum_app/app/data/models/user_model.dart';
 import 'package:scrum_app/app/modules/cart/controllers/cart_controller.dart';
-import 'package:scrum_app/app/modules/cart/widgets/order_payment_item_widget.dart';
+import 'package:scrum_app/app/modules/cart/widgets/product_payment_item_widget.dart';
 import 'package:scrum_app/app/modules/login/controllers/login_controller.dart';
 import 'package:scrum_app/app/routes/app_pages.dart';
 import 'package:scrum_app/app/theme/color_theme.dart';
@@ -33,7 +33,7 @@ class PaymentView extends GetView<CartController> {
               RoundedButton(
                 height: 40,
                 onPressed: () {
-                  controller.updatePaidOrder();
+                  controller.createOrder();
                   Get.dialog(
                       AlertDialog(
                         title: Text(
@@ -85,7 +85,7 @@ class PaymentView extends GetView<CartController> {
                         Text('Địa chỉ nhận hàng'),
                         SizedBox(height: 5),
                         Text(
-                            '${user.fullName} | ${user.phone} \n${user.address}'),
+                            '${user.profile.first_name} ${user.profile.last_name} | ${user.profile.phone_number} \n${user.profile.address}'),
                       ],
                     ),
                   ],
@@ -95,12 +95,12 @@ class PaymentView extends GetView<CartController> {
               ListView.builder(
                 physics: NeverScrollableScrollPhysics(),
                 shrinkWrap: true,
-                itemCount: controller.checkedOrders.length,
+                itemCount: controller.checkedProducts.length,
                 itemBuilder: (context, index) {
                   return Column(
                     children: [
-                      OrderPaymentItem(
-                        order: controller.checkedOrders[index],
+                      ProductPaymentItem(
+                        product: controller.checkedProducts[index],
                       ),
                       Divider(thickness: 4, height: 0),
                     ],

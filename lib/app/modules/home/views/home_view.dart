@@ -40,7 +40,7 @@ class HomeView extends GetView<HomeController> {
               return RefreshIndicator(
                 displacement: 0,
                 onRefresh: () async {
-                  controller.getAllProductOverview();
+                  controller.getProducts(0);
                 },
                 child: SingleChildScrollView(
                   child: Container(
@@ -48,11 +48,11 @@ class HomeView extends GetView<HomeController> {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: <Widget>[
-                        /*    Padding(
+                        Padding(
                             padding: const EdgeInsets.symmetric(vertical: 10),
                             child: Text('Danh mục', style: textTitle)),
                         _buildCategoryGridView(),
-                        Padding(
+                        /*Padding(
                             padding: const EdgeInsets.symmetric(vertical: 10),
                             child: Text('Dành cho bạn', style: textTitle)),
                         _buildSpecialListView(),*/
@@ -78,22 +78,26 @@ class HomeView extends GetView<HomeController> {
   }
 
   Widget _buildCategoryGridView() {
-    return SizedBox(
-      height: Get.height * 0.33,
-      child: GridView.builder(
-        itemCount: 10,
-        shrinkWrap: true,
-        scrollDirection: Axis.horizontal,
-        gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-            crossAxisCount: 2,
-            crossAxisSpacing: 5,
-            mainAxisSpacing: 5,
-            childAspectRatio: 1 / 1),
-        itemBuilder: (context, index) {
-          return CategoryCard();
-        },
-      ),
-    );
+    return controller.isLoadingCategories.value
+        ? Center(
+            child: CircularProgressIndicator(),
+          )
+        : SizedBox(
+            height: Get.height * 0.33,
+            child: GridView.builder(
+              itemCount: controller.categories.length,
+              shrinkWrap: true,
+              scrollDirection: Axis.horizontal,
+              gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                  crossAxisCount: 2,
+                  crossAxisSpacing: 5,
+                  mainAxisSpacing: 5,
+                  childAspectRatio: 1 / 1),
+              itemBuilder: (context, index) {
+                return CategoryCard(category: controller.categories[index]);
+              },
+            ),
+          );
   }
 
   Widget _buildSpecialListView() {

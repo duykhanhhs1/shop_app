@@ -1,6 +1,4 @@
 import 'package:flutter/material.dart';
-
-
 import 'package:scrum_app/app/data/models/product_model.dart';
 
 class ReviewCard extends StatelessWidget {
@@ -20,7 +18,7 @@ class ReviewCard extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
             Text(
-              productReview.username,
+              productReview.reviewer,
               style: TextStyle(color: Colors.black.withOpacity(.7)),
             ),
             SizedBox(
@@ -28,7 +26,7 @@ class ReviewCard extends StatelessWidget {
               child: ListView.builder(
                 scrollDirection: Axis.horizontal,
                 shrinkWrap: true,
-                itemCount: productReview.rating,
+                itemCount: productReview.rating.round(),
                 itemBuilder: (context, index) {
                   return Icon(
                     Icons.star,
@@ -50,12 +48,12 @@ class ReviewCard extends StatelessWidget {
               child: ListView.builder(
                 scrollDirection: Axis.horizontal,
                 shrinkWrap: true,
-                itemCount: productReview.imageUrls.length,
+                itemCount: productReview.photo_urls.length,
                 itemBuilder: (context, index) {
                   return Row(
                     children: [
                       Image.network(
-                        productReview.imageUrls[index],
+                        productReview.photo_urls[index],
                         width: 80,
                         height: 80,
                         fit: BoxFit.cover,

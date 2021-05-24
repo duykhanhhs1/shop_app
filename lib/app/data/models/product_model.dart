@@ -1,27 +1,39 @@
+import 'package:flutter/material.dart';
 import 'package:json_annotation/json_annotation.dart';
 
 part 'product_model.g.dart';
 
 @JsonSerializable()
 class ProductOverViewModel {
-  int productNo;
+  int id;
   String name;
   int price;
-  int amount;
+  int count;
+  int count_purchased;
+  double rating;
   int discount;
-  String imageUrl;
+  String link_image;
 
   @JsonKey(ignore: true)
   bool isFavorite;
+  @JsonKey(ignore: true)
+  bool isChecked;
+  @JsonKey(ignore: true)
+  TextEditingController quantityController = TextEditingController();
+
+  int get getPriceCart => this.count * this.price;
 
   ProductOverViewModel(
-      {this.productNo,
-      this.amount,
+      {this.id,
+      this.count,
+      this.count_purchased,
+      this.rating,
       this.discount,
       this.name,
       this.price,
       this.isFavorite = false,
-      this.imageUrl});
+      this.isChecked = false,
+      this.link_image});
 
   factory ProductOverViewModel.fromJson(Map<String, dynamic> json) =>
       _$ProductOverViewModelFromJson(json);
@@ -31,12 +43,16 @@ class ProductOverViewModel {
 
 @JsonSerializable()
 class ProductDetailModel {
-  int productNo;
+  int id;
   String name;
+  String description;
+  String link_image;
   int price;
-  int oldPrice;
-  int amount;
+  int count;
+  int count_purchased;
   double rating;
+
+  int oldPrice;
   List<String> imageUrls;
   int shippingCost;
   int discount;
@@ -51,13 +67,15 @@ class ProductDetailModel {
 
   ProductDetailModel(
       {this.discount,
-      this.amount,
+      this.count,
       shopImage,
       this.oldPrice,
       this.rating,
       this.quantity = 1,
-      this.productNo,
+      this.id,
       this.name,
+      this.description,
+      this.link_image,
       this.price,
       this.imageUrls,
       this.shippingCost,
@@ -95,20 +113,22 @@ class ProductPropertyModel {
 
 @JsonSerializable()
 class ProductReviewModel {
-  int productNo;
-  int reviewNo;
-  String username;
-  int rating;
+  int id;
+  int product_id;
+  String reviewer;
+  double rating;
   String comment;
-  List<String> imageUrls;
+  @JsonKey(defaultValue: [])
+  List<String> photo_urls;
 
   ProductReviewModel(
-      {this.productNo,
-      this.reviewNo,
-      this.username,
+      {this.id,
+      this.product_id,
+      this.reviewer,
       this.rating,
       this.comment,
-      this.imageUrls});
+      photo_urls})
+      : photo_urls = photo_urls ?? [];
 
   factory ProductReviewModel.fromJson(Map<String, dynamic> json) =>
       _$ProductReviewModelFromJson(json);
@@ -138,23 +158,22 @@ class ProductModel {
   @JsonKey(ignore: true)
   bool isChecked;
 
-  ProductModel(
-      {this.discount,
-      this.isChecked = false,
-      this.amount,
-      this.desc,
-      this.imageUrl,
-      this.shopImage,
-      this.rating,
-      this.productNo,
-      this.name,
-      this.price,
-      this.imageUrls,
-      this.shippingCost,
-      this.shopLocation,
-      this.shopName,
-      this.productProperties,
-      this.productReviews});
+  ProductModel({this.discount,
+    this.isChecked = false,
+    this.amount,
+    this.desc,
+    this.imageUrl,
+    this.shopImage,
+    this.rating,
+    this.productNo,
+    this.name,
+    this.price,
+    this.imageUrls,
+    this.shippingCost,
+    this.shopLocation,
+    this.shopName,
+    this.productProperties,
+    this.productReviews});
 
   factory ProductModel.fromJson(Map<String, dynamic> json) =>
       _$ProductModelFromJson(json);

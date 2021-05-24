@@ -1,12 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-
+import 'package:scrum_app/app/data/models/category_model.dart';
 import 'package:scrum_app/app/theme/color_theme.dart';
 
 class CategoryCard extends StatelessWidget {
   const CategoryCard({
     Key key,
+    this.category,
   }) : super(key: key);
+
+  final CategoryModel category;
 
   @override
   Widget build(BuildContext context) {
@@ -23,14 +26,18 @@ class CategoryCard extends StatelessWidget {
               height: Get.height*0.08,
               decoration: BoxDecoration(
                   image: DecorationImage(
-                    image: NetworkImage(
-                        'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTM3SP8vjcR1sdReAlqVxe_HRxMIdw-rBZ5aw&usqp=CAU'),
+                    image: NetworkImage(category.link_image),
                     fit: BoxFit.cover,
                   ),
                   color: Colors.grey,
                   shape: BoxShape.circle),
             ),
-            SizedBox(height: Get.height*0.06, child: Text('Electronic home',textAlign: TextAlign.center,))
+            SizedBox(
+                height: Get.height * 0.06,
+                child: Text(
+                  category.name.toString(),
+                  textAlign: TextAlign.center,
+                ))
           ],
         ),
       ),
