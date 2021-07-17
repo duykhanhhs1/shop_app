@@ -29,26 +29,26 @@ class DetailProductView extends GetView<DetailProductController> {
                   actions: <Widget>[
                     Center(child: CartIcon()),
                     SizedBox(
-                width: 20,
-              )
-            ],
-          ),
-          floatingActionButton: FloatingActionButton(
-            onPressed: () {
-              _buildBottomAddCart();
-            },
-            backgroundColor: kPrimaryColor,
-            child: Icon(
-              Icons.add_shopping_cart_rounded,
-              color: Colors.white,
-            ),
-          ),
-          body: SingleChildScrollView(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: <Widget>[
-                _buildListImage(product),
-                Divider(height: 4, thickness: 4),
+                      width: 20,
+                    )
+                  ],
+                ),
+                floatingActionButton: FloatingActionButton(
+                  onPressed: () {
+                    _buildBottomAddCart();
+                  },
+                  backgroundColor: kPrimaryColor,
+                  child: Icon(
+                    Icons.add_shopping_cart_rounded,
+                    color: Colors.white,
+                  ),
+                ),
+                body: SingleChildScrollView(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: <Widget>[
+                      _buildListImage(product),
+                      Divider(height: 4, thickness: 4),
                       Padding(
                         padding: const EdgeInsets.symmetric(horizontal: 12),
                         child: _buildOverviewInfo(product),
@@ -70,9 +70,9 @@ class DetailProductView extends GetView<DetailProductController> {
                       ),
                       SizedBox(height: 100),
                     ],
-            ),
-          ),
-        );
+                  ),
+                ),
+              );
       },
     );
   }
@@ -127,34 +127,45 @@ class DetailProductView extends GetView<DetailProductController> {
     return Column(
       children: [
         Row(
-          children: <Widget>[
-            ClipRRect(
-              borderRadius: BorderRadius.circular(100),
-              child: Image.network(
-                product.shopImage,
-                width: 50,
-                height: 50,
-                fit: BoxFit.cover,
-              ),
-            ),
-            SizedBox(width: 5),
-            Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Row(
               children: <Widget>[
-                Text(product.shopName),
-                Row(
+                ClipRRect(
+                  borderRadius: BorderRadius.circular(100),
+                  child: Image.network(
+                    product.shop_link_image,
+                    width: 50,
+                    height: 50,
+                    fit: BoxFit.cover,
+                  ),
+                ),
+                SizedBox(width: 5),
+                Text(product.name_shop),
+                /*  Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
                   children: <Widget>[
-                    Icon(Icons.location_on_outlined,
-                        size: 15, color: Colors.black.withOpacity(.7)),
-                    Text(
-                      product.shopLocation == null
-                          ? 'Vinh'
-                          : product.shopLocation,
-                      style: TextStyle(color: Colors.black.withOpacity(.7)),
-                    ),
+                    Text(product.name_shop),
+                    Row(
+                      children: <Widget>[
+                        Icon(Icons.location_on_outlined,
+                            size: 15, color: Colors.black.withOpacity(.7)),
+                        Text(
+                          product.shopLocation == null
+                              ? 'Vinh'
+                              : product.shopLocation,
+                          style: TextStyle(color: Colors.black.withOpacity(.7)),
+                        ),
+                      ],
+                    )
                   ],
-                )
+                )*/
               ],
+            ),
+            Text(
+              "Chi tiết shop",
+              style:
+                  TextStyle(color: kPrimaryColor, fontWeight: FontWeight.bold),
             )
           ],
         ),

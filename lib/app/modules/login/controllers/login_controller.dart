@@ -43,17 +43,13 @@ class LoginController extends GetxController {
 
   Future<void> verifyUser() async {
     final String storedToken = await _store.read(AppStorageKey.ACCESS_TOKEN);
-    // if (storedToken != null) {
-    //   final List<UserModel> users = await repository.getUsers();
-    //   users.forEach((element) {
-    //     if (element.authentication_token == storedToken) {
-    //       isLoginByToken.value = true;
-    //       navigateUser(element.userNo);
-    //     }
-    //   });
-    //   if (!isLoginByToken.value) Get.offAllNamed(Routes.LOGIN);
-    // } else
-    Get.offAllNamed(Routes.LOGIN);
+    if (storedToken != null) {
+      ProfileModel profile = await repository.getProfile();
+      userLogged.value.profile = profile;
+      userLogged.value.email = profile.email;
+      Get.offAllNamed(Routes.HOME);
+    } else
+      Get.offAllNamed(Routes.LOGIN);
   }
 
   Future<void> logout() async {

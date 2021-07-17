@@ -15,7 +15,7 @@ ProductOverViewModel _$ProductOverViewModelFromJson(Map<String, dynamic> json) {
     discount: json['discount'] as int,
     name: json['name'] as String,
     price: json['price'] as int,
-    link_image: json['link_image'] as String,
+    link_image: json['link_image'],
   );
 }
 
@@ -36,7 +36,7 @@ ProductDetailModel _$ProductDetailModelFromJson(Map<String, dynamic> json) {
   return ProductDetailModel(
     discount: json['discount'] as int,
     count: json['count'] as int,
-    shopImage: json['shopImage'],
+    shop_link_image: json['shop_link_image'],
     oldPrice: json['oldPrice'] as int,
     rating: (json['rating'] as num)?.toDouble(),
     id: json['id'] as int,
@@ -47,7 +47,7 @@ ProductDetailModel _$ProductDetailModelFromJson(Map<String, dynamic> json) {
     imageUrls: (json['imageUrls'] as List)?.map((e) => e as String)?.toList(),
     shippingCost: json['shippingCost'] as int,
     shopLocation: json['shopLocation'] as String,
-    shopName: json['shopName'],
+    name_shop: json['name_shop'],
     productProperties: (json['productProperties'] as List)
         ?.map((e) => e == null
             ? null
@@ -75,8 +75,8 @@ Map<String, dynamic> _$ProductDetailModelToJson(ProductDetailModel instance) =>
       'imageUrls': instance.imageUrls,
       'shippingCost': instance.shippingCost,
       'discount': instance.discount,
-      'shopName': instance.shopName,
-      'shopImage': instance.shopImage,
+      'name_shop': instance.name_shop,
+      'shop_link_image': instance.shop_link_image,
       'shopLocation': instance.shopLocation,
       'productProperties': instance.productProperties,
       'productReviews': instance.productReviews,
@@ -102,7 +102,7 @@ ProductReviewModel _$ProductReviewModelFromJson(Map<String, dynamic> json) {
   return ProductReviewModel(
     id: json['id'] as int,
     product_id: json['product_id'] as int,
-    reviewer: json['reviewer'] as String,
+    reviewer_name: json['reviewer_name'] as String,
     rating: (json['rating'] as num)?.toDouble(),
     comment: json['comment'] as String,
     photo_urls: json['photo_urls'] ?? [],
@@ -113,7 +113,7 @@ Map<String, dynamic> _$ProductReviewModelToJson(ProductReviewModel instance) =>
     <String, dynamic>{
       'id': instance.id,
       'product_id': instance.product_id,
-      'reviewer': instance.reviewer,
+      'reviewer_name': instance.reviewer_name,
       'rating': instance.rating,
       'comment': instance.comment,
       'photo_urls': instance.photo_urls,

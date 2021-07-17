@@ -31,6 +31,9 @@ ProfileModel _$ProfileModelFromJson(Map<String, dynamic> json) {
     userNo: json['userNo'] as String,
     gender: json['gender'] as String,
     description: json['description'] as String,
+    date_of_birth: json['date_of_birth'] == null
+        ? null
+        : DateTime.parse(json['date_of_birth'] as String),
     email: json['email'] as String,
     photo_url: json['photo_url'] ??
         'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQwQnaX0HIMtehoJnZsojyjD2P0u0YNl9IYyM3TJAaM4_QMgHqMpmYp_RfId466ou30Vs4&usqp=CAU',
@@ -39,10 +42,7 @@ ProfileModel _$ProfileModelFromJson(Map<String, dynamic> json) {
     phone_number: json['phone_number'] as String,
   )
     ..first_name = json['first_name'] as String
-    ..last_name = json['last_name'] as String
-    ..date_of_birth = json['date_of_birth'] == null
-        ? null
-        : DateTime.parse(json['date_of_birth'] as String);
+    ..last_name = json['last_name'] as String;
 }
 
 Map<String, dynamic> _$ProfileModelToJson(ProfileModel instance) =>
@@ -57,6 +57,31 @@ Map<String, dynamic> _$ProfileModelToJson(ProfileModel instance) =>
       'phone_number': instance.phone_number,
       'email': instance.email,
       'refreshToken': instance.refreshToken,
+      'date_of_birth': instance.date_of_birth?.toIso8601String(),
+    };
+
+ProfileUpdateModel _$ProfileUpdateModelFromJson(Map<String, dynamic> json) {
+  return ProfileUpdateModel(
+    gender: json['gender'] as String,
+    first_name: json['first_name'] as String,
+    last_name: json['last_name'] as String,
+    date_of_birth: json['date_of_birth'] == null
+        ? null
+        : DateTime.parse(json['date_of_birth'] as String),
+    email: json['email'] as String,
+    address: json['address'] as String,
+    phone_number: json['phone_number'] as String,
+  );
+}
+
+Map<String, dynamic> _$ProfileUpdateModelToJson(ProfileUpdateModel instance) =>
+    <String, dynamic>{
+      'first_name': instance.first_name,
+      'last_name': instance.last_name,
+      'address': instance.address,
+      'gender': instance.gender,
+      'phone_number': instance.phone_number,
+      'email': instance.email,
       'date_of_birth': instance.date_of_birth?.toIso8601String(),
     };
 

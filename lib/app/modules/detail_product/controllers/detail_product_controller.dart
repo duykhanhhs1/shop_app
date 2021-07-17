@@ -54,7 +54,7 @@ class DetailProductController extends GetxController {
   }
 
   void onSubmitReview(ProductReviewModel review) async {
-    review.reviewer = _loginController.userLogged.value.email;
+    review.reviewer_name = _loginController.userLogged.value.email;
     review.product_id = productDetail.value.id;
     await repository.addReview(review);
     getReviews(productDetail.value.id);

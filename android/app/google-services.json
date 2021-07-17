@@ -14,6 +14,14 @@
       },
       "oauth_client": [
         {
+          "client_id": "316801963221-nomfgld0d89i4cftcb4kt6p3hivl8uin.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "duykhanh.scrum_app",
+            "certificate_hash": "e1944d20e0869c9f58bce6882ba227c783950ee1"
+          }
+        },
+        {
           "client_id": "316801963221-mhuhtsf9bu2uqg1sqjnp2cj12bm22f01.apps.googleusercontent.com",
           "client_type": 3
         }

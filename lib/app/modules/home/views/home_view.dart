@@ -5,6 +5,7 @@ import 'package:scrum_app/app/modules/home/controllers/home_controller.dart';
 import 'package:scrum_app/app/modules/home/widgets/category_card_widget.dart';
 import 'package:scrum_app/app/modules/home/widgets/product_card_widget.dart';
 import 'package:scrum_app/app/modules/home/widgets/special_card_widget.dart';
+import 'package:scrum_app/app/theme/color_theme.dart';
 import 'package:scrum_app/app/theme/text_theme.dart';
 import 'package:scrum_app/app/widgets/app_bottom_navigation_bar_widget.dart';
 import 'package:scrum_app/app/widgets/cart_icon_widget.dart';
@@ -83,7 +84,7 @@ class HomeView extends GetView<HomeController> {
             child: CircularProgressIndicator(),
           )
         : SizedBox(
-            height: Get.height * 0.33,
+      height: Get.height * 0.27,
             child: GridView.builder(
               itemCount: controller.categories.length,
               shrinkWrap: true,
@@ -92,9 +93,14 @@ class HomeView extends GetView<HomeController> {
                   crossAxisCount: 2,
                   crossAxisSpacing: 5,
                   mainAxisSpacing: 5,
-                  childAspectRatio: 1 / 1),
+                  childAspectRatio: 1.2 / 1),
               itemBuilder: (context, index) {
-                return CategoryCard(category: controller.categories[index]);
+                return CategoryCard(
+                  category: controller.categories[index],
+                  onTap: () {
+                    controller.onCategoryTap(controller.categories[index]);
+                  },
+                );
               },
             ),
           );

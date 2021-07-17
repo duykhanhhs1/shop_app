@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+
+//
 import 'package:scrum_app/app/data/models/product_model.dart';
 import 'package:scrum_app/app/modules/home/controllers/home_controller.dart';
 import 'package:scrum_app/app/routes/app_pages.dart';
@@ -23,22 +25,16 @@ class ProductCard extends StatelessWidget {
       child: GetBuilder<HomeController>(
         init: Get.find(),
         builder: (controller) {
-          return Card(
-            shadowColor: kPrimaryColor,
-            margin: EdgeInsets.all(0),
-            shape:
-                RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
-            color: Colors.white,
+          return Container(
+            decoration:
+                BoxDecoration(border: Border.all(color: kLightBackground)),
             child: Column(
               children: <Widget>[
-                ClipRRect(
-                  borderRadius: BorderRadius.vertical(top: Radius.circular(10)),
-                  child: Image.network(
-                    product.link_image,
-                    width: Get.width,
-                    height: Get.width * 0.4,
-                    fit: BoxFit.cover,
-                  ),
+                Image.network(
+                  product.link_image,
+                  width: Get.width,
+                  height: Get.width * 0.4,
+                  fit: BoxFit.cover,
                 ),
                 Expanded(
                   child: Padding(

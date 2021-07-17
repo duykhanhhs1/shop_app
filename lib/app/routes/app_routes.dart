@@ -3,6 +3,7 @@ part of 'app_pages.dart';
 
 abstract class Routes {
   static const HOME = _Paths.HOME;
+  static const PRODUCT_CATEGORY = _Paths.PRODUCT_CATEGORY;
   static const LOGIN = _Paths.LOGIN;
   static const SPLASH = _Paths.SPLASH;
   static const REGISTER = _Paths.REGISTER;
@@ -19,6 +20,7 @@ abstract class Routes {
 
 abstract class _Paths {
   static const HOME = '/home';
+  static const PRODUCT_CATEGORY = '/product-category';
   static const LOGIN = '/login';
   static const SPLASH = '/splash';
   static const REGISTER = '/register';

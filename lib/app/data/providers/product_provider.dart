@@ -16,7 +16,7 @@ class ProductProvider extends GetConnect {
   Future<void> addOrder(OrderCreateModel order) async {
     try {
       final response = await HttpHelper.post(
-        Endpoints.REVIEWS,
+        Endpoints.ORDERS,
         order.toJson(),
       );
       if (response.statusCode == 200) return true;
@@ -115,6 +115,33 @@ class ProductProvider extends GetConnect {
       var result = response.body["products"]
           .map<ProductOverViewModel>(
               (item) => ProductOverViewModel.fromJson(item))
+          .toList();
+      return result;
+    } on DioError catch (e) {
+      return [];
+    }
+  }
+
+  Future<List<ProductOverViewModel>> getProductsByCate(
+      int pageIndex, int categoryId) async {
+    try {
+      final response = await HttpHelper.get(
+          Endpoints.CATEGORIES + "/$categoryId/products?page=$pageIndex");
+      var result = response.body["products"]
+          .map<ProductOverViewModel>(
+              (item) => ProductOverViewModel.fromJson(item))
+          .toList();
+      return result;
+    } on DioError catch (e) {
+      return [];
+    }
+  }
+
+  Future<List<OrderModel>> getOrders() async {
+    try {
+      final response = await HttpHelper.get(Endpoints.ORDERS);
+      var result = response.body["orders"]
+          .map<OrderModel>((item) => OrderModel.fromJson(item))
           .toList();
       return result;
     } on DioError catch (e) {

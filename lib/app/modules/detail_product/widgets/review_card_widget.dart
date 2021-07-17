@@ -18,7 +18,7 @@ class ReviewCard extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
             Text(
-              productReview.reviewer,
+              productReview.reviewer_name,
               style: TextStyle(color: Colors.black.withOpacity(.7)),
             ),
             SizedBox(
@@ -43,27 +43,28 @@ class ReviewCard extends StatelessWidget {
               maxLines: 6,
             ),
             SizedBox(height: 5),
-            SizedBox(
-              height: 80,
-              child: ListView.builder(
-                scrollDirection: Axis.horizontal,
-                shrinkWrap: true,
-                itemCount: productReview.photo_urls.length,
-                itemBuilder: (context, index) {
-                  return Row(
-                    children: [
-                      Image.network(
-                        productReview.photo_urls[index],
-                        width: 80,
-                        height: 80,
-                        fit: BoxFit.cover,
-                      ),
-                      SizedBox(width: 10),
-                    ],
-                  );
-                },
+            if (productReview.photo_urls.length > 0)
+              SizedBox(
+                height: 80,
+                child: ListView.builder(
+                  scrollDirection: Axis.horizontal,
+                  shrinkWrap: true,
+                  itemCount: productReview.photo_urls.length,
+                  itemBuilder: (context, index) {
+                    return Row(
+                      children: [
+                        Image.network(
+                          productReview.photo_urls[index],
+                          width: 80,
+                          height: 80,
+                          fit: BoxFit.cover,
+                        ),
+                        SizedBox(width: 10),
+                      ],
+                    );
+                  },
+                ),
               ),
-            ),
           ],
         ),
       ),

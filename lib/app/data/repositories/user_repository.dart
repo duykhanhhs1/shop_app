@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:scrum_app/app/data/models/user_model.dart';
 import 'package:scrum_app/app/data/providers/user_provider.dart';
@@ -19,6 +21,14 @@ class UserRepository {
     return apiClient.getProfile();
   }
 
+  Future<void> updateProfile(ProfileUpdateModel profile) {
+    return apiClient.updateProfile(profile);
+  }
+
+  Future<void> updateAvatarProfile(File imageFile) {
+    return apiClient.updateAvatarProfile(imageFile);
+  }
+
   Future<void> register({String email, String password, UserModel user}) async {
     return apiClient.register(email: email, password: password, user: user);
   }
@@ -30,9 +40,5 @@ class UserRepository {
 
   Future<void> removeUser(String userNo) async {
     return apiClient.removeUser(userNo);
-  }
-
-  Future<void> updateUser(UserModel user) {
-    return apiClient.updateUser(user);
   }
 }

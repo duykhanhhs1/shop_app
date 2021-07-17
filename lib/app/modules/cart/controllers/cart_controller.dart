@@ -26,9 +26,12 @@ class CartController extends GetxController {
   RxBool isCheckedAll = RxBool(false);
   RxBool isLoadingCart = RxBool(false);
   RxBool isUpdated = RxBool(false);
+  List<String> paymentMethods = ['Thanh toán khi nhận hàng', 'Thẻ tín dụng'];
+  RxString paymentMethod = ''.obs;
 
   @override
   void onInit() {
+    paymentMethod.value = paymentMethods[0];
     getProducts();
     super.onInit();
   }
@@ -86,14 +89,17 @@ class CartController extends GetxController {
     return total.value;
   }
 
-  void createOrder() async {
+  Future<void> createOrder() async {
     List<ProductCartModel> cartProducts = [];
     checkedProducts.forEach((element) {
       cartProducts.add(ProductCartModel(id: element.id, count: element.count));
     });
     ProfileModel profile = _loginController.userLogged.value.profile;
-    OrderCreateModel order =
-        OrderCreateModel(address: profile.address, products: cartProducts);
+    OrderCreateModel order = OrderCreateModel(
+        address: profile.address,
+        product_ids: cartProducts,
+        pay_method_name: paymentMethod.value,
+        phone_number: profile.phone_number);
     await repository.addOrder(order);
   }
 

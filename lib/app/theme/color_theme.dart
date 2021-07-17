@@ -12,3 +12,4 @@ const Color kHintTextColor = Color(0xff707070);
 const Color kWhiteTextColor = Colors.white;
 const Color kErrorColor = Color(0xffAA0000);
 const Color kOfferBackgroundColor = Color(0xffd1d1d1);
+const Color kLightBackground = Color(0xffF0F0F0);

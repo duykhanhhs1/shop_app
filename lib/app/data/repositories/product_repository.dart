@@ -33,6 +33,19 @@ class ProductRepository {
     return apiClient.removeProductsCart(productIds);
   }
 
+  Future<List<ProductOverViewModel>> getProducts(int pageIndex) {
+    return apiClient.getProducts(pageIndex);
+  }
+
+  Future<List<ProductOverViewModel>> getProductsByCate(
+      int pageIndex, int categoryId) {
+    return apiClient.getProductsByCate(pageIndex, categoryId);
+  }
+
+  Future<List<OrderModel>> getOrders() {
+    return apiClient.getOrders();
+  }
+
   ///Firebase
 
   Future<void> updateProduct(ProductModel product) {
@@ -41,10 +54,6 @@ class ProductRepository {
 
   Future<void> removeProduct(int productNo) {
     return apiClient.removeProduct(productNo);
-  }
-
-  Future<List<ProductOverViewModel>> getProducts(int pageIndex) {
-    return apiClient.getProducts(pageIndex);
   }
 
   Future<List<ProductOverViewModel>> getFavoriteProducts(String userNo) {

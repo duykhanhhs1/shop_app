@@ -8,6 +8,7 @@ import 'package:scrum_app/app/routes/app_pages.dart';
 import 'package:scrum_app/app/theme/color_theme.dart';
 import 'package:scrum_app/app/utils/helpers.dart';
 import 'package:scrum_app/app/widgets/rounded_button.widget.dart';
+import 'package:scrum_app/app/widgets/rounded_input_field.widget.dart';
 
 class PaymentView extends GetView<CartController> {
   final UserModel user = LoginController.to.userLogged.value;
@@ -32,8 +33,8 @@ class PaymentView extends GetView<CartController> {
               SizedBox(width: 5),
               RoundedButton(
                 height: 40,
-                onPressed: () {
-                  controller.createOrder();
+                onPressed: () async {
+                  await controller.createOrder();
                   Get.dialog(
                       AlertDialog(
                         title: Text(
@@ -69,67 +70,132 @@ class PaymentView extends GetView<CartController> {
             ],
           ),
         ),
-        body: SingleChildScrollView(
-          child: Column(
-            children: [
-              Padding(
-                padding: const EdgeInsets.all(10),
-                child: Row(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Icon(Icons.location_on_outlined, color: kSecondaryColor),
-                    SizedBox(width: 10),
-                    Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text('Địa chỉ nhận hàng'),
-                        SizedBox(height: 5),
-                        Text(
-                            '${user.profile.first_name} ${user.profile.last_name} | ${user.profile.phone_number} \n${user.profile.address}'),
-                      ],
-                    ),
-                  ],
-                ),
-              ),
-              Divider(thickness: 4, height: 0),
-              ListView.builder(
-                physics: NeverScrollableScrollPhysics(),
-                shrinkWrap: true,
-                itemCount: controller.checkedProducts.length,
-                itemBuilder: (context, index) {
-                  return Column(
+        body: GetBuilder<CartController>(
+          init: CartController.to,
+          builder: (controller) => SingleChildScrollView(
+            child: Column(
+              children: [
+                Padding(
+                  padding: const EdgeInsets.all(10),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      ProductPaymentItem(
-                        product: controller.checkedProducts[index],
+                      Row(
+                        children: [
+                          Icon(Icons.location_on_outlined,
+                              color: kSecondaryColor),
+                          SizedBox(width: 10),
+                          Text('Địa chỉ nhận hàng'),
+                        ],
                       ),
-                      Divider(thickness: 4, height: 0),
+                      SizedBox(height: 5),
+                      FormRoundedInputField(
+                        hintText: "Nhập địa chỉ nhận hàng",
+                        initialValue: user.profile.address,
+                        onChanged: (value) {
+                          user.profile.address = value;
+                        },
+                        borderRadius: BorderRadius.circular(10),
+                      ),
+                      SizedBox(height: 15),
+                      Row(
+                        children: [
+                          Icon(Icons.phone, color: kSecondaryColor),
+                          SizedBox(width: 10),
+                          Text('Số điện thoại'),
+                        ],
+                      ),
+                      SizedBox(height: 5),
+                      FormRoundedInputField(
+                        hintText: "Nhập số điện thoại",
+                        initialValue: user.profile.phone_number,
+                        borderRadius: BorderRadius.circular(10),
+                        onChanged: (value) {
+                          user.profile.phone_number = value;
+                        },
+                      ),
                     ],
-                  );
-                },
-              ),
-              Divider(thickness: 4, height: 0),
-              Padding(
-                padding: const EdgeInsets.all(10),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Row(children: [
-                      Icon(
-                        Icons.attach_money_rounded,
-                        color: kSecondaryColor,
-                      ),
-                      SizedBox(width: 10),
-                      Text('Phương thức thanh toán')
-                    ]),
-                    Text(
-                      'Tiền mặt',
-                      style: TextStyle(fontWeight: FontWeight.bold),
-                    ),
-                  ],
+                  ),
                 ),
-              ),
-              Divider(height: 0),
-            ],
+                Divider(thickness: 4, height: 0),
+                ListView.builder(
+                  physics: NeverScrollableScrollPhysics(),
+                  shrinkWrap: true,
+                  itemCount: controller.checkedProducts.length,
+                  itemBuilder: (context, index) {
+                    return Column(
+                      children: [
+                        ProductPaymentItem(
+                          product: controller.checkedProducts[index],
+                        ),
+                        Divider(thickness: 4, height: 0),
+                      ],
+                    );
+                  },
+                ),
+                Divider(thickness: 4, height: 0),
+                Padding(
+                  padding: const EdgeInsets.all(10),
+                  child: Row(
+                    children: [
+                      Expanded(
+                          child: FormRoundedInputField(
+                        hintText: "Nhập mã khuyến mãi",
+                        prefixIcon: Icons.payments,
+                        borderRadius: BorderRadius.circular(10),
+                      )),
+                      SizedBox(width: 10),
+                      RoundedButton(
+                        textContent: "Áp dụng",
+                        radius: 10,
+                        onPressed: () {},
+                      ),
+                    ],
+                  ),
+                ),
+                Divider(thickness: 4, height: 0),
+                Padding(
+                  padding: const EdgeInsets.all(10),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Row(children: [
+                        Icon(
+                          Icons.attach_money_rounded,
+                          color: kSecondaryColor,
+                        ),
+                        SizedBox(width: 10),
+                        Text('Phương thức thanh toán')
+                      ]),
+                      DropdownButton<String>(
+                        value: controller.paymentMethod.value,
+                        icon: const Icon(Icons.arrow_drop_down_outlined),
+                        iconSize: 24,
+                        elevation: 16,
+                        style: const TextStyle(
+                            color: kPrimaryColor, fontWeight: FontWeight.bold),
+                        underline: Container(
+                          height: 2,
+                          color: kPrimaryColor,
+                        ),
+                        onChanged: (String newValue) {
+                          controller.paymentMethod.value = newValue;
+                          controller.update();
+                        },
+                        items: controller.paymentMethods
+                            .map<DropdownMenuItem<String>>((String value) {
+                          return DropdownMenuItem<String>(
+                            value: value,
+                            child: Text(value),
+                          );
+                        }).toList(),
+                      )
+                    ],
+                  ),
+                ),
+                Divider(height: 0),
+              ],
+            ),
           ),
         ));
   }

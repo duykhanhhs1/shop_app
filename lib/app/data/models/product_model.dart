@@ -12,7 +12,7 @@ class ProductOverViewModel {
   int count_purchased;
   double rating;
   int discount;
-  String link_image;
+  dynamic link_image;
 
   @JsonKey(ignore: true)
   bool isFavorite;
@@ -56,8 +56,8 @@ class ProductDetailModel {
   List<String> imageUrls;
   int shippingCost;
   int discount;
-  String shopName;
-  String shopImage;
+  String name_shop;
+  String shop_link_image;
   String shopLocation;
   List<ProductPropertyModel> productProperties;
   List<ProductReviewModel> productReviews;
@@ -68,7 +68,7 @@ class ProductDetailModel {
   ProductDetailModel(
       {this.discount,
       this.count,
-      shopImage,
+      shop_link_image,
       this.oldPrice,
       this.rating,
       this.quantity = 1,
@@ -80,11 +80,11 @@ class ProductDetailModel {
       this.imageUrls,
       this.shippingCost,
       this.shopLocation,
-      shopName,
+      name_shop,
       this.productProperties,
       this.productReviews})
-      : shopName = shopName ?? 'thegioibanve',
-        shopImage = shopImage ??
+      : name_shop = name_shop ?? 'thegioibanve',
+        shop_link_image = shop_link_image ??
             'https://firebasestorage.googleapis.com/v0/b/shoponline-69684.appspot.com/o/images%2Fae86abf7-1e7f-43fc-bc99-4f6077c6422d3398657205301469443.jp?alt=media&token=d3089516-9931-4c85-8602-9ebd0b3844e7';
 
   factory ProductDetailModel.fromJson(Map<String, dynamic> json) =>
@@ -115,16 +115,16 @@ class ProductPropertyModel {
 class ProductReviewModel {
   int id;
   int product_id;
-  String reviewer;
+  String reviewer_name;
   double rating;
   String comment;
   @JsonKey(defaultValue: [])
-  List<String> photo_urls;
+  List<dynamic> photo_urls;
 
   ProductReviewModel(
       {this.id,
       this.product_id,
-      this.reviewer,
+      this.reviewer_name,
       this.rating,
       this.comment,
       photo_urls})

@@ -22,15 +22,18 @@ class ProfileController extends GetxController {
 
   RxBool isEditProfile = RxBool(false);
   RxBool isLoading = RxBool(false);
+  RxBool isLoadingOrder = RxBool(false);
 
   ProfileController(
       {@required this.productRepository, @required this.userRepository})
       : assert(userRepository != null && productRepository != null);
 
-  Rx<UserModel> userModel = LoginController.to.userLogged;
+  Rx<UserModel> get userModel => LoginController.to.userLogged;
   Rx<UserModel> userCreate = Rx(UserModel());
 
   UserModel get currentUser => userModel.value;
+
+  ProfileModel get currentProfile => userModel.value.profile;
 
   RxList<ProductOverViewModel> favoriteProducts =
       RxList<ProductOverViewModel>();
@@ -59,10 +62,24 @@ class ProfileController extends GetxController {
     update();
   }
 
-  Future<void> updateUser() async {
-    await userRepository.updateUser(currentUser);
+  Future<void> updateProfile() async {
+    ProfileUpdateModel profileUpdate = ProfileUpdateModel(
+        first_name: currentProfile.first_name,
+        last_name: currentProfile.last_name,
+        phone_number: currentProfile.phone_number,
+        address: currentProfile.address,
+        email: currentProfile.email,
+        gender: currentProfile.gender,
+        date_of_birth: currentProfile.date_of_birth);
+    await userRepository.updateProfile(profileUpdate);
+    await getProfile();
     setOpenEditForm(false);
     update();
+  }
+
+  Future<void> getProfile() async {
+    LoginController.to.userLogged.value.profile =
+        await userRepository.getProfile();
   }
 
   void pickAvatarProfile(ImageSource imageSource) async {
@@ -70,23 +87,11 @@ class ProfileController extends GetxController {
         await ImagePicker().getImage(source: imageSource);
     Get.back();
     if (pickedFile != null) {
-      String imageName;
-      if (kIsWeb) {
-        imageName = pickedFile.path.substring(
-            pickedFile.path.lastIndexOf('/'), pickedFile.path.length - 1);
-        currentUser.profile.photo_url = await FirebaseHelper.uploadImageWeb(
-            'avatar images', pickedFile, imageName);
-        await userRepository.updateUser(currentUser);
-      } else {
-        File imageFile = File(pickedFile.path);
-        imageName = imageFile.path.substring(
-            imageFile.path.lastIndexOf('/'), imageFile.path.length - 1);
-        currentUser.profile.photo_url = await FirebaseHelper.uploadImage(
-            'avatar images', imageFile, imageName);
-        await userRepository.updateUser(currentUser);
-      }
-      update();
+      File imageFile = File(pickedFile.path);
+      await userRepository.updateAvatarProfile(imageFile);
+      await getProfile();
     }
+    update();
   }
 
   // void setGender(String value) {
@@ -106,6 +111,15 @@ class ProfileController extends GetxController {
     final List<ProductOverViewModel> data = await productRepository
         .getFavoriteProducts(LoginController.to.userLogged.value.userNo);
     favoriteProducts = data.obs;
+    update();
+  }
+
+  void getOrders() async {
+    isLoadingOrder.value = true;
+    final List<OrderModel> data = await productRepository.getOrders();
+
+    orders = data.obs;
+    isLoadingOrder.value = false;
     update();
   }
 

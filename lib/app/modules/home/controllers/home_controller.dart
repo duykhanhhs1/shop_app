@@ -4,6 +4,7 @@ import 'package:scrum_app/app/data/models/category_model.dart';
 import 'package:scrum_app/app/data/models/product_model.dart';
 import 'package:scrum_app/app/data/repositories/product_repository.dart';
 import 'package:scrum_app/app/modules/login/controllers/login_controller.dart';
+import 'package:scrum_app/app/routes/app_pages.dart';
 
 class HomeController extends GetxController {
   final ProductRepository repository;
@@ -17,12 +18,14 @@ class HomeController extends GetxController {
 
   RxInt currentIndexBottomBar = RxInt(0);
   RxList<ProductOverViewModel> products = RxList<ProductOverViewModel>();
+  RxList<ProductOverViewModel> productsByCate = RxList<ProductOverViewModel>();
 
   List<ProductOverViewModel> get favoriteProducts =>
       products.where((_) => _.isFavorite).toList();
 
   //
   RxList<CategoryModel> categories = RxList([]);
+  CategoryModel currentCategory = CategoryModel();
   int pageIndex = 0;
 
   @override
@@ -32,11 +35,27 @@ class HomeController extends GetxController {
     super.onInit();
   }
 
+  void onCategoryTap(CategoryModel categoryModel) async {
+    currentCategory = categoryModel;
+    Get.toNamed(Routes.PRODUCT_CATEGORY);
+    getProductsByCate(0, currentCategory.id);
+    update();
+  }
+
   Future<void> getProducts(int pageIndex) async {
     isLoading.value = true;
     final List<ProductOverViewModel> data =
         await repository.getProducts(pageIndex);
     products = data.obs;
+    isLoading.value = false;
+    update();
+  }
+
+  Future<void> getProductsByCate(int pageIndex, int categoryId) async {
+    isLoading.value = true;
+    final List<ProductOverViewModel> data =
+        await repository.getProductsByCate(pageIndex, categoryId);
+    productsByCate = data.obs;
     isLoading.value = false;
     update();
   }

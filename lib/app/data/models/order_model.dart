@@ -11,7 +11,7 @@ class OrderCreateModel {
   String pay_method_name;
   String phone_number;
   List<int> voucher_ids;
-  List<ProductCartModel> products;
+  List<ProductCartModel> product_ids;
 
   OrderCreateModel({
     this.id,
@@ -19,7 +19,7 @@ class OrderCreateModel {
     this.pay_method_name,
     this.phone_number,
     this.full_name,
-    this.products,
+    this.product_ids,
     this.voucher_ids,
   });
 
@@ -49,6 +49,7 @@ class ProductCartModel {
 class OrderModel {
   int id;
   int quantity;
+  String created_at;
   int total_price;
   @JsonKey(defaultValue: [])
   List<ProductOverViewModel> products;
@@ -57,8 +58,9 @@ class OrderModel {
     this.id,
     this.quantity,
     this.total_price,
-    products,
-  }) : products = products ?? [];
+    this.products,
+    this.created_at,
+  });
 
   factory OrderModel.fromJson(Map<String, dynamic> json) =>
       _$OrderModelFromJson(json);

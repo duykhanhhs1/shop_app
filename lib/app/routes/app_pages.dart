@@ -6,6 +6,7 @@ import 'package:scrum_app/app/modules/detail_product/bindings/detail_product_bin
 import 'package:scrum_app/app/modules/detail_product/views/detail_product_view.dart';
 import 'package:scrum_app/app/modules/home/bindings/home_binding.dart';
 import 'package:scrum_app/app/modules/home/views/home_view.dart';
+import 'package:scrum_app/app/modules/home/views/product_category_view.dart';
 import 'package:scrum_app/app/modules/login/bindings/login_binding.dart';
 import 'package:scrum_app/app/modules/login/views/login_view.dart';
 import 'package:scrum_app/app/modules/login/views/register_view.dart';
@@ -41,6 +42,11 @@ class AppPages {
     GetPage(
       name: _Paths.HOME,
       page: () => HomeView(),
+      binding: HomeBinding(),
+    ),
+    GetPage(
+      name: _Paths.PRODUCT_CATEGORY,
+      page: () => ProductCategoryView(),
       binding: HomeBinding(),
     ),
     GetPage(

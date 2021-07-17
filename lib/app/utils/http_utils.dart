@@ -42,6 +42,16 @@ class HttpHelper {
     );
   }
 
+  static Future<HttpResponse> patch(String url, Object data) async {
+    final dio = HttpHelper.getDio();
+    final response = await dio.patch(url, data: data);
+    return HttpResponse(
+      originalResponse: response,
+      statusCode: response.statusCode,
+      body: response.data,
+    );
+  }
+
   static Future<HttpResponse> put(String url, Object data) async {
     final dio = HttpHelper.getDio();
     final response = await dio.put(url, data: data);
@@ -69,8 +79,8 @@ class HttpHelper {
       file.path,
       filename: basename(file.path),
     );
-    final formData = FormData.fromMap({'file': uploadFile});
-    final response = await dio.post(url, data: formData);
+    final formData = FormData.fromMap({'photo_url': uploadFile});
+    final response = await dio.patch(url, data: formData);
     return HttpResponse(
       originalResponse: response,
       statusCode: response.statusCode,

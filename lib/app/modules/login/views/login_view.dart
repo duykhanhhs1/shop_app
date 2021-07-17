@@ -6,6 +6,7 @@ import 'package:scrum_app/app/routes/app_pages.dart';
 import 'package:scrum_app/app/theme/color_theme.dart';
 import 'package:scrum_app/app/widgets/rounded_button.widget.dart';
 import 'package:scrum_app/app/widgets/rounded_input_field.widget.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class LoginView extends GetView<LoginController> {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
@@ -80,6 +81,17 @@ class LoginView extends GetView<LoginController> {
                             }
                           },
                   ),
+                ),
+                SizedBox(height: 20),
+                RoundedButton(
+                  width: Get.width,
+                  color: kPrimaryBlueColor,
+                  textContent: 'Đăng nhập với Google',
+                  onPressed: () async => await canLaunch(
+                          "https://your-ecommerce.herokuapp.com/users/auth/google_oauth2")
+                      ? await launch(
+                          "https://your-ecommerce.herokuapp.com/users/auth/google_oauth2")
+                      : throw 'Could not launch',
                 ),
                 SizedBox(height: 20),
                 Row(

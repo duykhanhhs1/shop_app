@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:get/get.dart';
@@ -13,8 +15,10 @@ class UserProvider extends GetConnect {
 
   Future<UserModel> login(String username, String password) async {
     try {
-      HttpResponse response = await HttpHelper.post(
-          Endpoints.LOGIN, {"username": username, "password": password});
+      HttpResponse response = await HttpHelper.post(Endpoints.LOGIN, {
+        "username": username,
+        "password": password,
+      });
       UserModel user = UserModel.fromJson(response.body);
       return user;
     } catch (e) {
@@ -24,9 +28,25 @@ class UserProvider extends GetConnect {
 
   Future<ProfileModel> getProfile() async {
     try {
-      HttpResponse response = await HttpHelper.get(Endpoints.USER_PROFILE);
+      HttpResponse response = await HttpHelper.get(Endpoints.PROFILE);
       ProfileModel profile = ProfileModel.fromJson(response.body);
       return profile;
+    } catch (e) {
+      return null;
+    }
+  }
+
+  Future<void> updateProfile(ProfileUpdateModel profile) async {
+    try {
+      await HttpHelper.patch(Endpoints.PROFILE, profile);
+    } catch (e) {
+      return null;
+    }
+  }
+
+  Future<void> updateAvatarProfile(File imageFile) async {
+    try {
+      await HttpHelper.uploadFile(Endpoints.PROFILE, file: imageFile);
     } catch (e) {
       return null;
     }
@@ -59,7 +79,7 @@ class UserProvider extends GetConnect {
       //var idUser = FirebaseAuth.instance.currentUser.uid;
 //      Customer.uid = value.uid;
       CollectionReference users =
-          FirebaseFirestore.instance.collection('users');
+      FirebaseFirestore.instance.collection('users');
       users.doc(user.userNo).set(user.toJson()).then((value) {
         print("Add Customer Success!!");
       }).catchError((error) => print("Failed to add customer: $error"));
@@ -88,13 +108,5 @@ class UserProvider extends GetConnect {
         .doc('$userNo')
         .delete()
         .then((value) => print('delete success'));
-  }
-
-  Future<void> updateUser(UserModel user) async {
-    await FirebaseFirestore.instance
-        .collection('users')
-        .doc('${user.userNo}')
-        .update(user.toJson())
-        .then((value) => print("Update Successfully"));
   }
 }

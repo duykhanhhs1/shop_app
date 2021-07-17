@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:json_annotation/json_annotation.dart';
 
 part 'user_model.g.dart';
@@ -41,12 +43,16 @@ class ProfileModel {
   String refreshToken;
   DateTime date_of_birth;
 
-  String get fullName => first_name + last_name;
+  String get fullName {
+    if (first_name != null || last_name != null)
+      return first_name + " " + last_name;
+  }
 
   ProfileModel(
       {this.userNo,
       this.gender,
       this.description,
+      this.date_of_birth,
       this.email,
       photo_url,
       this.address,
@@ -59,6 +65,37 @@ class ProfileModel {
       _$ProfileModelFromJson(json);
 
   Map<String, dynamic> toJson() => _$ProfileModelToJson(this);
+}
+
+@JsonSerializable()
+class ProfileUpdateModel {
+  String first_name;
+  String last_name;
+  String address;
+  String gender;
+  String phone_number;
+  String email;
+  DateTime date_of_birth;
+
+  String get fullName {
+    if (first_name != null || last_name != null)
+      return first_name + " " + last_name;
+  }
+
+  ProfileUpdateModel({
+    this.gender,
+    this.first_name,
+    this.last_name,
+    this.date_of_birth,
+    this.email,
+    this.address,
+    this.phone_number,
+  });
+
+  factory ProfileUpdateModel.fromJson(Map<String, dynamic> json) =>
+      _$ProfileUpdateModelFromJson(json);
+
+  Map<String, dynamic> toJson() => _$ProfileUpdateModelToJson(this);
 }
 
 @JsonSerializable()
