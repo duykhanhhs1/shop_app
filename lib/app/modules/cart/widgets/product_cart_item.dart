@@ -1,7 +1,9 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:scrum_app/app/data/models/product_model.dart';
 import 'package:scrum_app/app/modules/cart/controllers/cart_controller.dart';
+import 'package:scrum_app/app/modules/home/widgets/product_card_widget.dart';
 import 'package:scrum_app/app/theme/color_theme.dart';
 import 'package:scrum_app/app/utils/helpers.dart';
 import 'package:scrum_app/app/widgets/number_input_field_widget.dart';
@@ -51,8 +53,14 @@ class ProductCartItem extends StatelessWidget {
                             ? kSecondaryColor
                             : Colors.black54),
                   ),
-                  Image.network(product.link_image,
-                      height: 70, width: 70, fit: BoxFit.cover),
+                  SizedBox(width: 5),
+                  CachedNetworkImage(
+                      imageUrl: product.link_image,
+                      errorWidget: (context, url, error) =>
+                          ErrorImage(size: 20),
+                      height: 70,
+                      width: 70,
+                      fit: BoxFit.cover),
                   SizedBox(width: 10),
                   Expanded(
                     child: Column(
@@ -62,6 +70,7 @@ class ProductCartItem extends StatelessWidget {
                           product.name,
                           style: TextStyle(fontSize: 16),
                           maxLines: 2,
+                          overflow: TextOverflow.ellipsis,
                         ),
                         SizedBox(height: 5),
                         Row(

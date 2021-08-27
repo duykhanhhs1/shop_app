@@ -24,6 +24,8 @@ class DetailProductController extends GetxController {
   Rx<ProductReviewModel> review = ProductReviewModel(rating: 0).obs;
 
   TextEditingController quantityController = TextEditingController();
+  TextEditingController reviewTextController = TextEditingController();
+  RxDouble rating = RxDouble(0.0);
   RxInt quantity = RxInt(0);
 
   @override
@@ -53,10 +55,12 @@ class DetailProductController extends GetxController {
     update();
   }
 
-  void onSubmitReview(ProductReviewModel review) async {
-    review.reviewer_name = _loginController.userLogged.value.email;
-    review.product_id = productDetail.value.id;
-    await repository.addReview(review);
+  void onSubmitReview() async {
+    review.value.reviewer_name = _loginController.userLogged.value.email;
+    review.value.product_id = productDetail.value.id;
+    await repository.addReview(review.value);
+    reviewTextController.clear();
+    rating.value = 0;
     getReviews(productDetail.value.id);
     update();
   }

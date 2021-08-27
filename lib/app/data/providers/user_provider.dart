@@ -70,22 +70,16 @@ class UserProvider extends GetConnect {
     return customer;
   }
 
-  Future<void> register({String email, String password, UserModel user}) async {
-    await FirebaseAuth.instance
-        .createUserWithEmailAndPassword(email: email, password: password)
-        .then((value) {
-      //upload info customer
-      user.userNo = FirebaseAuth.instance.currentUser.uid;
-      //var idUser = FirebaseAuth.instance.currentUser.uid;
-//      Customer.uid = value.uid;
-      CollectionReference users =
-      FirebaseFirestore.instance.collection('users');
-      users.doc(user.userNo).set(user.toJson()).then((value) {
-        print("Add Customer Success!!");
-      }).catchError((error) => print("Failed to add customer: $error"));
-    }).catchError((onError) {
-      print("register failure" + onError.toString());
-    });
+  Future<void> register({String email, String password, String user}) async {
+    try {
+      await HttpHelper.post(Endpoints.REGISTER, {
+        "username": user,
+        "email": email,
+        "password": password,
+      });
+    } catch (e) {
+      return null;
+    }
   }
 
   ///ADMIN

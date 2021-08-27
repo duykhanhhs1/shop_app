@@ -67,22 +67,22 @@ class ProductDetailModel {
 
   ProductDetailModel(
       {this.discount,
-      this.count,
-      shop_link_image,
-      this.oldPrice,
-      this.rating,
-      this.quantity = 1,
-      this.id,
-      this.name,
-      this.description,
-      this.link_image,
-      this.price,
-      this.imageUrls,
-      this.shippingCost,
-      this.shopLocation,
-      name_shop,
-      this.productProperties,
-      this.productReviews})
+        this.count,
+        shop_link_image,
+        this.oldPrice,
+        this.rating,
+        this.quantity = 1,
+        this.id,
+        this.name,
+        this.description,
+        this.link_image,
+        this.price,
+        this.imageUrls,
+        this.shippingCost,
+        this.shopLocation,
+        name_shop,
+        this.productProperties,
+        this.productReviews})
       : name_shop = name_shop ?? 'thegioibanve',
         shop_link_image = shop_link_image ??
             'https://firebasestorage.googleapis.com/v0/b/shoponline-69684.appspot.com/o/images%2Fae86abf7-1e7f-43fc-bc99-4f6077c6422d3398657205301469443.jp?alt=media&token=d3089516-9931-4c85-8602-9ebd0b3844e7';
@@ -116,18 +116,21 @@ class ProductReviewModel {
   int id;
   int product_id;
   String reviewer_name;
+  DateTime create_at;
   double rating;
   String comment;
+  String reviewer_photo_url;
   @JsonKey(defaultValue: [])
   List<dynamic> photo_urls;
 
-  ProductReviewModel(
-      {this.id,
-      this.product_id,
-      this.reviewer_name,
-      this.rating,
-      this.comment,
-      photo_urls})
+  ProductReviewModel({this.id,
+    this.product_id,
+    this.reviewer_name,
+    this.create_at,
+    this.reviewer_photo_url,
+    this.rating,
+    this.comment,
+    photo_urls})
       : photo_urls = photo_urls ?? [];
 
   factory ProductReviewModel.fromJson(Map<String, dynamic> json) =>

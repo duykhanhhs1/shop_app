@@ -29,7 +29,7 @@ class UserRepository {
     return apiClient.updateAvatarProfile(imageFile);
   }
 
-  Future<void> register({String email, String password, UserModel user}) async {
+  Future<void> register({String email, String password, String user}) async {
     return apiClient.register(email: email, password: password, user: user);
   }
 

@@ -32,22 +32,25 @@ class CartController extends GetxController {
   @override
   void onInit() {
     paymentMethod.value = paymentMethods[0];
-    getProducts();
+    if (LoginController.to.isLogged) {
+      getProducts();
+    }
     super.onInit();
   }
 
   Future<void> addProduct(int productId, int count) async {
-    if (products.indexWhere((element) => element.id == productId) != null) {
+    try {
       isLoadingCart.value = true;
       await repository.addProductToCart(productId, count);
-      products.length++;
+      if (products.indexWhere((element) => element.id == productId) == -1) {
+        products.add(ProductOverViewModel(id: productId, count: count));
+      }
       isLoadingCart.value = false;
-    } else {
-      isLoadingCart.value = true;
-      await repository.updateProductToCart(productId, count);
-      isLoadingCart.value = false;
+      update();
+    } catch (e) {
+      Get.snackbar("Lỗi", "Đã xảy ra lỗi. Vui lòng thử lại",
+          colorText: Colors.red);
     }
-
     update();
   }
 
@@ -55,6 +58,7 @@ class CartController extends GetxController {
 
   Future<void> getProducts() async {
     isLoadingCart.value = true;
+    reCheckProducts();
     final List<ProductOverViewModel> data = await repository.getProductsCart();
     products = data.obs;
     isLoadingCart.value = false;
@@ -62,13 +66,16 @@ class CartController extends GetxController {
   }
 
   void removeCheckedProducts() async {
-    List<int> productIds;
-    checkedProducts.forEach((product) {
-      productIds.add(product.id);
-      products.remove(product);
-    });
-    await repository.removeProductsCart(productIds);
-    isCheckedAll.value = false;
+    try {
+      for (var product in checkedProducts) {
+        await repository.removeProductsCart(product.id);
+        products.remove(product);
+      }
+      isCheckedAll.value = false;
+    } catch (e) {
+      Get.snackbar("Lỗi", "Đã có lỗi xảy ra. Vui lòng thử lại sau.",
+          colorText: Colors.red);
+    }
     update();
   }
 
@@ -90,17 +97,24 @@ class CartController extends GetxController {
   }
 
   Future<void> createOrder() async {
-    List<ProductCartModel> cartProducts = [];
-    checkedProducts.forEach((element) {
-      cartProducts.add(ProductCartModel(id: element.id, count: element.count));
-    });
-    ProfileModel profile = _loginController.userLogged.value.profile;
-    OrderCreateModel order = OrderCreateModel(
-        address: profile.address,
-        product_ids: cartProducts,
-        pay_method_name: paymentMethod.value,
-        phone_number: profile.phone_number);
-    await repository.addOrder(order);
+    try {
+      List<ProductCartModel> cartProducts = [];
+      checkedProducts.forEach((element) {
+        cartProducts
+            .add(ProductCartModel(id: element.id, count: element.count));
+      });
+      ProfileModel profile = _loginController.userLogged.value.profile;
+      OrderCreateModel order = OrderCreateModel(
+          address: profile.address,
+          product_ids: cartProducts,
+          pay_method_name: paymentMethod.value,
+          phone_number: profile.phone_number);
+      await repository.addOrder(order);
+      products.clear();
+    } catch (e) {
+      Get.snackbar("Lỗi", "Đã xảy ra lỗi. Vui lòng thử lại",
+          colorText: Colors.red);
+    }
   }
 
   void reBuy(OrderCreateModel order) {

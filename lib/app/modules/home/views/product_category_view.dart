@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 import 'package:get/get.dart';
@@ -40,10 +41,10 @@ class ProductCategoryView extends GetView<HomeController> {
                 Padding(
                   padding: const EdgeInsets.symmetric(vertical: 10),
                   child:
-                      Text(controller.currentCategory.name, style: textTitle),
+                  Text(controller.currentCategory.name, style: textTitle),
                 ),
                 controller.isLoading.value
-                    ? Center(child: CircularProgressIndicator())
+                    ? Center(child: CupertinoActivityIndicator())
                     : controller.productsByCate.length == 0
                         ? Padding(
                             padding: const EdgeInsets.only(top: 100),
@@ -56,22 +57,22 @@ class ProductCategoryView extends GetView<HomeController> {
                                 ],
                               ),
                             ),
-                          )
-                        : GridView.builder(
-                            physics: NeverScrollableScrollPhysics(),
-                            shrinkWrap: true,
-                            itemCount: controller.productsByCate.length,
-                            gridDelegate:
-                                SliverGridDelegateWithFixedCrossAxisCount(
-                                    crossAxisSpacing: 7,
-                                    mainAxisSpacing: 7,
-                                    crossAxisCount: 2,
-                                    childAspectRatio: 1 / 1.23),
-                            itemBuilder: (BuildContext context, int index) {
-                              return ProductCard(
-                                product: controller.productsByCate[index],
-                              );
-                            }),
+                )
+                    : GridView.builder(
+                    physics: NeverScrollableScrollPhysics(),
+                    shrinkWrap: true,
+                    itemCount: controller.productsByCate.length,
+                    gridDelegate:
+                    SliverGridDelegateWithFixedCrossAxisCount(
+                        crossAxisSpacing: 7,
+                        mainAxisSpacing: 7,
+                        crossAxisCount: 2,
+                        childAspectRatio: 1 / 1.23),
+                    itemBuilder: (BuildContext context, int index) {
+                      return ProductCard(
+                        product: controller.productsByCate[index],
+                      );
+                    }),
               ],
             ),
           ),

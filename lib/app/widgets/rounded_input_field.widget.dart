@@ -9,20 +9,25 @@ class FormRoundedInputField extends StatelessWidget {
     this.onFieldSubmitted,
     this.style,
     this.maxLines,
+    this.textInputAction,
     this.hintText,
     this.prefixIcon,
     this.obscureText = false,
+    this.autofocus = false,
+    this.readOnly = false,
     this.initialValue,
     this.borderRadius = const BorderRadius.all(Radius.circular(50)),
     this.contentPadding =
         const EdgeInsets.symmetric(vertical: 0, horizontal: 10),
     this.validator,
     this.fillColor,
+    this.onTap,
     this.onSaved,
     this.onChanged,
     this.keyboardType = TextInputType.text,
     this.icon,
-    this.inputFormatters, this.borderColor = kPrimaryColor,
+    this.inputFormatters,
+    this.borderColor = kPrimaryColor,
   });
 
   final Key key;
@@ -41,13 +46,21 @@ class FormRoundedInputField extends StatelessWidget {
   final Color borderColor;
   final Function onSaved;
   final Function onChanged;
+  final Function onTap;
   final TextInputType keyboardType;
   final Icon icon;
   final List<TextInputFormatter> inputFormatters;
+  final TextInputAction textInputAction;
+  final bool autofocus;
+  final bool readOnly;
 
   @override
   Widget build(BuildContext context) {
     return TextFormField(
+      onTap: onTap,
+      readOnly: readOnly,
+      autofocus: autofocus,
+      textInputAction: textInputAction,
       key: key,
       decoration: InputDecoration(
         filled: true,
@@ -72,10 +85,10 @@ class FormRoundedInputField extends StatelessWidget {
           borderRadius: borderRadius,
           borderSide: BorderSide(color: borderColor),
         ),
-       focusedErrorBorder: OutlineInputBorder(
-        borderRadius: borderRadius,
-        borderSide: BorderSide(color: borderColor),
-      ),
+        focusedErrorBorder: OutlineInputBorder(
+          borderRadius: borderRadius,
+          borderSide: BorderSide(color: borderColor),
+        ),
       ),
       onFieldSubmitted: onFieldSubmitted,
       style: style,

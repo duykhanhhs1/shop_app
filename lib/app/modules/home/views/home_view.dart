@@ -2,10 +2,10 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:scrum_app/app/modules/home/controllers/home_controller.dart';
+import 'package:scrum_app/app/modules/home/views/search_product_view.dart';
 import 'package:scrum_app/app/modules/home/widgets/category_card_widget.dart';
 import 'package:scrum_app/app/modules/home/widgets/product_card_widget.dart';
 import 'package:scrum_app/app/modules/home/widgets/special_card_widget.dart';
-import 'package:scrum_app/app/theme/color_theme.dart';
 import 'package:scrum_app/app/theme/text_theme.dart';
 import 'package:scrum_app/app/widgets/app_bottom_navigation_bar_widget.dart';
 import 'package:scrum_app/app/widgets/cart_icon_widget.dart';
@@ -22,6 +22,11 @@ class HomeView extends GetView<HomeController> {
               child: SizedBox(
                 height: 40,
                 child: FormRoundedInputField(
+                  onTap: () {
+                    controller.searchedProducts = controller.products;
+                    Get.to(() => SearchProductView());
+                  },
+                  readOnly: true,
                   keyboardType: TextInputType.text,
                   borderRadius: BorderRadius.circular(10),
                   prefixIcon: Icons.search_rounded,
@@ -42,32 +47,30 @@ class HomeView extends GetView<HomeController> {
                 displacement: 0,
                 onRefresh: () async {
                   controller.getProducts(0);
+                  controller.getCategories();
                 },
                 child: SingleChildScrollView(
-                  child: Container(
-                    padding: const EdgeInsets.symmetric(horizontal: 10),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: <Widget>[
-                        Padding(
-                            padding: const EdgeInsets.symmetric(vertical: 10),
-                            child: Text('Danh mục', style: textTitle)),
-                        _buildCategoryGridView(),
-                        /*Padding(
-                            padding: const EdgeInsets.symmetric(vertical: 10),
-                            child: Text('Dành cho bạn', style: textTitle)),
-                        _buildSpecialListView(),*/
-                        Padding(
-                            padding: const EdgeInsets.symmetric(vertical: 10),
-                            child: Text('Sản phẩm nổi bật', style: textTitle)),
-                        controller.isLoading.value
-                            ? Center(child: CircularProgressIndicator())
-                            : _buildPopularGridView(controller),
-                        SizedBox(
-                          height: 15,
-                        )
-                      ],
-                    ),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: <Widget>[
+                      /*                     Padding(
+                          padding: const EdgeInsets.symmetric(vertical: 10),
+                          child: Text('Ưu đãi giá sốc', style: textTitle)),
+                      _buildSpecialListView(),*/
+                      Padding(
+                          padding: const EdgeInsets.all(10),
+                          child: Text('Danh mục', style: textTitle)),
+                      _buildCategoryGridView(),
+                      Padding(
+                          padding: const EdgeInsets.all(10),
+                          child: Text('Gợi ý hôm nay', style: textTitle)),
+                      controller.isLoading.value
+                          ? Center(child: CupertinoActivityIndicator())
+                          : _buildPopularGridView(controller),
+                      SizedBox(
+                        height: 15,
+                      )
+                    ],
                   ),
                 ),
               );
@@ -81,10 +84,11 @@ class HomeView extends GetView<HomeController> {
   Widget _buildCategoryGridView() {
     return controller.isLoadingCategories.value
         ? Center(
-            child: CircularProgressIndicator(),
+            child: CupertinoActivityIndicator(),
           )
-        : SizedBox(
-      height: Get.height * 0.27,
+        : Container(
+            padding: EdgeInsets.only(left: 10),
+            height: Get.height * 0.27,
             child: GridView.builder(
               itemCount: controller.categories.length,
               shrinkWrap: true,
@@ -112,14 +116,18 @@ class HomeView extends GetView<HomeController> {
       child: Row(
         children: [
           SizedBox(
-            height: Get.height * 0.16,
+            height: Get.height * 0.3,
             child: ListView.builder(
               scrollDirection: Axis.horizontal,
               shrinkWrap: true,
-              itemCount: 5,
+              itemCount: controller.productsDiscount.length,
               itemBuilder: (context, index) {
-                return Row(
-                  children: [SpecialCard(), SizedBox(width: 10)],
+                return Padding(
+                  padding: const EdgeInsets.only(right: 10),
+                  child: SizedBox(
+                      width: Get.width * 0.5,
+                      child: ProductCard(
+                          product: controller.productsDiscount[index])),
                 );
               },
             ),
@@ -131,6 +139,7 @@ class HomeView extends GetView<HomeController> {
 
   Widget _buildPopularGridView(HomeController controller) {
     return GridView.builder(
+        padding: EdgeInsets.symmetric(horizontal: 10),
         physics: NeverScrollableScrollPhysics(),
         shrinkWrap: true,
         itemCount: controller.products.length,

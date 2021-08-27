@@ -16,6 +16,7 @@ class LoginController extends GetxController {
 
   static LoginController get to => Get.find<LoginController>();
 
+  TextEditingController usernameController = TextEditingController();
   TextEditingController emailController = TextEditingController();
   TextEditingController passwordController = TextEditingController();
   TextEditingController fullNameController = TextEditingController();
@@ -24,6 +25,8 @@ class LoginController extends GetxController {
   RxBool isProcessing = RxBool(false);
   RxBool isLoginByToken = RxBool(false);
   Rx<UserModel> userLogged = Rx(UserModel());
+
+  bool get isLogged => userLogged.value.email != null;
 
   final GetStorage _store = GetStorage();
 
@@ -49,7 +52,7 @@ class LoginController extends GetxController {
       userLogged.value.email = profile.email;
       Get.offAllNamed(Routes.HOME);
     } else
-      Get.offAllNamed(Routes.LOGIN);
+      Get.offAllNamed(Routes.HOME);
   }
 
   Future<void> logout() async {
@@ -73,7 +76,7 @@ class LoginController extends GetxController {
       Get.offAllNamed(Routes.HOME);
       isProcessing.value = false;
     } else {
-      Get.snackbar('Error', 'User not found',
+      Get.snackbar('Lỗi', 'Sai tên đăng nhập hoặc mật khẩu, vui lòng thử lại.',
           snackPosition: SnackPosition.BOTTOM, colorText: Colors.red);
       isProcessing.value = false;
     }
@@ -92,9 +95,12 @@ class LoginController extends GetxController {
     update();
   }
 
-  void register({String email, String password, UserModel user}) async {
+  void register() async {
     isProcessing.value = true;
-    await repository.register(email: email, password: password, user: user);
+    await repository.register(
+        email: emailController.text,
+        password: passwordController.text,
+        user: usernameController.text);
     isProcessing.value = false;
     Get.offAllNamed(Routes.LOGIN);
     Get.snackbar('Success', 'Register success',

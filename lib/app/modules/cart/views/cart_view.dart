@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:scrum_app/app/modules/cart/widgets/product_cart_item.dart';
@@ -23,46 +24,54 @@ class CartView extends GetView<CartController> {
                       onPressed: () {
                         controller.removeCheckedProducts();
                       },
-                      icon: Icon(Icons.delete_outline))
+                      icon: Icon(
+                        Icons.delete,
+                        color: Colors.deepOrange,
+                      ))
               ],
             ),
             bottomNavigationBar: _buildBottomNavigationBar(controller),
             body: controller.isLoadingCart.value
-                ? Center(child: CircularProgressIndicator())
-                : Column(
-                    children: [
-                      if (controller.products.length > 0)
-                        Divider(
-                          thickness: 5,
-                          height: 5,
-                        ),
-                      Expanded(
-                        child: ListView.builder(
-                          itemCount: controller.products.length,
-                          itemBuilder: (context, index) {
-                            return Column(
-                              children: <Widget>[
-                                ProductCartItem(
-                                  controller: controller,
-                                  product: controller.products[index],
-                                ),
-                                Divider(
-                                  thickness: 5,
-                                  height: 5,
-                                ),
-                              ],
-                            );
-                          },
-                        ),
-                      )
-                    ],
-                  ));
+                ? Center(child: CupertinoActivityIndicator())
+                : controller.products.length == 0
+                    ? Center(child: Text("Bạn chưa có đơn hàng nào."))
+                    : Column(
+                        children: [
+                          if (controller.products.length > 0)
+                            Divider(
+                              thickness: 5,
+                              height: 5,
+                            ),
+                          Expanded(
+                            child: ListView.builder(
+                              itemCount: controller.products.length,
+                              itemBuilder: (context, index) {
+                                return Column(
+                                  children: <Widget>[
+                                    ProductCartItem(
+                                      controller: controller,
+                                      product: controller.products[index],
+                                    ),
+                                    Divider(
+                                      thickness: 5,
+                                      height: 5,
+                                    ),
+                                  ],
+                                );
+                              },
+                            ),
+                          )
+                        ],
+                      ));
       },
     );
   }
 
   Widget _buildBottomNavigationBar(CartController controller) {
     return Container(
+      decoration: BoxDecoration(
+          border:
+              Border(top: BorderSide(color: Colors.grey.shade200, width: 3))),
       padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -102,8 +111,8 @@ class CartView extends GetView<CartController> {
                   height: 40,
                   onPressed: controller.checkedProducts.length > 0
                       ? () {
-                          Get.toNamed(Routes.PAYMENT);
-                        }
+                    Get.toNamed(Routes.PAYMENT);
+                  }
                       : null,
                   color: Colors.deepOrange,
                   textContent: 'Mua hàng',

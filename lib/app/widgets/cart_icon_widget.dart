@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:scrum_app/app/modules/cart/controllers/cart_controller.dart';
+import 'package:scrum_app/app/modules/login/controllers/login_controller.dart';
 import 'package:scrum_app/app/routes/app_pages.dart';
 
 class CartIcon extends StatelessWidget {
@@ -18,9 +19,12 @@ class CartIcon extends StatelessWidget {
             IconButton(
                 tooltip: 'Giỏ hàng',
                 onPressed: () {
-                  controller.reCheckProducts();
-                  controller.getProducts();
-                  Get.toNamed(Routes.CART);
+                  if (LoginController.to.isLogged) {
+                    controller.getProducts();
+                    Get.toNamed(Routes.CART);
+                  } else {
+                    Get.toNamed(Routes.LOGIN);
+                  }
                 },
                 icon: Icon(
                   Icons.shopping_cart,

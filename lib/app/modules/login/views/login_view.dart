@@ -14,6 +14,10 @@ class LoginView extends GetView<LoginController> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(
+        title: Text("Đăng nhập"),
+        centerTitle: true,
+      ),
       body: Form(
         key: _formKey,
         child: Padding(
@@ -30,7 +34,7 @@ class LoginView extends GetView<LoginController> {
                 ),
                 SizedBox(height: 50.0),
                 FormRoundedInputField(
-                  controller: controller.emailController,
+                  controller: controller.usernameController,
                   style: TextStyle(
                     color: Colors.black,
                   ),
@@ -42,7 +46,8 @@ class LoginView extends GetView<LoginController> {
                   ]),
                   keyboardType: TextInputType.text,
                   onChanged: (value) => null,
-                  onSaved: (value) => controller.emailController.text = value,
+                  onSaved: (value) =>
+                      controller.usernameController.text = value,
                 ),
                 SizedBox(height: 20),
                 FormRoundedInputField(
@@ -61,12 +66,12 @@ class LoginView extends GetView<LoginController> {
                   obscureText: true,
                   onChanged: (value) => null,
                   onSaved: (value) =>
-                      controller.passwordController.text = value,
+                  controller.passwordController.text = value,
                   maxLines: 1,
                 ),
                 SizedBox(height: 20),
                 Obx(
-                  () => RoundedButton(
+                      () => RoundedButton(
                     width: Get.width,
                     textContent: controller.isProcessing.value
                         ? 'Đăng nhập...'
@@ -74,16 +79,16 @@ class LoginView extends GetView<LoginController> {
                     onPressed: controller.isProcessing.value
                         ? null
                         : () async {
-                            if (_formKey.currentState.validate()) {
-                              await controller.login(
-                                  username: controller.emailController.text,
+                      if (_formKey.currentState.validate()) {
+                        await controller.login(
+                            username: controller.usernameController.text,
                                   password: controller.passwordController.text);
-                            }
-                          },
+                      }
+                    },
                   ),
                 ),
                 SizedBox(height: 20),
-                RoundedButton(
+/*                RoundedButton(
                   width: Get.width,
                   color: kPrimaryBlueColor,
                   textContent: 'Đăng nhập với Google',
@@ -93,7 +98,7 @@ class LoginView extends GetView<LoginController> {
                           "https://your-ecommerce.herokuapp.com/users/auth/google_oauth2")
                       : throw 'Could not launch',
                 ),
-                SizedBox(height: 20),
+                SizedBox(height: 20),*/
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [

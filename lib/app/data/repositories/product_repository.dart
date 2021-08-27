@@ -29,12 +29,20 @@ class ProductRepository {
     return apiClient.updateProductToCart(productId, count);
   }
 
-  Future<void> removeProductsCart(List<int> productIds) async {
+  Future<void> removeProductsCart(int productIds) async {
     return apiClient.removeProductsCart(productIds);
   }
 
   Future<List<ProductOverViewModel>> getProducts(int pageIndex) {
     return apiClient.getProducts(pageIndex);
+  }
+
+  Future<List<ProductOverViewModel>> getProductsDiscount() {
+    return apiClient.getProductsDiscount();
+  }
+
+  Future<List<ProductOverViewModel>> searchProducts(String keySearch) {
+    return apiClient.searchProducts(keySearch);
   }
 
   Future<List<ProductOverViewModel>> getProductsByCate(

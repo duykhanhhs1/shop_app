@@ -1,5 +1,4 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:dio/dio.dart';
 import 'package:get/get.dart';
 import 'package:scrum_app/app/data/models/category_model.dart';
 import 'package:scrum_app/app/data/models/order_model.dart';
@@ -25,9 +24,10 @@ class ProductProvider extends GetConnect {
     }
   }
 
-  Future<void> removeProductsCart(List<int> productIds) async {
+  Future<void> removeProductsCart(int productIds) async {
     try {
-      final response = await HttpHelper.delete(Endpoints.CARTS, productIds);
+      final response = await HttpHelper.delete(
+          "${Endpoints.CARTS}?product_id[]=$productIds");
       if (response.statusCode == 200) return true;
     } catch (e) {
       return false;
@@ -41,7 +41,7 @@ class ProductProvider extends GetConnect {
           .map<CategoryModel>((item) => CategoryModel.fromJson(item))
           .toList();
       return result;
-    } on DioError catch (e) {
+    } catch (e) {
       return [];
     }
   }
@@ -54,7 +54,7 @@ class ProductProvider extends GetConnect {
           .map<ProductReviewModel>((item) => ProductReviewModel.fromJson(item))
           .toList();
       return result;
-    } on DioError catch (e) {
+    } catch (e) {
       return [];
     }
   }
@@ -103,7 +103,7 @@ class ProductProvider extends GetConnect {
               (item) => ProductOverViewModel.fromJson(item))
           .toList();
       return result;
-    } on DioError catch (e) {
+    } catch (e) {
       return [];
     }
   }
@@ -117,7 +117,35 @@ class ProductProvider extends GetConnect {
               (item) => ProductOverViewModel.fromJson(item))
           .toList();
       return result;
-    } on DioError catch (e) {
+    } catch (e) {
+      return [];
+    }
+  }
+
+  Future<List<ProductOverViewModel>> getProductsDiscount() async {
+    try {
+      final response = await HttpHelper.get(
+          "https://your-ecommerce.herokuapp.com/products_discount");
+      var result = response.body["products"]
+          .map<ProductOverViewModel>(
+              (item) => ProductOverViewModel.fromJson(item))
+          .toList();
+      return result;
+    } catch (e) {
+      return [];
+    }
+  }
+
+  Future<List<ProductOverViewModel>> searchProducts(String keySearch) async {
+    try {
+      final response = await HttpHelper.get(
+          Endpoints.SEARCH_PRODUCT + "?page=0&name_find=$keySearch");
+      var result = response.body["products"]
+          .map<ProductOverViewModel>(
+              (item) => ProductOverViewModel.fromJson(item))
+          .toList();
+      return result;
+    } catch (e) {
       return [];
     }
   }
@@ -132,7 +160,7 @@ class ProductProvider extends GetConnect {
               (item) => ProductOverViewModel.fromJson(item))
           .toList();
       return result;
-    } on DioError catch (e) {
+    } catch (e) {
       return [];
     }
   }
@@ -144,7 +172,7 @@ class ProductProvider extends GetConnect {
           .map<OrderModel>((item) => OrderModel.fromJson(item))
           .toList();
       return result;
-    } on DioError catch (e) {
+    } catch (e) {
       return [];
     }
   }
@@ -181,8 +209,7 @@ class ProductProvider extends GetConnect {
         .catchError((error) => print("Failed to add product: $error"));
   }
 
-  Future<void> removeProduct(int productNo) async {
-  }
+  Future<void> removeProduct(int productNo) async {}
 
   Future<void> updateProduct(ProductModel product) async {
     CollectionReference products =

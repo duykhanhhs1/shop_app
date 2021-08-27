@@ -1,3 +1,5 @@
+import 'package:cached_network_image/cached_network_image.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:get/get.dart';
@@ -5,6 +7,9 @@ import 'package:scrum_app/app/data/models/product_model.dart';
 import 'package:scrum_app/app/modules/cart/controllers/cart_controller.dart';
 import 'package:scrum_app/app/modules/detail_product/controllers/detail_product_controller.dart';
 import 'package:scrum_app/app/modules/detail_product/widgets/review_card_widget.dart';
+import 'package:scrum_app/app/modules/home/widgets/product_card_widget.dart';
+import 'package:scrum_app/app/modules/login/controllers/login_controller.dart';
+import 'package:scrum_app/app/routes/app_pages.dart';
 import 'package:scrum_app/app/theme/color_theme.dart';
 import 'package:scrum_app/app/utils/helpers.dart';
 import 'package:scrum_app/app/widgets/number_input_field_widget.dart';
@@ -21,7 +26,7 @@ class DetailProductView extends GetView<DetailProductController> {
       builder: (DetailProductController controller) {
         ProductDetailModel product = controller.productDetail.value;
         return controller.isLoadingProduct.value
-            ? Scaffold(body: Center(child: CircularProgressIndicator()))
+            ? Scaffold(body: Center(child: CupertinoActivityIndicator()))
             : Scaffold(
                 appBar: AppBar(
                   title: Text(product.name),
@@ -33,46 +38,46 @@ class DetailProductView extends GetView<DetailProductController> {
                     )
                   ],
                 ),
-                floatingActionButton: FloatingActionButton(
-                  onPressed: () {
-                    _buildBottomAddCart();
-                  },
-                  backgroundColor: kPrimaryColor,
-                  child: Icon(
-                    Icons.add_shopping_cart_rounded,
-                    color: Colors.white,
-                  ),
+          floatingActionButton: FloatingActionButton(
+            onPressed: () {
+              _buildBottomAddCart();
+            },
+            backgroundColor: kPrimaryColor,
+            child: Icon(
+              Icons.add_shopping_cart_rounded,
+              color: Colors.white,
+            ),
+          ),
+          body: SingleChildScrollView(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: <Widget>[
+                _buildListImage(product),
+                Divider(height: 4, thickness: 4),
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 12),
+                  child: _buildOverviewInfo(product),
                 ),
-                body: SingleChildScrollView(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: <Widget>[
-                      _buildListImage(product),
-                      Divider(height: 4, thickness: 4),
-                      Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 12),
-                        child: _buildOverviewInfo(product),
-                      ),
-                      Divider(height: 30, thickness: 4),
-                      Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 12),
-                        child: _buildShopInfo(product),
-                      ),
-                      Divider(height: 30, thickness: 4),
-                      Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 12),
-                        child: _buildDetailInfo(product),
-                      ),
-                      Divider(height: 30, thickness: 5),
-                      Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 12),
-                        child: _buildReviews(product),
-                      ),
-                      SizedBox(height: 100),
-                    ],
-                  ),
+                Divider(height: 30, thickness: 4),
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 12),
+                  child: _buildShopInfo(product),
                 ),
-              );
+                Divider(height: 30, thickness: 4),
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 12),
+                  child: _buildDetailInfo(product),
+                ),
+                Divider(height: 30, thickness: 5),
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 12),
+                  child: _buildReviews(product),
+                ),
+                SizedBox(height: 100),
+              ],
+            ),
+          ),
+        );
       },
     );
   }
@@ -165,7 +170,7 @@ class DetailProductView extends GetView<DetailProductController> {
             Text(
               "Chi tiết shop",
               style:
-                  TextStyle(color: kPrimaryColor, fontWeight: FontWeight.bold),
+              TextStyle(color: kPrimaryColor, fontWeight: FontWeight.bold),
             )
           ],
         ),
@@ -185,7 +190,6 @@ class DetailProductView extends GetView<DetailProductController> {
               child: Row(
                 children: <Widget>[
                   _buildRating(product),
-                  SizedBox(width: 5),
                   Expanded(
                     child: Text(
                       product.name,
@@ -226,7 +230,7 @@ class DetailProductView extends GetView<DetailProductController> {
                 )),
             Text(
                 product.shippingCost == null
-                    ? '₫0'
+                    ? 'Miễn phí'
                     : '₫${NumberHelper.currencyFormat(product.shippingCost)}',
                 style: TextStyle(
                   color: Colors.black87,
@@ -259,13 +263,16 @@ class DetailProductView extends GetView<DetailProductController> {
         scrollDirection: Axis.horizontal,
         children: List.generate(
           product.imageUrls.length,
-          (index) => Stack(
+              (index) => Stack(
             children: [
-              Image.network(
-                '${product.imageUrls[index]}',
+              CachedNetworkImage(
+                imageUrl: '${product.imageUrls[index]}',
                 width: Get.width,
                 height: Get.height,
                 fit: BoxFit.contain,
+                errorWidget: (context, url, error) => ErrorImage(
+                  size: 100,
+                ),
               ),
               Positioned(
                 child: Container(
@@ -297,12 +304,13 @@ class DetailProductView extends GetView<DetailProductController> {
           maxLines: 3,
           hintText: 'Đánh giá của bạn',
           onChanged: (value) => review.comment = value,
+          controller: controller.reviewTextController,
         ),
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: <Widget>[
             RatingBar.builder(
-              initialRating: 0,
+              initialRating: controller.rating.value,
               minRating: 1,
               direction: Axis.horizontal,
               allowHalfRating: true,
@@ -325,7 +333,7 @@ class DetailProductView extends GetView<DetailProductController> {
               radius: 10,
               height: 35,
               onPressed: () {
-                if (review.rating > 0) controller.onSubmitReview(review);
+                if (review.rating > 0) controller.onSubmitReview();
               },
             ),
           ],
@@ -363,42 +371,49 @@ class DetailProductView extends GetView<DetailProductController> {
               Column(
                 children: [
                   Row(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: <Widget>[
-                      Row(
-                        crossAxisAlignment: CrossAxisAlignment.end,
-                        children: <Widget>[
-                          Image.network(
-                            controller.productDetail.value.imageUrls[0],
-                            height: 80,
-                            width: 80,
-                            fit: BoxFit.cover,
-                          ),
-                          SizedBox(width: 10),
-                          Column(
+                      CachedNetworkImage(
+                        imageUrl: controller.productDetail.value.imageUrls[0],
+                        height: 80,
+                        width: 80,
+                        fit: BoxFit.cover,
+                        errorWidget: (context, url, error) =>
+                            ErrorImage(size: 20),
+                      ),
+                      SizedBox(width: 10),
+                      Expanded(
+                        child: SizedBox(
+                          height: 80,
+                          child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
-                            mainAxisAlignment: MainAxisAlignment.end,
-                            children: <Widget>[
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
                               Text(
-                                  '${NumberHelper.currencyFormat(controller.getPrice())} VNĐ',
-                                  style: TextStyle(
-                                      color: kSecondaryColor,
-                                      fontWeight: FontWeight.bold)),
-                              Text(
-                                  'Kho: ${NumberHelper.currencyFormat(controller.productDetail.value.count)}',
-                                  style: TextStyle(
-                                      color: Colors.black.withOpacity(.6),
-                                      fontWeight: FontWeight.bold)),
+                                controller.productDetail.value.name,
+                                style: TextStyle(fontWeight: FontWeight.bold),
+                                maxLines: 2,
+                                overflow: TextOverflow.ellipsis,
+                              ),
+                              Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                mainAxisAlignment: MainAxisAlignment.end,
+                                children: <Widget>[
+                                  Text(
+                                      '${NumberHelper.currencyFormat(controller.getPrice())} VNĐ',
+                                      style: TextStyle(
+                                          color: kSecondaryColor,
+                                          fontWeight: FontWeight.bold)),
+                                  Text(
+                                      'Kho: ${NumberHelper.currencyFormat(controller.productDetail.value.count)}',
+                                      style: TextStyle(
+                                          color: Colors.black.withOpacity(.6),
+                                          fontWeight: FontWeight.bold)),
+                                ],
+                              ),
                             ],
                           ),
-                        ],
+                        ),
                       ),
-                      GestureDetector(
-                          child: Icon(Icons.clear),
-                          onTap: () {
-                            Get.back();
-                          })
                     ],
                   ),
                   Divider(),
@@ -425,13 +440,17 @@ class DetailProductView extends GetView<DetailProductController> {
                   return RoundedButton(
                     width: Get.width,
                     onPressed: () async {
-                      await cartController.addProduct(
-                          controller.productDetail.value.id,
-                          controller.productDetail.value.quantity);
-                      Get.back();
+                      if (LoginController.to.isLogged) {
+                        await cartController.addProduct(
+                            controller.productDetail.value.id,
+                            controller.productDetail.value.quantity);
+                        Get.back();
+                      } else {
+                        Get.toNamed(Routes.LOGIN);
+                      }
                     },
                     textContent: cartController.isLoadingCart.value
-                        ? CircularProgressIndicator()
+                        ? "Đang xử lý..."
                         : 'Thêm vào giỏ hàng',
                   );
                 },
@@ -456,26 +475,31 @@ class DetailProductView extends GetView<DetailProductController> {
   }
 
   Widget _buildRating(ProductDetailModel product) {
-    return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 5),
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(15),
-        color: kPrimaryColor.withOpacity(.4),
-      ),
-      child: Row(
-        children: <Widget>[
-          Text(
-            product.rating == null ? '4.9' : '${product.rating}',
-            style: TextStyle(
-                fontWeight: FontWeight.bold,
-                color: Colors.black.withOpacity(.6)),
-          ),
-          Icon(
-            Icons.star_rounded,
-            color: Colors.yellow.shade700,
+    return product.rating == null
+        ? Padding(
+            padding: const EdgeInsets.only(right: 5),
+            child: Container(
+              padding: const EdgeInsets.symmetric(horizontal: 5),
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(15),
+                color: kPrimaryColor.withOpacity(.4),
+              ),
+              child: Row(
+                children: <Widget>[
+                  Text(
+                    '${product.rating}',
+                    style: TextStyle(
+                        fontWeight: FontWeight.bold,
+                        color: Colors.black.withOpacity(.6)),
+                  ),
+                  Icon(
+                    Icons.star_rounded,
+                    color: Colors.yellow.shade700,
+                  )
+                ],
+              ),
+            ),
           )
-        ],
-      ),
-    );
+        : SizedBox();
   }
 }

@@ -14,6 +14,10 @@ class RegisterView extends GetView<LoginController> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(
+        title: Text("Đăng ký"),
+        centerTitle: true,
+      ),
       body: Form(
         key: _formKey,
         child: Padding(
@@ -23,16 +27,8 @@ class RegisterView extends GetView<LoginController> {
               mainAxisAlignment: MainAxisAlignment.center,
               crossAxisAlignment: CrossAxisAlignment.start,
               children: <Widget>[
-                InkWell(
-                    onTap: () {
-                      Get.back();
-                    },
-                    child: Icon(
-                      Icons.arrow_back_outlined,
-                      color: Colors.black.withOpacity(.6),
-                    )),
                 Text(
-                  'Đăng ký',
+                  'Thông tin đăng ký',
                   style: TextStyle(
                       fontWeight: FontWeight.bold,
                       fontSize: 25,
@@ -40,19 +36,20 @@ class RegisterView extends GetView<LoginController> {
                 ),
                 SizedBox(height: 60.0),
                 FormRoundedInputField(
-                  controller: controller.fullNameController,
+                  controller: controller.usernameController,
                   style: TextStyle(
                     color: Colors.black,
                   ),
                   fillColor: Colors.white.withOpacity(0.75),
                   prefixIcon: Icons.person,
-                  hintText: 'Họ và tên',
+                  hintText: 'Username',
                   validator: MultiValidator([
-                    RequiredValidator(errorText: 'Vui lòng nhập tên'),
+                    RequiredValidator(errorText: 'Vui lòng nhập username'),
                   ]),
                   keyboardType: TextInputType.text,
                   onChanged: (value) => null,
-                  onSaved: (value) => controller.emailController.text = value,
+                  onSaved: (value) =>
+                      controller.usernameController.text = value,
                 ),
                 SizedBox(height: 20),
                 FormRoundedInputField(
@@ -68,38 +65,6 @@ class RegisterView extends GetView<LoginController> {
                     EmailValidator(errorText: 'Email không hợp lệ'),
                   ]),
                   keyboardType: TextInputType.emailAddress,
-                  onChanged: (value) => null,
-                  onSaved: (value) => controller.emailController.text = value,
-                ),
-                SizedBox(height: 20),
-                FormRoundedInputField(
-                  controller: controller.phoneNumberController,
-                  style: TextStyle(
-                    color: Colors.black,
-                  ),
-                  fillColor: Colors.white.withOpacity(0.75),
-                  prefixIcon: Icons.phone,
-                  hintText: 'Số điện thoại',
-                  validator: MultiValidator([
-                    RequiredValidator(errorText: 'Vui lòng nhập số điện thoại'),
-                  ]),
-                  keyboardType: TextInputType.phone,
-                  onChanged: (value) => null,
-                  onSaved: (value) => controller.emailController.text = value,
-                ),
-                SizedBox(height: 20),
-                FormRoundedInputField(
-                  controller: controller.addressController,
-                  style: TextStyle(
-                    color: Colors.black,
-                  ),
-                  fillColor: Colors.white.withOpacity(0.75),
-                  prefixIcon: Icons.location_on_outlined,
-                  hintText: 'Địa chỉ',
-                  validator: MultiValidator([
-                    RequiredValidator(errorText: 'Vui lòng nhập địa chỉ'),
-                  ]),
-                  keyboardType: TextInputType.text,
                   onChanged: (value) => null,
                   onSaved: (value) => controller.emailController.text = value,
                 ),
@@ -122,12 +87,12 @@ class RegisterView extends GetView<LoginController> {
                   obscureText: true,
                   onChanged: (value) => null,
                   onSaved: (value) =>
-                      controller.passwordController.text = value,
+                  controller.passwordController.text = value,
                   maxLines: 1,
                 ),
                 SizedBox(height: 20),
                 Obx(
-                  () => RoundedButton(
+                      () => RoundedButton(
                     width: Get.width,
                     textContent: controller.isProcessing.value
                         ? 'Đăng ký...'
@@ -135,26 +100,10 @@ class RegisterView extends GetView<LoginController> {
                     onPressed: controller.isProcessing.value
                         ? null
                         : () async {
-                            if (_formKey.currentState.validate()) {
-                              controller.register(
-                                email: controller.emailController.text,
-                                password: controller.passwordController.text,
-                                user: UserModel(
-                                  email: controller.emailController.text,
-                                ),
-                                /*  user: UserModel(
-                                    imageUrl:
-                                        'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQwQnaX0HIMtehoJnZsojyjD2P0u0YNl9IYyM3TJAaM4_QMgHqMpmYp_RfId466ou30Vs4&usqp=CAU',
-                                    email: controller.emailController.text,
-                                    fullName:
-                                        controller.fullNameController.text,
-                                    phone:
-                                        controller.phoneNumberController.text,
-                                    address: controller.addressController.text,
-                                    role: 'user'),*/
-                              );
+                      if (_formKey.currentState.validate()) {
+                        controller.register();
                             }
-                          },
+                    },
                   ),
                 ),
                 SizedBox(height: 20),

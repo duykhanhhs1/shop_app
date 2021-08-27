@@ -1,3 +1,5 @@
+import 'package:cached_network_image/cached_network_image.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -26,15 +28,52 @@ class ProductCard extends StatelessWidget {
         init: Get.find(),
         builder: (controller) {
           return Container(
-            decoration:
-                BoxDecoration(border: Border.all(color: kLightBackground)),
+            decoration: BoxDecoration(
+                color: Colors.white,
+                border: Border.all(color: kLightBackground),
+                boxShadow: [
+                  BoxShadow(
+                      color: Colors.grey.shade200,
+                      blurRadius: 5,
+                      offset: Offset(5, 5))
+                ]),
             child: Column(
               children: <Widget>[
-                Image.network(
-                  product.link_image,
-                  width: Get.width,
-                  height: Get.width * 0.4,
-                  fit: BoxFit.cover,
+                Stack(
+                  children: [
+                    CachedNetworkImage(
+                      errorWidget: (context, url, error) => ErrorImage(),
+                      imageUrl: product.link_image,
+                      placeholder: (context, url) =>
+                          Container(color: Colors.grey.shade200),
+                      width: Get.width,
+                      height: Get.width * 0.4,
+                      fit: BoxFit.cover,
+                    ),
+                    /* if (product.discount != null && product.discount > 0)
+                      Positioned(
+                          top: 0,
+                          right: 0,
+                          child: Stack(
+                            children: [
+                              Icon(
+                                CupertinoIcons.bookmark_fill,
+                                size: 50,
+                                color: Colors.yellow.shade600,
+                              ),
+                              Positioned(
+                                  top: 15,
+                                  left: 15,
+                                  child: Text(
+                                    "${product.discount}%",
+                                    style: TextStyle(
+                                        color: Colors.white,
+                                        fontWeight: FontWeight.bold,
+                                        fontSize: 12),
+                                  ))
+                            ],
+                          ))*/
+                  ],
                 ),
                 Expanded(
                   child: Padding(
@@ -84,6 +123,29 @@ class ProductCard extends StatelessWidget {
             ),
           );
         },
+      ),
+    );
+  }
+}
+
+class ErrorImage extends StatelessWidget {
+  const ErrorImage({
+    Key key,
+    this.size = 50,
+  }) : super(key: key);
+
+  final double size;
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      color: Colors.grey.shade200,
+      child: Center(
+        child: Icon(
+          CupertinoIcons.photo_fill,
+          size: size,
+          color: Colors.grey.shade400,
+        ),
       ),
     );
   }

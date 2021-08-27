@@ -14,10 +14,16 @@ class HomeController extends GetxController {
   static HomeController get to => Get.find<HomeController>();
 
   RxBool isLoading = false.obs;
+  RxBool isSearching = false.obs;
   RxBool isLoadingCategories = false.obs;
+  RxBool isLoadingDiscountProduct = false.obs;
 
   RxInt currentIndexBottomBar = RxInt(0);
   RxList<ProductOverViewModel> products = RxList<ProductOverViewModel>();
+  RxList<ProductOverViewModel> productsDiscount =
+      RxList<ProductOverViewModel>();
+  RxList<ProductOverViewModel> searchedProducts =
+      RxList<ProductOverViewModel>();
   RxList<ProductOverViewModel> productsByCate = RxList<ProductOverViewModel>();
 
   List<ProductOverViewModel> get favoriteProducts =>
@@ -32,6 +38,7 @@ class HomeController extends GetxController {
   void onInit() async {
     getProducts(pageIndex);
     getCategories();
+    getProductsDiscount();
     super.onInit();
   }
 
@@ -44,11 +51,40 @@ class HomeController extends GetxController {
 
   Future<void> getProducts(int pageIndex) async {
     isLoading.value = true;
-    final List<ProductOverViewModel> data =
-        await repository.getProducts(pageIndex);
-    products = data.obs;
-    isLoading.value = false;
+    try {
+      final List<ProductOverViewModel> data =
+          await repository.getProducts(pageIndex);
+      products = data.obs;
+      isLoading.value = false;
+    } catch (e) {
+      isLoading.value = false;
+    }
     update();
+  }
+
+  Future<void> getProductsDiscount() async {
+    isLoadingDiscountProduct.value = true;
+    try {
+      final List<ProductOverViewModel> data =
+          await repository.getProductsDiscount();
+      productsDiscount = data.obs;
+      isLoadingDiscountProduct.value = false;
+    } catch (e) {
+      isLoadingDiscountProduct.value = false;
+    }
+    update();
+  }
+
+  Future<void> searchProducts(String searchKey) async {
+    isSearching.value = true;
+    try {
+      final List<ProductOverViewModel> data =
+          await repository.searchProducts(searchKey);
+      searchedProducts = data.obs;
+      isSearching.value = false;
+    } catch (e) {
+      isSearching.value = false;
+    }
   }
 
   Future<void> getProductsByCate(int pageIndex, int categoryId) async {

@@ -1,6 +1,8 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:scrum_app/app/data/models/order_model.dart';
+import 'package:scrum_app/app/modules/home/widgets/product_card_widget.dart';
 import 'package:scrum_app/app/theme/color_theme.dart';
 import 'package:scrum_app/app/utils/helpers.dart';
 
@@ -24,8 +26,12 @@ class OrderItem extends StatelessWidget {
             padding: const EdgeInsets.all(10),
             child: Row(
               children: <Widget>[
-                Image.network(order.products[index].link_image,
-                    height: 70, width: 70, fit: BoxFit.cover),
+                CachedNetworkImage(
+                    imageUrl: order.products[index].link_image,
+                    errorWidget: (context, url, error) => ErrorImage(size: 20),
+                    height: 70,
+                    width: 70,
+                    fit: BoxFit.cover),
                 SizedBox(width: 10),
                 Expanded(
                   child: SizedBox(
@@ -64,7 +70,7 @@ class OrderItem extends StatelessWidget {
         Padding(
           padding: const EdgeInsets.all(10),
           child:
-              Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
+          Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
             Text('Tổng số tiền (${order.quantity} sản phẩm)'),
             Text('₫${NumberHelper.currencyFormat(order.total_price)}',
                 style: TextStyle(

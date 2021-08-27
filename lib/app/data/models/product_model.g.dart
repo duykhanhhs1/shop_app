@@ -103,6 +103,10 @@ ProductReviewModel _$ProductReviewModelFromJson(Map<String, dynamic> json) {
     id: json['id'] as int,
     product_id: json['product_id'] as int,
     reviewer_name: json['reviewer_name'] as String,
+    create_at: json['create_at'] == null
+        ? null
+        : DateTime.parse(json['create_at'] as String),
+    reviewer_photo_url: json['reviewer_photo_url'] as String,
     rating: (json['rating'] as num)?.toDouble(),
     comment: json['comment'] as String,
     photo_urls: json['photo_urls'] ?? [],
@@ -114,8 +118,10 @@ Map<String, dynamic> _$ProductReviewModelToJson(ProductReviewModel instance) =>
       'id': instance.id,
       'product_id': instance.product_id,
       'reviewer_name': instance.reviewer_name,
+      'create_at': instance.create_at?.toIso8601String(),
       'rating': instance.rating,
       'comment': instance.comment,
+      'reviewer_photo_url': instance.reviewer_photo_url,
       'photo_urls': instance.photo_urls,
     };
 
