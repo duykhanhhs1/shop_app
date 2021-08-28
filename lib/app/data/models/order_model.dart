@@ -32,11 +32,11 @@ class OrderCreateModel {
 @JsonSerializable()
 class ProductCartModel {
   int id;
-  int count;
+  int count_product_cart;
 
   ProductCartModel({
     this.id,
-    this.count,
+    this.count_product_cart,
   });
 
   factory ProductCartModel.fromJson(Map<String, dynamic> json) =>
@@ -50,6 +50,7 @@ class OrderModel {
   int id;
   int quantity;
   String created_at;
+  String order_status;
   int total_price;
   @JsonKey(defaultValue: [])
   List<ProductOverViewModel> products;
@@ -58,6 +59,7 @@ class OrderModel {
     this.id,
     this.quantity,
     this.total_price,
+    this.order_status,
     this.products,
     this.created_at,
   });

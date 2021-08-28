@@ -10,7 +10,7 @@ class OrderManagementView extends GetView<ProfileController> {
   @override
   Widget build(BuildContext context) {
     return DefaultTabController(
-        length: 4,
+        length: 2,
         child: Scaffold(
             appBar: AppBar(
               title: Text('Đơn mua'),
@@ -18,10 +18,8 @@ class OrderManagementView extends GetView<ProfileController> {
               bottom: TabBar(
                 isScrollable: true,
                 tabs: [
-                  Tab(child: Text('Đã thanh toán')),
-                  Tab(child: Text('Đã giao')),
-                  Tab(child: Text('Chờ xác nhận')),
-                  Tab(child: Text('Đang giao')),
+                  SizedBox(width: 200, child: Tab(child: Text('Chờ xác nhận'))),
+                  SizedBox(width: 200, child: Tab(child: Text('Đã giao'))),
                 ],
               ),
             ),
@@ -31,28 +29,80 @@ class OrderManagementView extends GetView<ProfileController> {
                 children: [
                   controller.isLoadingOrder.value
                       ? Center(child: CupertinoActivityIndicator())
-                      : controller.orders.length == 0
+                      : controller.unVerifiedOrders.length == 0
                           ? Center(
                               child: Text("Bạn chưa mua đơn hàng nào. "),
                             )
                           : Column(
                               children: [
-                                if (controller.orders.length > 0)
+                                if (controller.unVerifiedOrders.length > 0)
                                   Divider(thickness: 4, height: 4),
                                 Expanded(
                                   child: ListView.builder(
                                     shrinkWrap: true,
-                          itemCount: controller.orders.length,
-                          itemBuilder: (context, index) {
-                            return Column(
-                              children: [
-                                OrderItem(
-                                  order: controller.orders[index],
+                                    itemCount:
+                                        controller.unVerifiedOrders.length,
+                                    itemBuilder: (context, index) {
+                                      return Column(
+                                        children: [
+                                          OrderItem(
+                                            order: controller
+                                                .unVerifiedOrders[index],
+                                          ),
+                                          Padding(
+                                            padding: const EdgeInsets.only(
+                                              top: 0,
+                                              left: 10,
+                                              right: 10,
+                                              bottom: 10,
+                                            ),
+                                            child: Row(
+                                              mainAxisAlignment:
+                                                  MainAxisAlignment
+                                                      .spaceBetween,
+                                              children: [
+                                                Text(
+                                                  'Ngày thanh toán: ${controller.unVerifiedOrders[index].created_at}',
+                                                  style: TextStyle(
+                                                      color: Colors.black
+                                                          .withOpacity(.6)),
+                                                ),
+                                              ],
+                                            ),
+                                          ),
+                                          Divider(thickness: 4, height: 0),
+                                        ],
+                                      );
+                                    },
+                                  ),
                                 ),
-                                Padding(
-                                  padding: const EdgeInsets.only(
-                                    top: 0,
-                                    left: 10,
+                              ],
+                            ),
+                  controller.isLoadingOrder.value
+                      ? Center(child: CupertinoActivityIndicator())
+                      : controller.verifiedOrders.length == 0
+                          ? Center(
+                              child: Text("Bạn chưa mua đơn hàng nào. "),
+                            )
+                          : Column(
+                              children: [
+                                if (controller.verifiedOrders.length > 0)
+                                  Divider(thickness: 4, height: 4),
+                                Expanded(
+                                  child: ListView.builder(
+                                    shrinkWrap: true,
+                                    itemCount: controller.verifiedOrders.length,
+                                    itemBuilder: (context, index) {
+                                      return Column(
+                                        children: [
+                                          OrderItem(
+                                            order: controller
+                                                .verifiedOrders[index],
+                                          ),
+                                          Padding(
+                                            padding: const EdgeInsets.only(
+                                              top: 0,
+                                              left: 10,
                                     right: 10,
                                     bottom: 10,
                                   ),
@@ -62,21 +112,11 @@ class OrderManagementView extends GetView<ProfileController> {
                                         .spaceBetween,
                                     children: [
                                       Text(
-                                        'Ngày thanh toán: ${controller.orders[index].created_at}',
-                                        style: TextStyle(
-                                            color: Colors.black
-                                                .withOpacity(.6)),
-                                      ),
-                                      RoundedButton(
-                                        color: Colors.deepOrange,
-                                        radius: 5,
-                                        onPressed: () {
-                                                    /* CartController.to.addProduct(
-                                                        controller.orders[index].);*/
-                                                  },
-                                        textContent: 'Mua lại',
-                                        height: 40,
-                                      )
+                                        'Ngày thanh toán: ${controller.verifiedOrders[index].created_at}',
+                                                  style: TextStyle(
+                                                      color: Colors.black
+                                                          .withOpacity(.6)),
+                                                ),
                                     ],
                                   ),
                                 ),
@@ -88,9 +128,6 @@ class OrderManagementView extends GetView<ProfileController> {
                       ),
                     ],
                   ),
-                  Center(child: Text('Đang cập nhật...')),
-                  Center(child: Text('Đang cập nhật...')),
-                  Center(child: Text('Đang cập nhật...')),
                 ],
               ),
             )));

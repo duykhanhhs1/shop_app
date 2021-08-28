@@ -28,6 +28,7 @@ class ProductCard extends StatelessWidget {
         init: Get.find(),
         builder: (controller) {
           return Container(
+            width: 225,
             decoration: BoxDecoration(
                 color: Colors.white,
                 border: Border.all(color: kLightBackground),
@@ -46,11 +47,10 @@ class ProductCard extends StatelessWidget {
                       imageUrl: product.link_image,
                       placeholder: (context, url) =>
                           Container(color: Colors.grey.shade200),
-                      width: Get.width,
                       height: Get.width * 0.4,
                       fit: BoxFit.cover,
                     ),
-                    /* if (product.discount != null && product.discount > 0)
+                    if (product.discount != null && product.discount > 0)
                       Positioned(
                           top: 0,
                           right: 0,
@@ -58,21 +58,21 @@ class ProductCard extends StatelessWidget {
                             children: [
                               Icon(
                                 CupertinoIcons.bookmark_fill,
-                                size: 50,
+                                size: 60,
                                 color: Colors.yellow.shade600,
                               ),
                               Positioned(
-                                  top: 15,
-                                  left: 15,
+                                  top: 18,
+                                  left: 18,
                                   child: Text(
-                                    "${product.discount}%",
+                                    "${((product.discount / product.price) * 100).round()}%",
                                     style: TextStyle(
-                                        color: Colors.white,
+                                        color: kPrimaryColor,
                                         fontWeight: FontWeight.bold,
-                                        fontSize: 12),
+                                        fontSize: 14),
                                   ))
                             ],
-                          ))*/
+                          ))
                   ],
                 ),
                 Expanded(
@@ -100,17 +100,10 @@ class ProductCard extends StatelessWidget {
                                       color: kSecondaryColor,
                                       fontSize: 18,
                                       fontWeight: FontWeight.bold)),
-                              InkWell(
-                                child: Icon(
-                                  product.isFavorite
-                                      ? Icons.favorite_rounded
-                                      : Icons.favorite_border_rounded,
-                                  color: kSecondaryColor,
-                                ),
-                                onTap: () {
-                                  ///Handle favorite product
-                                  controller.setProductFavorite(product);
-                                },
+                              Text(
+                                "Đã bán: ${product.count_purchased}",
+                                style: TextStyle(
+                                    color: Colors.grey.shade600, fontSize: 14),
                               )
                             ],
                           ),

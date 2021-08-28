@@ -36,14 +36,14 @@ Map<String, dynamic> _$OrderCreateModelToJson(OrderCreateModel instance) =>
 ProductCartModel _$ProductCartModelFromJson(Map<String, dynamic> json) {
   return ProductCartModel(
     id: json['id'] as int,
-    count: json['count'] as int,
+    count_product_cart: json['count_product_cart'] as int,
   );
 }
 
 Map<String, dynamic> _$ProductCartModelToJson(ProductCartModel instance) =>
     <String, dynamic>{
       'id': instance.id,
-      'count': instance.count,
+      'count_product_cart': instance.count_product_cart,
     };
 
 OrderModel _$OrderModelFromJson(Map<String, dynamic> json) {
@@ -51,11 +51,13 @@ OrderModel _$OrderModelFromJson(Map<String, dynamic> json) {
     id: json['id'] as int,
     quantity: json['quantity'] as int,
     total_price: json['total_price'] as int,
+    order_status: json['order_status'] as String,
     products: (json['products'] as List)
-            ?.map((e) => e == null
-                ? null
-                : ProductOverViewModel.fromJson(e as Map<String, dynamic>))
-            ?.toList() ??
+        ?.map((e) =>
+    e == null
+        ? null
+        : ProductOverViewModel.fromJson(e as Map<String, dynamic>))
+        ?.toList() ??
         [],
     created_at: json['created_at'] as String,
   );
@@ -66,6 +68,7 @@ Map<String, dynamic> _$OrderModelToJson(OrderModel instance) =>
       'id': instance.id,
       'quantity': instance.quantity,
       'created_at': instance.created_at,
+      'order_status': instance.order_status,
       'total_price': instance.total_price,
       'products': instance.products,
     };

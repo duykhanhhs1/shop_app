@@ -125,7 +125,7 @@ class ProductProvider extends GetConnect {
   Future<List<ProductOverViewModel>> getProductsDiscount() async {
     try {
       final response = await HttpHelper.get(
-          "https://your-ecommerce.herokuapp.com/products_discount");
+          "https://your-ecommerce.herokuapp.com/products_rating?page=0");
       var result = response.body["products"]
           .map<ProductOverViewModel>(
               (item) => ProductOverViewModel.fromJson(item))

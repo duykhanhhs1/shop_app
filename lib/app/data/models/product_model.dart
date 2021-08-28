@@ -10,6 +10,7 @@ class ProductOverViewModel {
   int price;
   int count;
   int count_purchased;
+  int count_product_order;
   double rating;
   int discount;
   dynamic link_image;
@@ -23,17 +24,17 @@ class ProductOverViewModel {
 
   int get getPriceCart => this.count * this.price;
 
-  ProductOverViewModel(
-      {this.id,
-      this.count,
-      this.count_purchased,
-      this.rating,
-      this.discount,
-      this.name,
-      this.price,
-      this.isFavorite = false,
-      this.isChecked = false,
-      this.link_image});
+  ProductOverViewModel({this.id,
+    this.count,
+    this.count_purchased,
+    this.count_product_order,
+    this.rating,
+    this.discount,
+    this.name,
+    this.price,
+    this.isFavorite = false,
+    this.isChecked = false,
+    this.link_image});
 
   factory ProductOverViewModel.fromJson(Map<String, dynamic> json) =>
       _$ProductOverViewModelFromJson(json);

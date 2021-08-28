@@ -40,6 +40,12 @@ class ProfileController extends GetxController {
 
   RxList<OrderModel> orders = RxList();
 
+  List<OrderModel> get unVerifiedOrders =>
+      orders.where((_) => _.order_status == "Chờ xác nhận").toList();
+
+  List<OrderModel> get verifiedOrders =>
+      orders.where((_) => _.order_status == "Đã giao").toList();
+
   static ProfileController get to => Get.find<ProfileController>();
 
   @override

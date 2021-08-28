@@ -72,7 +72,7 @@ class ReviewCard extends StatelessWidget {
                 ),
                 Text(
                   DateFormat("hh:mm dd/MM/yyyy")
-                      .format(productReview.create_at),
+                      .format(productReview.create_at.toLocal()),
                   style: TextStyle(fontSize: 12),
                 )
               ],

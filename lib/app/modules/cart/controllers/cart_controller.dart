@@ -26,7 +26,7 @@ class CartController extends GetxController {
   RxBool isCheckedAll = RxBool(false);
   RxBool isLoadingCart = RxBool(false);
   RxBool isUpdated = RxBool(false);
-  List<String> paymentMethods = ['Thanh toán khi nhận hàng', 'Thẻ tín dụng'];
+  List<String> paymentMethods = ['Thanh toán khi nhận hàng'];
   RxString paymentMethod = ''.obs;
 
   @override
@@ -100,8 +100,8 @@ class CartController extends GetxController {
     try {
       List<ProductCartModel> cartProducts = [];
       checkedProducts.forEach((element) {
-        cartProducts
-            .add(ProductCartModel(id: element.id, count: element.count));
+        cartProducts.add(ProductCartModel(
+            id: element.id, count_product_cart: element.count));
       });
       ProfileModel profile = _loginController.userLogged.value.profile;
       OrderCreateModel order = OrderCreateModel(

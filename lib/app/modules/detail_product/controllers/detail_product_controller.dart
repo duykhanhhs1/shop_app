@@ -27,10 +27,11 @@ class DetailProductController extends GetxController {
   TextEditingController reviewTextController = TextEditingController();
   RxDouble rating = RxDouble(0.0);
   RxInt quantity = RxInt(0);
+  int productId = 0;
 
   @override
   void onInit() {
-    final int productId = Get.arguments;
+    productId = Get.arguments;
     getProductDetailFB(productId);
     getReviews(productId);
     super.onInit();
@@ -45,8 +46,10 @@ class DetailProductController extends GetxController {
     update();
   }
 
-  void getProductDetailFB(int id) async {
-    isLoadingProduct.value = true;
+  void getProductDetailFB(int id, {bool reload = true}) async {
+    if (reload) {
+      isLoadingProduct.value = true;
+    }
     final ProductDetailModel data = await repository.getProductDetailFB(id);
     productDetail = data.obs;
     productDetail.value.imageUrls =
@@ -59,6 +62,7 @@ class DetailProductController extends GetxController {
     review.value.reviewer_name = _loginController.userLogged.value.email;
     review.value.product_id = productDetail.value.id;
     await repository.addReview(review.value);
+    getProductDetailFB(productId, reload: false);
     reviewTextController.clear();
     rating.value = 0;
     getReviews(productDetail.value.id);

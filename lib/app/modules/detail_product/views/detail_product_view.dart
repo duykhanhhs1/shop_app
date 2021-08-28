@@ -38,46 +38,46 @@ class DetailProductView extends GetView<DetailProductController> {
                     )
                   ],
                 ),
-          floatingActionButton: FloatingActionButton(
-            onPressed: () {
-              _buildBottomAddCart();
-            },
-            backgroundColor: kPrimaryColor,
-            child: Icon(
-              Icons.add_shopping_cart_rounded,
-              color: Colors.white,
-            ),
-          ),
-          body: SingleChildScrollView(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: <Widget>[
-                _buildListImage(product),
-                Divider(height: 4, thickness: 4),
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 12),
-                  child: _buildOverviewInfo(product),
+                floatingActionButton: FloatingActionButton(
+                  onPressed: () {
+                    _buildBottomAddCart(product);
+                  },
+                  backgroundColor: kPrimaryColor,
+                  child: Icon(
+                    Icons.add_shopping_cart_rounded,
+                    color: Colors.white,
+                  ),
                 ),
-                Divider(height: 30, thickness: 4),
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 12),
-                  child: _buildShopInfo(product),
+                body: SingleChildScrollView(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: <Widget>[
+                      _buildListImage(product),
+                      Divider(height: 4, thickness: 4),
+                      Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 12),
+                        child: _buildOverviewInfo(product),
+                      ),
+                      Divider(height: 30, thickness: 4),
+                      Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 12),
+                        child: _buildShopInfo(product),
+                      ),
+                      Divider(height: 30, thickness: 4),
+                      Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 12),
+                        child: _buildDetailInfo(product),
+                      ),
+                      Divider(height: 30, thickness: 5),
+                      Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 12),
+                        child: _buildReviews(product),
+                      ),
+                      SizedBox(height: 100),
+                    ],
+                  ),
                 ),
-                Divider(height: 30, thickness: 4),
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 12),
-                  child: _buildDetailInfo(product),
-                ),
-                Divider(height: 30, thickness: 5),
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 12),
-                  child: _buildReviews(product),
-                ),
-                SizedBox(height: 100),
-              ],
-            ),
-          ),
-        );
+              );
       },
     );
   }
@@ -170,7 +170,7 @@ class DetailProductView extends GetView<DetailProductController> {
             Text(
               "Chi tiết shop",
               style:
-              TextStyle(color: kPrimaryColor, fontWeight: FontWeight.bold),
+                  TextStyle(color: kPrimaryColor, fontWeight: FontWeight.bold),
             )
           ],
         ),
@@ -256,41 +256,47 @@ class DetailProductView extends GetView<DetailProductController> {
   }
 
   Widget _buildListImage(ProductDetailModel product) {
-    return Container(
-      width: Get.width,
-      height: Get.width,
-      child: PageView(
-        scrollDirection: Axis.horizontal,
-        children: List.generate(
-          product.imageUrls.length,
+    return Stack(
+      children: [
+        Container(
+          width: Get.width,
+          height: Get.width,
+          child: PageView(
+            scrollDirection: Axis.horizontal,
+            children: List.generate(
+              product.imageUrls.length,
               (index) => Stack(
-            children: [
-              CachedNetworkImage(
-                imageUrl: '${product.imageUrls[index]}',
-                width: Get.width,
-                height: Get.height,
-                fit: BoxFit.contain,
-                errorWidget: (context, url, error) => ErrorImage(
-                  size: 100,
-                ),
+                children: [
+                  CachedNetworkImage(
+                    imageUrl: '${product.imageUrls[index]}',
+                    width: Get.width,
+                    height: Get.height,
+                    fit: BoxFit.contain,
+                    errorWidget: (context, url, error) => ErrorImage(
+                      size: 100,
+                    ),
+                  ),
+                  Positioned(
+                    child: Container(
+                        padding:
+                            EdgeInsets.symmetric(vertical: 3, horizontal: 10),
+                        decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(15),
+                            color: kPrimaryColor.withOpacity(.8)),
+                        child: Text(
+                          '${index + 1}/${product.imageUrls.length}',
+                          style: TextStyle(color: Colors.white, fontSize: 12),
+                        )),
+                    bottom: 10,
+                    right: 10,
+                  )
+                ],
               ),
-              Positioned(
-                child: Container(
-                    padding: EdgeInsets.symmetric(vertical: 3, horizontal: 10),
-                    decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(15),
-                        color: kPrimaryColor.withOpacity(.8)),
-                    child: Text(
-                      '${index + 1}/${product.imageUrls.length}',
-                      style: TextStyle(color: Colors.white, fontSize: 12),
-                    )),
-                bottom: 10,
-                right: 10,
-              )
-            ],
+            ),
           ),
         ),
-      ),
+        _buildDiscount(product),
+      ],
     );
   }
 
@@ -354,7 +360,7 @@ class DetailProductView extends GetView<DetailProductController> {
     );
   }
 
-  Future<dynamic> _buildBottomAddCart() {
+  Future<dynamic> _buildBottomAddCart(ProductDetailModel product) {
     controller.quantityController.text = '1';
     controller.productDetail.value.quantity = 1;
     return Get.bottomSheet(GetBuilder<DetailProductController>(
@@ -434,27 +440,46 @@ class DetailProductView extends GetView<DetailProductController> {
                   Divider(),
                 ],
               ),
-              GetBuilder(
-                init: Get.find<CartController>(),
-                builder: (CartController cartController) {
-                  return RoundedButton(
-                    width: Get.width,
-                    onPressed: () async {
-                      if (LoginController.to.isLogged) {
-                        await cartController.addProduct(
-                            controller.productDetail.value.id,
-                            controller.productDetail.value.quantity);
-                        Get.back();
-                      } else {
-                        Get.toNamed(Routes.LOGIN);
-                      }
-                    },
-                    textContent: cartController.isLoadingCart.value
-                        ? "Đang xử lý..."
-                        : 'Thêm vào giỏ hàng',
-                  );
-                },
-              )
+              product.count > 0 &&
+                      controller.productDetail.value.quantity <= product.count
+                  ? GetBuilder(
+                      init: Get.find<CartController>(),
+                      builder: (CartController cartController) {
+                        return RoundedButton(
+                          width: Get.width,
+                          onPressed: () async {
+                            if (LoginController.to.isLogged) {
+                              await cartController.addProduct(
+                                  controller.productDetail.value.id,
+                                  controller.productDetail.value.quantity);
+                              Get.back();
+                            } else {
+                              Get.toNamed(Routes.LOGIN);
+                            }
+                          },
+                          textContent: cartController.isLoadingCart.value
+                              ? "Đang xử lý..."
+                              : 'Thêm vào giỏ hàng',
+                        );
+                      },
+                    )
+                  : ClipRRect(
+                      borderRadius: BorderRadius.circular(100),
+                      child: Container(
+                        height: 50,
+                        width: Get.width,
+                        child: Center(
+                          child: Text(
+                            'Hết hàng',
+                            style: TextStyle(
+                                color: Colors.white,
+                                fontWeight: FontWeight.bold,
+                                fontSize: 16),
+                          ),
+                        ),
+                        color: Colors.deepOrange,
+                      ),
+                    )
             ],
           ),
         );
@@ -463,19 +488,34 @@ class DetailProductView extends GetView<DetailProductController> {
   }
 
   Widget _buildDiscount(ProductDetailModel product) {
-    return Container(
-      padding: const EdgeInsets.all(10),
-      decoration: BoxDecoration(shape: BoxShape.circle, color: Colors.yellow),
-      child: Text(
-        '- ${product.discount}%',
-        style: TextStyle(
-            color: Colors.red, fontSize: 12, fontWeight: FontWeight.bold),
-      ),
-    );
+    return product.discount != null && product.discount > 0
+        ? Positioned(
+            top: 0,
+            right: 0,
+            child: Stack(
+              children: [
+                Icon(
+                  CupertinoIcons.bookmark_fill,
+                  size: 60,
+                  color: Colors.yellow.shade600,
+                ),
+                Positioned(
+                    top: 18,
+                    left: 18,
+                    child: Text(
+                      "${((product.discount / product.price) * 100).round()}%",
+                      style: TextStyle(
+                          color: kPrimaryColor,
+                          fontWeight: FontWeight.bold,
+                          fontSize: 14),
+                    ))
+              ],
+            ))
+        : SizedBox();
   }
 
   Widget _buildRating(ProductDetailModel product) {
-    return product.rating == null
+    return product.rating != null && product.rating.round() > 0
         ? Padding(
             padding: const EdgeInsets.only(right: 5),
             child: Container(
@@ -487,7 +527,7 @@ class DetailProductView extends GetView<DetailProductController> {
               child: Row(
                 children: <Widget>[
                   Text(
-                    '${product.rating}',
+                    '${product.rating.round()}',
                     style: TextStyle(
                         fontWeight: FontWeight.bold,
                         color: Colors.black.withOpacity(.6)),

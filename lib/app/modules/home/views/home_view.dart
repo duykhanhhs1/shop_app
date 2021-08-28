@@ -48,6 +48,7 @@ class HomeView extends GetView<HomeController> {
                 onRefresh: () async {
                   controller.getProducts(0);
                   controller.getCategories();
+                  controller.getProductsDiscount();
                 },
                 child: SingleChildScrollView(
                   child: Column(
@@ -57,19 +58,26 @@ class HomeView extends GetView<HomeController> {
                           padding: const EdgeInsets.symmetric(vertical: 10),
                           child: Text('Ưu đãi giá sốc', style: textTitle)),
                       _buildSpecialListView(),*/
+                      SizedBox(height: 10),
+                      Padding(
+                          padding: const EdgeInsets.all(10),
+                          child: Text('Giá sốc hôm nay',
+                              style: textTitle.copyWith(
+                                  color: Colors.deepOrange))),
+                      _buildDiscountProducts(),
+                      SizedBox(height: 10),
                       Padding(
                           padding: const EdgeInsets.all(10),
                           child: Text('Danh mục', style: textTitle)),
                       _buildCategoryGridView(),
+                      SizedBox(height: 10),
                       Padding(
                           padding: const EdgeInsets.all(10),
                           child: Text('Gợi ý hôm nay', style: textTitle)),
                       controller.isLoading.value
                           ? Center(child: CupertinoActivityIndicator())
                           : _buildPopularGridView(controller),
-                      SizedBox(
-                        height: 15,
-                      )
+                      SizedBox(height: 15)
                     ],
                   ),
                 ),
@@ -104,6 +112,28 @@ class HomeView extends GetView<HomeController> {
                   onTap: () {
                     controller.onCategoryTap(controller.categories[index]);
                   },
+                );
+              },
+            ),
+          );
+  }
+
+  Widget _buildDiscountProducts() {
+    return controller.isLoadingDiscountProduct.value
+        ? Center(child: CupertinoActivityIndicator())
+        : Container(
+            padding: EdgeInsets.only(left: 10),
+            height: Get.width * 0.6,
+            child: ListView.builder(
+              itemCount: controller.productsDiscount.length,
+              shrinkWrap: true,
+              scrollDirection: Axis.horizontal,
+              itemBuilder: (context, index) {
+                return Padding(
+                  padding: const EdgeInsets.only(right: 10),
+                  child: ProductCard(
+                    product: controller.productsDiscount[index],
+                  ),
                 );
               },
             ),

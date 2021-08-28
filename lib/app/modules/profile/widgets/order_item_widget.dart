@@ -53,7 +53,7 @@ class OrderItem extends StatelessWidget {
                                 style: TextStyle(
                                     color: Colors.black.withOpacity(.6))),
                             Text(
-                                'x${NumberHelper.currencyFormat(order.products[index].count)}',
+                                'x${NumberHelper.currencyFormat(order.products[index].count_product_order)}',
                                 style: TextStyle(
                                     color: Colors.black.withOpacity(.6)))
                           ],
